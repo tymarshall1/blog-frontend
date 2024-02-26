@@ -1,6 +1,10 @@
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
+type LayoutProps = {
+  children: ReactNode;
+};
 
-function Layout({ children }) {
+function Layout({ children }: LayoutProps) {
   return (
     <>
       <nav className="flex items-center gap-8 p-4 min-h-10 bg-primary text-secondary">
