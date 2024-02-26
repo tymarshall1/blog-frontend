@@ -4,7 +4,7 @@ const images = Array(7).fill(wave);
 
 function About() {
   return (
-    <div className="xl:grid xl:grid-cols-5 xl:justify-items-center">
+    <div className="p-4 mt-4 xl:grid xl:grid-cols-5 xl:justify-items-center">
       <div className="xl:col-start-1 xl:col-end-2">
         {images.map((src, index) => (
           <img
@@ -17,12 +17,12 @@ function About() {
       </div>
 
       <div className="flex flex-col max-w-xl gap-8 mx-auto xl:col-start-2 xl:col-end-5">
-        <section className="p-4 space-y-4 text-center">
+        <section className="p-4 space-y-4 text-center rounded shadow shadow-primary bg-primary text-secondary">
           <h1 className="text-4xl font-black ">About Me</h1>
           <p>Welcome to [Blog Name]! Here's a little bit about me:</p>
         </section>
 
-        <section className="p-4 space-y-4 border-2 border-black rounded">
+        <section className="p-4 space-y-4 border-2 border-black rounded shadow-xl shadow-primary">
           <h2 className="text-2xl font-black text-center">Who Am I?</h2>
           <p>
             Hi, I'm [Your Name], the creator and author behind this blog. I'm
@@ -32,7 +32,7 @@ function About() {
           </p>
         </section>
 
-        <section className="p-4 space-y-4 border-2 border-black rounded">
+        <section className="p-4 space-y-4 border-2 border-black rounded shadow-xl shadow-primary">
           <h2 className="text-2xl font-black text-center">
             What is [Blog Name] About?
           </h2>
@@ -46,7 +46,7 @@ function About() {
           </p>
         </section>
 
-        <section className="p-4 space-y-4 border-2 border-black rounded">
+        <section className="p-4 space-y-4 border-2 border-black rounded shadow-xl shadow-primary">
           <h2 className="text-2xl font-black text-center">
             Why I Started Blogging
           </h2>
@@ -59,7 +59,7 @@ function About() {
           </p>
         </section>
 
-        <section className="p-4 space-y-4 border-2 border-black rounded">
+        <section className="p-4 space-y-4 border-2 border-black rounded shadow-xl shadow-primary">
           <h2 className="text-2xl font-black text-center">
             What You'll Find Here
           </h2>
@@ -86,7 +86,7 @@ function About() {
           </ul>
         </section>
 
-        <section className="p-4 space-y-4 border-2 border-black rounded">
+        <section className="p-4 space-y-4 border-2 border-black rounded shadow-xl shadow-primary">
           <h2 className="text-2xl font-black text-center">Connect With Me</h2>
           <p className="mb-2">
             I love connecting with my readers! Feel free to reach out to me via

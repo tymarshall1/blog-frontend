@@ -9,7 +9,7 @@ function Layout({ children }: LayoutProps) {
     <>
       <nav className="flex items-center gap-8 p-4 min-h-10 bg-primary text-secondary">
         <Link className="flex-1 text-4xl font-black" to={"/"}>
-          Home
+          Canine Chronicles
         </Link>
         <Link className="text-xl font-semibold" to={"/articles"}>
           Articles
@@ -18,7 +18,10 @@ function Layout({ children }: LayoutProps) {
           About
         </Link>
       </nav>
-      <main className="p-4 mt-4">{children}</main>
+      <main className="min-h-screen ">{children}</main>
+      <footer className="mt-auto text-center text-white bg-primary min-h-10">
+        Canine Chronicles
+      </footer>
     </>
   );
 }
