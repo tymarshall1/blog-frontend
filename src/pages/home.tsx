@@ -2,6 +2,8 @@ import puppyHeroLg from "../assets/puppy-hero-lg.jpg";
 import { Button } from "@/components/ui/button";
 import puppyAbout from "../assets/puppy-about.jpg";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import pawPrint from "../assets/Paw_Print.svg";
 function Hero() {
   return (
     <section className="p-8 bg-primary ">
@@ -51,8 +53,74 @@ function About() {
   );
 }
 
+type FeaturedArticleProps = {
+  title: string;
+  body: string;
+};
+
+type Article = {
+  title: string;
+  body: string;
+};
+
+function FeaturedArticle(props: FeaturedArticleProps) {
+  function limitCharacters(text: string, maxLength: number): string {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.slice(0, maxLength) + "...";
+    }
+  }
+  return (
+    <div className="flex flex-col justify-between flex-1 p-4 border-2 border-gray-500 rounded">
+      <h2 className="mb-2 text-2xl font-bold text-center capitalize">
+        {props.title}
+      </h2>
+      <p className="mb-2">{limitCharacters(props.body, 250)}</p>
+      <Button className="block mx-auto " size={"lg"} variant={"secondary"}>
+        <Link to={"/"}>Read More</Link>
+      </Button>
+    </div>
+  );
+}
+
 function FeaturedArticles() {
-  return <section></section>;
+  const [featuredArticles, setFeaturedArticles] = useState<Article[] | null>(
+    null
+  );
+  useEffect(() => {
+    fetch("http://localhost:3000/api/articles")
+      .then((response) => response.json())
+      .then((data) => setFeaturedArticles(data));
+  }, []);
+
+  return (
+    <section className="p-4 text-white bg-primary">
+      <div className="flex items-center justify-center mb-4">
+        <img className="w-20 h-20" src={pawPrint} alt="" />
+        <h1 className="text-5xl font-black text-center ">
+          Featured <span className="text-gray-500 ">Articles</span>
+        </h1>
+        <img className="w-20 h-20" src={pawPrint} alt="" />
+      </div>
+      {featuredArticles && (
+        <div className="flex flex-col gap-4 md:flex-row justify-evenly">
+          <FeaturedArticle
+            title={featuredArticles[0].title}
+            body={featuredArticles[0].body}
+          />
+          <FeaturedArticle
+            title={featuredArticles[1].title}
+            body={featuredArticles[1].body}
+          />
+          <FeaturedArticle
+            title={featuredArticles[2].title}
+            body={featuredArticles[2].body}
+          />
+        </div>
+      )}
+    </section>
+  );
 }
 
 function Home() {
