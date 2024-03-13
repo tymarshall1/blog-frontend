@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import searchIcon from "../../assets/search-icon.svg";
 import { useEffect, useState } from "react";
 import closeIcon from "../../assets/close.svg";
-
+import leafLogo from "../../assets/leaf-logo.svg";
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -23,9 +23,12 @@ function Navbar() {
 
   return (
     <nav className="flex items-center justify-between p-4 min-h-10 text-primary bg-foreground">
-      <Link className="text-4xl font-black hover:text-secondary" to={"/"}>
-        LimeLeaf
-      </Link>
+      <div className="flex items-center justify-center">
+        <img src={leafLogo} className="w-10 h-10 " alt="" />{" "}
+        <Link className="text-4xl font-black hover:text-secondary" to={"/"}>
+          LimeLeaf
+        </Link>
+      </div>
 
       {/*render search bar if screen size greater than 640*/}
       {windowWidth > 640 && (
@@ -58,7 +61,7 @@ function Navbar() {
                 src={closeIcon}
                 onClick={() => setSearchOpen(false)}
                 alt=""
-                className="inline-block ml-1"
+                className="inline-block ml-1 cursor-pointer"
               />
             </div>
           </>
