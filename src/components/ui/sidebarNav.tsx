@@ -13,7 +13,7 @@ function NavLink({
 }) {
   return (
     <Link
-      className={`${css} flex-1 p-1 mx-2 text-lg font-medium transition ease-in rounded hover:bg-secondary min-w-20 ml-6`}
+      className={`${css} flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6`}
       to={link}
     >
       {linkName}

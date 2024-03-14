@@ -46,7 +46,7 @@ function Collapse(props: CollapseProps) {
             {props.seeMore.map((element) => {
               return <>{element}</>;
             })}
-            <div className="flex items-center justify-center mt-4">
+            <div className="flex items-center justify-center">
               <button
                 onClick={() => setExploreSeeMoreOpen(false)}
                 className="px-5 font-light tracking-wider text-center rounded whitespace-nowrap hover:text-secondary"
@@ -59,7 +59,7 @@ function Collapse(props: CollapseProps) {
         <div
           className={`${
             exploreSeeMoreOpen ? "hidden" : "block"
-          } flex items-center justify-center mt-4`}
+          } flex items-center justify-center`}
         >
           <button
             onClick={() => setExploreSeeMoreOpen(true)}

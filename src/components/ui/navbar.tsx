@@ -37,7 +37,7 @@ function Navbar() {
           <input
             type="search"
             placeholder="Search"
-            className="py-2 pl-10 rounded w-60 bg-background"
+            className="py-2 pl-10 rounded-full sm:w-56 md:w-80 lg:w-96 bg-background"
           />
         </div>
       )}
