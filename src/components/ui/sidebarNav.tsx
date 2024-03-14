@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Collapse } from "@/components/ui/collapsible";
+import homeIcon from "../../assets/home-icon.svg";
 
 function NavLink({
   linkName,
   link,
   css,
+  icon,
 }: {
   linkName: string;
   link: string;
   css?: string;
+  icon?: string;
 }) {
   return (
     <Link
       className={`${css} flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
       to={link}
     >
+      <img src={icon} alt="" />
       {linkName}
     </Link>
   );
@@ -54,12 +58,13 @@ function HeadSideBar() {
           linkSelected === "home"
             ? "bg-secondary text-sideNav"
             : "background-transparent"
-        } p-2 text-xl font-black rounded  hover:bg-secondary hover:text-sideNav`}
+        } p-2 text-xl font-black rounded flex items-center gap-2 hover:bg-secondary hover:text-sideNav`}
         to={""}
         onClick={() => {
           setLinkSelected("home");
         }}
       >
+        <img className="inline-block" src={homeIcon} alt="" />
         Home
       </Link>
       <Link
