@@ -24,7 +24,9 @@ function Navbar() {
   return (
     <nav className="flex items-center justify-between p-4 min-h-10 text-primary bg-foreground">
       <div className="flex items-center justify-center">
-        <img src={leafLogo} className="w-10 h-10 " alt="" />{" "}
+        <Link to={""}>
+          <img src={leafLogo} className="w-10 h-10 " alt="" />
+        </Link>
         <Link className="text-4xl font-black hover:text-secondary" to={"/"}>
           LimeLeaf
         </Link>
@@ -68,11 +70,11 @@ function Navbar() {
         ) : (
           <>
             {/* if search bar unopened, render login and sign-up buttons */}
-            <Link className="text-xl font-black hover:opacity-50" to={"/"}>
+            <Link className="text-xl font-black hover:text-secondary" to={"/"}>
               Login
             </Link>
             <Link
-              className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:opacity-50"
+              className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
               to={"/"}
             >
               Sign Up

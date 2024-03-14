@@ -13,7 +13,7 @@ function NavLink({
 }) {
   return (
     <Link
-      className={`${css} flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6`}
+      className={`${css} flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
       to={link}
     >
       {linkName}
@@ -51,8 +51,10 @@ function HeadSideBar() {
     <div className="flex flex-col gap-2">
       <Link
         className={`${
-          linkSelected === "home" ? "bg-secondary" : "background-transparent"
-        } p-2 text-xl font-black rounded  hover:bg-secondary`}
+          linkSelected === "home"
+            ? "bg-secondary text-sideNav"
+            : "background-transparent"
+        } p-2 text-xl font-black rounded  hover:bg-secondary hover:text-sideNav`}
         to={""}
         onClick={() => {
           setLinkSelected("home");
@@ -62,8 +64,10 @@ function HeadSideBar() {
       </Link>
       <Link
         className={`${
-          linkSelected === "popular" ? "bg-secondary" : "background-transparent"
-        } p-2 text-xl font-black transition ease-in delay-75 rounded hover:bg-secondary hover:opacity-95`}
+          linkSelected === "popular"
+            ? "bg-secondary text-sideNav"
+            : "background-transparent"
+        } p-2 text-xl font-black transition ease-in delay-75 rounded hover:bg-secondary hover:text-sideNav`}
         to={""}
         onClick={() => {
           setLinkSelected("popular");

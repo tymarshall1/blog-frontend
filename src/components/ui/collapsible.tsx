@@ -24,7 +24,7 @@ function Collapse(props: CollapseProps) {
         exploreOpened ? setExploreOpened(false) : setExploreOpened(true)
       }
     >
-      <CollapsibleTrigger className="w-full p-1 mb-3 text-3xl font-black text-left transition ease-in rounded hover:bg-secondary">
+      <CollapsibleTrigger className="w-full p-1 mb-3 text-3xl font-black text-left transition ease-in rounded hover:bg-secondary hover:text-sideNav">
         <div className="flex items-center justify-between ">
           <h2 className="">{props.title}</h2>
           <img
@@ -49,7 +49,7 @@ function Collapse(props: CollapseProps) {
             <div className="flex items-center justify-center">
               <button
                 onClick={() => setExploreSeeMoreOpen(false)}
-                className="px-5 font-light tracking-wider text-center rounded whitespace-nowrap hover:text-secondary"
+                className="px-5 font-medium tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav"
               >
                 See Less
               </button>
@@ -63,7 +63,7 @@ function Collapse(props: CollapseProps) {
         >
           <button
             onClick={() => setExploreSeeMoreOpen(true)}
-            className="px-5 font-light tracking-wider text-center rounded whitespace-nowrap hover:text-secondary "
+            className="px-5 font-light tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav"
           >
             See More
           </button>
