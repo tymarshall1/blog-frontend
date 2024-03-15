@@ -15,13 +15,13 @@ type CollapseProps = {
 };
 
 function Collapse(props: CollapseProps) {
-  const [exploreSeeMoreOpen, setExploreSeeMoreOpen] = useState(false);
-  const [exploreOpened, setExploreOpened] = useState(true);
+  const [seeMoreOpen, setSeeMoreOpen] = useState(false);
+  const [collapseOpened, setCollapseOpened] = useState(true);
   return (
     <Collapsible
-      open={exploreOpened}
+      open={collapseOpened}
       onOpenChange={() =>
-        exploreOpened ? setExploreOpened(false) : setExploreOpened(true)
+        collapseOpened ? setCollapseOpened(false) : setCollapseOpened(true)
       }
     >
       <CollapsibleTrigger className="w-full p-1 mb-3 text-3xl font-black text-left transition ease-in rounded hover:bg-secondary hover:text-sideNav">
@@ -31,7 +31,7 @@ function Collapse(props: CollapseProps) {
             src={expand}
             alt="expand"
             className={`${
-              exploreOpened
+              collapseOpened
                 ? "transition ease-in-out rotate-180 delay-75"
                 : "transition ease-in-out delay-75"
             } w-10 h-10`}
@@ -41,14 +41,14 @@ function Collapse(props: CollapseProps) {
 
       <CollapsibleContent className="flex flex-col gap-3 CollapsibleContent">
         {props.children}
-        {exploreSeeMoreOpen && (
+        {seeMoreOpen && (
           <>
             {props.seeMore.map((element) => {
               return <>{element}</>;
             })}
             <div className="flex items-center justify-center">
               <button
-                onClick={() => setExploreSeeMoreOpen(false)}
+                onClick={() => setSeeMoreOpen(false)}
                 className="px-5 font-medium tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav"
               >
                 See Less
@@ -58,11 +58,11 @@ function Collapse(props: CollapseProps) {
         )}
         <div
           className={`${
-            exploreSeeMoreOpen ? "hidden" : "block"
+            seeMoreOpen ? "hidden" : "block"
           } flex items-center justify-center`}
         >
           <button
-            onClick={() => setExploreSeeMoreOpen(true)}
+            onClick={() => setSeeMoreOpen(true)}
             className="px-5 font-light tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav"
           >
             See More

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Collapse } from "@/components/ui/collapsible";
 import homeIcon from "../../assets/home-icon.svg";
+import popularIcon from "../../assets/popular.svg";
 
 function NavLink({
   linkName,
@@ -16,7 +17,9 @@ function NavLink({
 }) {
   return (
     <Link
-      className={`${css} flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
+      className={`${
+        css || ""
+      } flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
       to={link}
     >
       <img src={icon} alt="" />
@@ -72,12 +75,13 @@ function HeadSideBar() {
           linkSelected === "popular"
             ? "bg-secondary text-sideNav"
             : "background-transparent"
-        } p-2 text-xl font-black transition ease-in delay-75 rounded hover:bg-secondary hover:text-sideNav`}
+        } p-2 text-xl font-black transition ease-in delay-75 rounded hover:bg-secondary hover:text-sideNav flex items-center gap-2`}
         to={""}
         onClick={() => {
           setLinkSelected("popular");
         }}
       >
+        <img className="inline-block" src={popularIcon} alt="" />
         Popular
       </Link>
     </div>
