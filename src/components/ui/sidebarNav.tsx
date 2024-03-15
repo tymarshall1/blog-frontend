@@ -107,10 +107,13 @@ function Resources() {
 
 function SidebarNav() {
   return (
-    <nav className="fixed left-0 p-4 space-y-5 overflow-auto divide-y h-svh w-80 scrollbar divide-solid text-primary bg-sideNav">
+    <nav className="fixed left-0 h-full p-4 pb-20 space-y-5 overflow-auto divide-y w-80 scrollbar divide-solid text-primary bg-sideNav">
       <HeadSideBar />
       <Explore />
       <Resources />
+      <p className="pt-3 text-xs text-center">
+        LimeLeaf, Inc @ 2024. All rights reserved
+      </p>
     </nav>
   );
 }
