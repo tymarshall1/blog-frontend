@@ -10,13 +10,15 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
   return (
     <>
+      <div className="hidden xl:block">
+        <SidebarNav />
+      </div>
       <Navbar />
-      <main className="grid min-h-screen mx-auto md:grid-cols-4 max-w-[1920px]">
-        <div className="hidden lg:col-start-1 lg:col-end-2 lg:block">
-          <SidebarNav />
+      <main className="grid min-h-screen mx-auto lg:grid-cols-3 xl:grid-cols-xlLayout max-w-[1600px] mt-[4.5rem] gap-4">
+        <div className="lg:col-start-1 lg:col-end-3 xl:col-start-2 xl:col-end-3">
+          {children}
         </div>
-        <div>{children}</div>
-        <div className="hidden md:col-start-4 md:col-end-5 md:block">
+        <div className="hidden lg:col-start-3 lg:col-end-4 md:block">
           <PopularCommunities />
         </div>
       </main>

@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Collapse } from "@/components/ui/collapsible";
-import homeIcon from "../../assets/home-icon.svg";
-import popularIcon from "../../assets/popular.svg";
 
 function NavLink({
   linkName,
@@ -67,7 +65,7 @@ function HeadSideBar() {
           setLinkSelected("home");
         }}
       >
-        <img className="inline-block" src={homeIcon} alt="" />
+        <span className="material-symbols-outlined">home</span>
         Home
       </Link>
       <Link
@@ -81,7 +79,7 @@ function HeadSideBar() {
           setLinkSelected("popular");
         }}
       >
-        <img className="inline-block" src={popularIcon} alt="" />
+        <span className="material-symbols-outlined">data_thresholding</span>
         Popular
       </Link>
     </div>
@@ -109,7 +107,7 @@ function Resources() {
 
 function SidebarNav() {
   return (
-    <nav className="h-full max-h-screen p-4 space-y-5 overflow-auto divide-y scrollbar divide-solid text-primary bg-sideNav max-w-80">
+    <nav className="fixed left-0 h-full max-h-screen p-4 space-y-5 overflow-auto divide-y w-80 scrollbar divide-solid text-primary bg-sideNav">
       <HeadSideBar />
       <Explore />
       <Resources />

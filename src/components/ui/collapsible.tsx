@@ -1,6 +1,5 @@
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { ReactElement, useState } from "react";
-import expand from "../../assets/expand.svg";
 
 const Collapsible = CollapsiblePrimitive.Root;
 
@@ -27,15 +26,15 @@ function Collapse(props: CollapseProps) {
       <CollapsibleTrigger className="w-full p-1 mb-3 text-3xl font-black text-left transition ease-in rounded hover:bg-secondary hover:text-sideNav">
         <div className="flex items-center justify-between ">
           <h2 className="">{props.title}</h2>
-          <img
-            src={expand}
-            alt="expand"
-            className={`${
+          <span
+            className={`material-symbols-outlined ${
               collapseOpened
                 ? "transition ease-in-out rotate-180 delay-75"
                 : "transition ease-in-out delay-75"
-            } w-10 h-10`}
-          />
+            } text-3xl`}
+          >
+            expand_more
+          </span>
         </div>
       </CollapsibleTrigger>
 

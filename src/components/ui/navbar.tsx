@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
-import searchIcon from "../../assets/search-icon.svg";
 import { useEffect, useState } from "react";
 import closeIcon from "../../assets/close.svg";
 import leafLogo from "../../assets/leaf-logo.svg";
+import SidebarNav from "./sidebarNav";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -22,12 +29,28 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="flex items-center justify-between p-4 min-h-10 text-primary bg-foreground">
-      <div className="flex items-center justify-center">
+    <nav className="fixed top-0 z-50 flex items-center justify-between w-full p-4 min-h-10 text-primary bg-foreground">
+      <div className="flex items-center">
+        <Sheet>
+          <SheetTrigger className="place-self-end">
+            <span className="text-3xl cursor-pointer  material-symbols-outlined xl:hidden">
+              menu
+            </span>
+          </SheetTrigger>
+          <SheetContent side={"left"}>
+            <SheetDescription>
+              <SidebarNav />
+            </SheetDescription>
+          </SheetContent>
+        </Sheet>
+
         <Link to={""}>
           <img src={leafLogo} className="w-10 h-10 " alt="" />
         </Link>
-        <Link className="text-4xl font-black hover:text-secondary" to={"/"}>
+        <Link
+          className="hidden text-4xl font-black hover:text-secondary sm:block"
+          to={"/"}
+        >
           LimeLeaf
         </Link>
       </div>
@@ -35,29 +58,29 @@ function Navbar() {
       {/*render search bar if screen size greater than 640*/}
       {windowWidth > 640 && (
         <div className="relative">
-          <img src={searchIcon} alt="" className="absolute top-0 left-0 p-2" />
+          <span className="absolute top-0 left-0 p-2 material-symbols-outlined">
+            search
+          </span>
           <input
             type="search"
             placeholder="Search"
-            className="py-2 pl-10 rounded-full sm:w-56 md:w-80 lg:w-96 bg-background"
+            className="py-2 pl-10 rounded-full sm:w-48 md:w-80 lg:w-96 bg-background"
           />
         </div>
       )}
 
-      <div className="pr-3 space-x-2 sm:space-x-8">
+      <div className="flex items-center gap-2 pr-3 sm:gap-8">
         {/* if search bar has been opened, render only the search bar */}
         {searchOpen ? (
           <>
             <div className="relative flex ml-2">
-              <img
-                src={searchIcon}
-                alt=""
-                className="absolute top-0 left-0 p-2"
-              />
+              <span className="absolute top-0 left-0 p-2 material-symbols-outlined">
+                search
+              </span>
               <input
                 type="search"
                 placeholder="Search"
-                className="py-2 pl-10 rounded min-w-32 bg-background"
+                className="py-2 pl-10 rounded bg-background"
               />
               <img
                 src={closeIcon}
@@ -83,12 +106,12 @@ function Navbar() {
         )}
         {/* if screen size is less then 640 and search bar unopened, render search icon next to the buttons*/}
         {windowWidth <= 640 && !searchOpen && (
-          <img
+          <span
             onClick={() => setSearchOpen(true)}
-            src={searchIcon}
-            alt=""
-            className="inline-block cursor-pointer"
-          />
+            className="inline-block text-3xl cursor-pointer material-symbols-outlined"
+          >
+            search
+          </span>
         )}
       </div>
     </nav>

@@ -20,6 +20,9 @@ module.exports = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        xlLayout: "20rem 2fr 1fr",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
