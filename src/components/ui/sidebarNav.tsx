@@ -60,7 +60,7 @@ function HeadSideBar() {
             ? "bg-secondary text-sideNav"
             : "background-transparent"
         } p-2 text-xl font-black rounded flex items-center gap-2 hover:bg-secondary hover:text-sideNav`}
-        to={""}
+        to={"/"}
         onClick={() => {
           setLinkSelected("home");
         }}

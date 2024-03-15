@@ -30,10 +30,10 @@ function Navbar() {
 
   return (
     <nav className="fixed top-0 z-50 flex items-center justify-between w-full p-4 min-h-10 text-primary bg-foreground">
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Sheet>
           <SheetTrigger className="place-self-end">
-            <span className="text-3xl cursor-pointer  material-symbols-outlined xl:hidden">
+            <span className="text-3xl cursor-pointer material-symbols-outlined xl:hidden hover:text-secondary">
               menu
             </span>
           </SheetTrigger>
