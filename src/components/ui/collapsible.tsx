@@ -13,7 +13,7 @@ type CollapseProps = {
   title: string;
 };
 
-function Collapse(props: CollapseProps) {
+function CollapseMenu(props: CollapseProps) {
   const [seeMoreOpen, setSeeMoreOpen] = useState(false);
   const [collapseOpened, setCollapseOpened] = useState(true);
   return (
@@ -25,7 +25,7 @@ function Collapse(props: CollapseProps) {
     >
       <CollapsibleTrigger className="w-full p-1 mb-3 text-3xl font-black text-left transition ease-in rounded hover:bg-secondary hover:text-sideNav">
         <div className="flex items-center justify-between ">
-          <h2 className="">{props.title}</h2>
+          <h2 className="font-medium tracking-tight">{props.title}</h2>
           <span
             className={`material-symbols-outlined ${
               collapseOpened
@@ -72,4 +72,4 @@ function Collapse(props: CollapseProps) {
   );
 }
 
-export { Collapsible, CollapsibleTrigger, CollapsibleContent, Collapse };
+export { Collapsible, CollapsibleTrigger, CollapsibleContent, CollapseMenu };

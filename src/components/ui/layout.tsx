@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import Navbar from "./navbar";
-import Footer from "./footer";
 import SidebarNav from "./sidebarNav";
 import PopularCommunities from "./popularCommunities";
 type LayoutProps = {
@@ -22,7 +21,6 @@ function Layout({ children }: LayoutProps) {
           <PopularCommunities />
         </div>
       </main>
-      <Footer />
     </>
   );
 }

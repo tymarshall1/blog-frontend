@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
-import { Collapse } from "@/components/ui/collapsible";
-
+import { CollapseMenu } from "@/components/ui/collapsible";
+import leafLogo from "../../assets/leaf-logo.svg";
 function NavLink({
   linkName,
   link,
@@ -11,42 +11,87 @@ function NavLink({
   linkName: string;
   link: string;
   css?: string;
-  icon?: string;
+  icon?: ReactNode;
 }) {
   return (
     <Link
       className={`${
         css || ""
-      } flex-1 p-1 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
+      } flex-1 p-1 flex items-center gap-2 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
       to={link}
     >
-      <img src={icon} alt="" />
-      {linkName}
+      {icon}
+      <p className="tracking-wide">{linkName}</p>
     </Link>
   );
 }
 
 function Explore() {
   return (
-    <Collapse
+    <CollapseMenu
       title="Explore"
       seeMore={[
-        <NavLink linkName={"Art"} link={"/"} />,
-        <NavLink linkName={"Animals and Pets"} link={"/"} />,
-        <NavLink linkName={"History"} link={"/"} />,
-        <NavLink linkName={"Crypto"} link={"/"} />,
+        <NavLink
+          linkName={"Art"}
+          icon={<span className="material-symbols-outlined">palette</span>}
+          link={"/"}
+        />,
+        <NavLink
+          linkName={"Animals and Pets"}
+          icon={<span className="material-symbols-outlined">pets</span>}
+          link={"/"}
+        />,
+        <NavLink
+          linkName={"Crypto"}
+          icon={
+            <span className="material-symbols-outlined">currency_bitcoin</span>
+          }
+          link={"/"}
+        />,
       ]}
     >
       <>
-        <NavLink linkName={"Gaming"} link={"/"} />
-        <NavLink linkName={"Sports"} link={"/"} />
-        <NavLink linkName={"Music"} link={"/"} />
-        <NavLink linkName={"Places"} link={"/"} />
-        <NavLink linkName={"Programming"} link={"/"} />
-        <NavLink linkName={"Fashion"} link={"/"} />
-        <NavLink linkName={"Food"} link={"/"} />
+        <NavLink
+          linkName={"Gaming"}
+          icon={
+            <span className="material-symbols-outlined">stadia_controller</span>
+          }
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Sports"}
+          icon={
+            <span className="material-symbols-outlined">sports_football</span>
+          }
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Music"}
+          icon={<span className="material-symbols-outlined">headphones</span>}
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Places"}
+          icon={<span className="material-symbols-outlined">storefront</span>}
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Programming"}
+          icon={<span className="material-symbols-outlined">code</span>}
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Fashion"}
+          icon={<span className="material-symbols-outlined">styler</span>}
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Food"}
+          icon={<span className="material-symbols-outlined">restaurant</span>}
+          link={"/"}
+        />
       </>
-    </Collapse>
+    </CollapseMenu>
   );
 }
 
@@ -88,20 +133,44 @@ function HeadSideBar() {
 
 function Resources() {
   return (
-    <Collapse
+    <CollapseMenu
       title={"Resources"}
       seeMore={[
-        <NavLink linkName={"Content Policy"} link={"/"} />,
-        <NavLink linkName={"Privacy Policy"} link={"/"} />,
-        <NavLink linkName={"User Agreement"} link={"/"} />,
+        <NavLink
+          linkName={"Content Policy"}
+          icon={<span className="material-symbols-outlined">description</span>}
+          link={"/"}
+        />,
+        <NavLink
+          linkName={"Privacy Policy"}
+          icon={<span className="material-symbols-outlined">article</span>}
+          link={"/"}
+        />,
+        <NavLink
+          linkName={"User Agreement"}
+          icon={<span className="material-symbols-outlined">contract</span>}
+          link={"/"}
+        />,
       ]}
     >
       <>
-        <NavLink linkName={"About"} link={"/"} />
-        <NavLink linkName={"Help"} link={"/"} />
-        <NavLink linkName={"Careers"} link={"/"} />
+        <NavLink
+          linkName={"About"}
+          icon={<img className="w-6 h-6" src={leafLogo} />}
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Help"}
+          icon={<span className="material-symbols-outlined">help</span>}
+          link={"/"}
+        />
+        <NavLink
+          linkName={"Careers"}
+          icon={<span className="material-symbols-outlined">plumbing</span>}
+          link={"/"}
+        />
       </>
-    </Collapse>
+    </CollapseMenu>
   );
 }
 
@@ -111,8 +180,8 @@ function SidebarNav() {
       <HeadSideBar />
       <Explore />
       <Resources />
-      <p className="pt-3 text-xs text-center">
-        LimeLeaf, Inc @ 2024. All rights reserved
+      <p className="pt-3 text-xs font-light text-center">
+        LimeLeaf, Inc © 2024. All rights reserved
       </p>
     </nav>
   );
