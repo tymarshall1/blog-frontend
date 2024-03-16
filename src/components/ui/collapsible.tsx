@@ -1,5 +1,5 @@
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import { ReactElement, useState } from "react";
+import React, { ReactElement, useState } from "react";
 
 const Collapsible = CollapsiblePrimitive.Root;
 
@@ -42,8 +42,8 @@ function CollapseMenu(props: CollapseProps) {
         {props.children}
         {seeMoreOpen && (
           <>
-            {props.seeMore.map((element) => {
-              return <>{element}</>;
+            {props.seeMore.map((element, index) => {
+              return <React.Fragment key={index}>{element}</React.Fragment>;
             })}
             <div className="flex items-center justify-center">
               <button

@@ -2,22 +2,24 @@ import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
 import { CollapseMenu } from "@/components/ui/collapsible";
 import leafLogo from "../../assets/leaf-logo.svg";
+import { cn } from "@/lib/utils";
 function NavLink({
   linkName,
   link,
-  css,
+  className,
   icon,
 }: {
   linkName: string;
   link: string;
-  css?: string;
+  className?: string;
   icon?: ReactNode;
 }) {
   return (
     <Link
-      className={`${
-        css || ""
-      } flex-1 p-1 flex items-center gap-2 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav`}
+      className={cn(
+        "flex-1 p-1 flex items-center gap-2 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav",
+        className
+      )}
       to={link}
     >
       {icon}
@@ -174,9 +176,14 @@ function Resources() {
   );
 }
 
-function SidebarNav() {
+function SidebarNav({ className }: { className?: string }) {
   return (
-    <nav className="fixed left-0 h-full p-4 pb-20 space-y-5 overflow-auto divide-y w-80 scrollbar divide-solid text-primary bg-sideNav">
+    <nav
+      className={cn(
+        "fixed left-0 h-full p-4 pb-20 space-y-5 overflow-auto divide-y w-80 scrollbar divide-solid text-primary bg-sideNav",
+        className
+      )}
+    >
       <HeadSideBar />
       <Explore />
       <Resources />

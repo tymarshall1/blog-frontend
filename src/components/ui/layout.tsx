@@ -9,9 +9,7 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
   return (
     <>
-      <div className="hidden xl:block">
-        <SidebarNav />
-      </div>
+      <SidebarNav className="hidden xl:block" />
       <Navbar />
       <main className="grid min-h-screen mx-auto lg:grid-cols-3 xl:grid-cols-xlLayout max-w-[1600px] mt-[4.5rem] gap-4">
         <div className="lg:col-start-1 lg:col-end-3 xl:col-start-2 xl:col-end-3">
