@@ -1,5 +1,5 @@
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import React, { ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 
 const Collapsible = CollapsiblePrimitive.Root;
 
@@ -9,12 +9,10 @@ const CollapsibleContent = CollapsiblePrimitive.CollapsibleContent;
 
 type CollapseProps = {
   children: ReactElement;
-  seeMore: ReactElement[];
   title: string;
 };
 
 function CollapseMenu(props: CollapseProps) {
-  const [seeMoreOpen, setSeeMoreOpen] = useState(false);
   const [collapseOpened, setCollapseOpened] = useState(true);
   return (
     <Collapsible
@@ -40,33 +38,6 @@ function CollapseMenu(props: CollapseProps) {
 
       <CollapsibleContent className="flex flex-col gap-3 CollapsibleContent">
         {props.children}
-        {seeMoreOpen && (
-          <>
-            {props.seeMore.map((element, index) => {
-              return <React.Fragment key={index}>{element}</React.Fragment>;
-            })}
-            <div className="flex items-center justify-center">
-              <button
-                onClick={() => setSeeMoreOpen(false)}
-                className="px-5 font-medium tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav"
-              >
-                See Less
-              </button>
-            </div>
-          </>
-        )}
-        <div
-          className={`${
-            seeMoreOpen ? "hidden" : "block"
-          } flex items-center justify-center`}
-        >
-          <button
-            onClick={() => setSeeMoreOpen(true)}
-            className="px-5 font-light tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav"
-          >
-            See More
-          </button>
-        </div>
       </CollapsibleContent>
     </Collapsible>
   );

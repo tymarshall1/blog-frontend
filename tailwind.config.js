@@ -30,6 +30,8 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         sideNav: "hsl(var(--side-nav))",
+        moreInformation: "hsl(var(--more-information))",
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

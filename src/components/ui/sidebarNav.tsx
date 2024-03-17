@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { CollapseMenu } from "@/components/ui/collapsible";
 import leafLogo from "../../assets/leaf-logo.svg";
 import { cn } from "@/lib/utils";
+import SeeMore from "./seeMore";
 function NavLink({
   linkName,
   link,
@@ -17,7 +18,7 @@ function NavLink({
   return (
     <Link
       className={cn(
-        "flex-1 p-1 flex items-center gap-2 mx-2 text-lg font-light transition ease-in rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav",
+        "flex-1 p-1 flex items-center gap-2 mx-2 text-lg font-light rounded hover:bg-secondary min-w-20 ml-6 hover:text-sideNav",
         className
       )}
       to={link}
@@ -30,28 +31,7 @@ function NavLink({
 
 function Explore() {
   return (
-    <CollapseMenu
-      title="Explore"
-      seeMore={[
-        <NavLink
-          linkName={"Art"}
-          icon={<span className="material-symbols-outlined">palette</span>}
-          link={"/"}
-        />,
-        <NavLink
-          linkName={"Animals and Pets"}
-          icon={<span className="material-symbols-outlined">pets</span>}
-          link={"/"}
-        />,
-        <NavLink
-          linkName={"Crypto"}
-          icon={
-            <span className="material-symbols-outlined">currency_bitcoin</span>
-          }
-          link={"/"}
-        />,
-      ]}
-    >
+    <CollapseMenu title="Explore">
       <>
         <NavLink
           linkName={"Gaming"}
@@ -92,6 +72,29 @@ function Explore() {
           icon={<span className="material-symbols-outlined">restaurant</span>}
           link={"/"}
         />
+        <SeeMore
+          additionalItems={[
+            <NavLink
+              linkName={"Art"}
+              icon={<span className="material-symbols-outlined">palette</span>}
+              link={"/"}
+            />,
+            <NavLink
+              linkName={"Animals and Pets"}
+              icon={<span className="material-symbols-outlined">pets</span>}
+              link={"/"}
+            />,
+            <NavLink
+              linkName={"Crypto"}
+              icon={
+                <span className="material-symbols-outlined">
+                  currency_bitcoin
+                </span>
+              }
+              link={"/"}
+            />,
+          ]}
+        />
       </>
     </CollapseMenu>
   );
@@ -121,7 +124,7 @@ function HeadSideBar() {
             ? "bg-secondary text-sideNav"
             : "background-transparent"
         } p-2 text-xl font-black transition ease-in delay-75 rounded hover:bg-secondary hover:text-sideNav flex items-center gap-2`}
-        to={""}
+        to={"/popular"}
         onClick={() => {
           setLinkSelected("popular");
         }}
@@ -135,26 +138,7 @@ function HeadSideBar() {
 
 function Resources() {
   return (
-    <CollapseMenu
-      title={"Resources"}
-      seeMore={[
-        <NavLink
-          linkName={"Content Policy"}
-          icon={<span className="material-symbols-outlined">description</span>}
-          link={"/"}
-        />,
-        <NavLink
-          linkName={"Privacy Policy"}
-          icon={<span className="material-symbols-outlined">article</span>}
-          link={"/"}
-        />,
-        <NavLink
-          linkName={"User Agreement"}
-          icon={<span className="material-symbols-outlined">contract</span>}
-          link={"/"}
-        />,
-      ]}
-    >
+    <CollapseMenu title={"Resources"}>
       <>
         <NavLink
           linkName={"About"}
@@ -170,6 +154,27 @@ function Resources() {
           linkName={"Careers"}
           icon={<span className="material-symbols-outlined">plumbing</span>}
           link={"/"}
+        />
+        <SeeMore
+          additionalItems={[
+            <NavLink
+              linkName={"Content Policy"}
+              icon={
+                <span className="material-symbols-outlined">description</span>
+              }
+              link={"/"}
+            />,
+            <NavLink
+              linkName={"Privacy Policy"}
+              icon={<span className="material-symbols-outlined">article</span>}
+              link={"/"}
+            />,
+            <NavLink
+              linkName={"User Agreement"}
+              icon={<span className="material-symbols-outlined">contract</span>}
+              link={"/"}
+            />,
+          ]}
         />
       </>
     </CollapseMenu>
