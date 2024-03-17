@@ -19,7 +19,7 @@ function SeeMore({
           <div className="text-center">
             <button
               onClick={() => setSeeMoreOpen(false)}
-              className={`${btnStyles} px-5 font-medium tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav`}
+              className={`${btnStyles} px-5 text-sm font-medium tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav`}
             >
               See Less
             </button>
@@ -29,7 +29,7 @@ function SeeMore({
       <div className={`${seeMoreOpen ? "hidden" : "block"} text-center`}>
         <button
           onClick={() => setSeeMoreOpen(true)}
-          className={`${btnStyles} px-5 font-medium tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav`}
+          className={`${btnStyles} px-5 font-medium text-sm tracking-wider text-center rounded whitespace-nowrap hover:bg-secondary hover:text-sideNav`}
         >
           See More
         </button>

@@ -26,7 +26,7 @@ function Community(props: CommunityProps) {
 function DefaultInformation() {
   return (
     <>
-      <h1 className="mb-5 text-xl font-normal tracking-tight">
+      <h1 className="mb-8 text-xl font-normal tracking-tight">
         Popular Communities
       </h1>
       <Community title={"Programming"} members={9687444} />
