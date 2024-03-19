@@ -3,12 +3,7 @@ import { useEffect, useState } from "react";
 import closeIcon from "../../assets/close.svg";
 import leafLogo from "../../assets/leaf-logo.svg";
 import SidebarNav from "./sidebarNav";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -38,9 +33,7 @@ function Navbar() {
             </span>
           </SheetTrigger>
           <SheetContent side={"left"}>
-            <SheetDescription>
-              <SidebarNav />
-            </SheetDescription>
+            <SidebarNav />
           </SheetContent>
         </Sheet>
 

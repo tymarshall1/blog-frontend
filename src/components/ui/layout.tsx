@@ -16,7 +16,7 @@ function Layout({ children }: LayoutProps) {
         <div className="lg:col-start-1 lg:col-end-3 xl:col-start-2 xl:col-end-3">
           {children}
         </div>
-        <aside className="hidden lg:col-start-3 lg:col-end-4 md:block">
+        <aside className="hidden lg:col-start-3 lg:col-end-4 lg:block">
           <MoreInformation />
         </aside>
       </main>
