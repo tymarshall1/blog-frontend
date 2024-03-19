@@ -24,17 +24,17 @@ function Post(props: PostProps) {
         <p className="font-light tracking-wide ">{props.body}</p>
       </div>
       <div className="flex flex-wrap justify-between">
-        <div className="flex font-light">
-          <div className="flex items-center gap-1 p-1 text-sm rounded cursor-pointer hover:bg-secondary">
+        <div className="flex text-sm font-light">
+          <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
             <span className="material-symbols-outlined">thumb_up</span>
             <span>{props.likes}</span>
           </div>
-          <div className="flex items-center gap-1 p-1 text-sm rounded cursor-pointer hover:bg-secondary">
+          <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
             <span className="material-symbols-outlined">thumb_down</span>
             <span>{props.dislikes}</span>
           </div>
         </div>
-        <div className="flex gap-2 font-light tracking-wide">
+        <div className="flex gap-2 text-sm font-light tracking-wide">
           <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
             <span className="material-symbols-outlined">forum</span>
             <span>{props.comments} Comments</span>
