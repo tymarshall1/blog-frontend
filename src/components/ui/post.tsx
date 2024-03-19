@@ -1,3 +1,5 @@
+import { limitCharacters } from "@/lib/utils";
+
 type PostProps = {
   community: string;
   user: string;
@@ -11,7 +13,7 @@ type PostProps = {
 
 function Post(props: PostProps) {
   return (
-    <div className="max-w-screen-md p-3 mx-auto space-y-3 text-black border-2 border-transparent rounded cursor-pointer bg-zinc-300 hover:border-secondary max-h-96">
+    <div className="max-w-screen-md p-3 mx-auto space-y-3 overflow-hidden text-black border-2 border-transparent rounded cursor-pointer bg-zinc-300 hover:border-secondary max-h-96">
       <div className="flex items-center gap-1">
         <span className="bg-black rounded-full w-7 h-7"></span>
         <h2 className="font-normal text-md">{props.community}</h2>{" "}
@@ -21,7 +23,9 @@ function Post(props: PostProps) {
       </div>
       <div>
         <h3 className="text-xl font-semibold">{props.title}</h3>
-        <p className="font-light tracking-wide ">{props.body}</p>
+        <p className="font-light tracking-wide ">
+          {limitCharacters(props.body, 200)}
+        </p>
       </div>
       <div className="flex flex-wrap justify-between">
         <div className="flex text-sm font-light">
