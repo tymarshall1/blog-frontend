@@ -4,10 +4,13 @@ import closeIcon from "../../assets/close.svg";
 import leafLogo from "../../assets/leaf-logo.svg";
 import SidebarNav from "./sidebarNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import LoginForm from "@/forms/login";
 
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
+  console.log("test");
 
   useEffect(() => {
     const updateWindowWidth = () => {
@@ -86,9 +89,14 @@ function Navbar() {
         ) : (
           <>
             {/* if search bar unopened, render login and sign-up buttons */}
-            <Link className="text-xl font-black hover:text-secondary" to={"/"}>
-              Login
-            </Link>
+            <Dialog>
+              <DialogTrigger className="text-xl font-black hover:text-secondary">
+                Login
+              </DialogTrigger>
+              <DialogContent>
+                <LoginForm />
+              </DialogContent>
+            </Dialog>
             <Link
               className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
               to={"/"}
