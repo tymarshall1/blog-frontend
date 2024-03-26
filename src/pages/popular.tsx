@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import useFetchAuth from "@/hooks/useFetchAuth";
+
 function Popular() {
-  useEffect(() => {
-    fetch("http://localhost:3000/test", { credentials: "include" })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
-  }, []);
-  return <div>Popular</div>;
+  const { data, loading, error } = useFetchAuth(
+    "http://localhost:3000/api/posts"
+  );
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  return <div>{data}</div>;
 }
 
 export default Popular;

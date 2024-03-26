@@ -5,9 +5,16 @@ type InputProps = {
   id: string;
   type: string;
   onChange: ChangeEventHandler;
+  invalidInput: boolean;
 };
 
-function Input({ label, id, type, onChange }: InputProps) {
+function Input({
+  label,
+  id,
+  type,
+  onChange,
+  invalidInput = false,
+}: InputProps) {
   return (
     <div className="flex flex-col">
       <label className="text-xl font-medium text-white" htmlFor={id}>
@@ -15,7 +22,9 @@ function Input({ label, id, type, onChange }: InputProps) {
       </label>
       <input
         required
-        className="h-8 pl-2 rounded"
+        className={`${
+          invalidInput ? "outline-2 outline outline-destructive" : ""
+        } h-8 pl-2 rounded`}
         id={id}
         type={type}
         onChange={onChange}

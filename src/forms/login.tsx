@@ -1,14 +1,18 @@
 import { ChangeEvent, useState } from "react";
-import { useCookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Input from "./components/input";
 
-function LoginForm() {
+function LoginForm({
+  closeLoginDialog,
+  openSignupDialog,
+}: {
+  closeLoginDialog: () => void;
+  openSignupDialog: () => void;
+}) {
   const [user, setUser] = useState({ username: "", password: "" });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cookies, setCookie] = useCookies(["token"]);
-  const navigate = useNavigate();
+  const [invalidLogin, setInvalidLogin] = useState(false);
 
   async function handleLogin(e: { preventDefault: () => void }) {
     e.preventDefault();
@@ -26,10 +30,12 @@ function LoginForm() {
     const loginJson = await loginRequest.json();
 
     if ("token" in loginJson) {
-      setCookie("token", loginJson.token, { path: "/" });
-      return navigate("/");
+      localStorage.setItem("accessToken", loginJson.token);
+      closeLoginDialog();
+      return;
     }
-    console.log(loginJson);
+
+    setInvalidLogin(true);
   }
 
   return (
@@ -52,18 +58,25 @@ function LoginForm() {
           label={"Username"}
           id={"username"}
           type={"text"}
+          invalidInput={invalidLogin}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUser({ username: e.target.value, password: user.password });
+            setUser({ ...user, username: e.target.value });
+            setInvalidLogin(false);
           }}
         />
         <Input
           label={"Password"}
           id={"password"}
           type={"password"}
+          invalidInput={invalidLogin}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUser({ username: user.username, password: e.target.value });
+            setUser({ ...user, password: e.target.value });
+            setInvalidLogin(false);
           }}
         />
+        {invalidLogin && (
+          <p className="text-destructive">*Invalid username or password</p>
+        )}
       </div>
       <div className="space-y-2">
         <p className="font-normal text-white text-md">
@@ -79,18 +92,26 @@ function LoginForm() {
         </p>
         <p className="font-normal text-white text-md">
           Don't have an account yet?{" "}
-          <Link className="text-secondary" to={""}>
-            Create one
-          </Link>
+          <Button
+            onClick={() => {
+              closeLoginDialog();
+              openSignupDialog();
+            }}
+            type="button"
+            variant={"link"}
+            className="p-0 m-0 font-normal text-secondary text-md "
+          >
+            Create One
+          </Button>
         </p>
       </div>
       <Button
+        type="submit"
+        disabled={
+          user.username.length <= 0 || user.password.length < 5 ? true : false
+        }
         onClick={handleLogin}
-        className={`${
-          user.username.length <= 0 || user.password.length < 10
-            ? "opacity-20"
-            : "opacity-100"
-        } block w-1/4 mx-auto text-black`}
+        className="block w-1/4 mx-auto text-black"
       >
         Login
       </Button>

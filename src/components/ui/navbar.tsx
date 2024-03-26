@@ -6,11 +6,12 @@ import SidebarNav from "./sidebarNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import LoginForm from "@/forms/login";
-
+import SignupForm from "@/forms/signup";
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
-  console.log("test");
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
 
   useEffect(() => {
     const updateWindowWidth = () => {
@@ -25,6 +26,22 @@ function Navbar() {
       window.removeEventListener("resize", updateWindowWidth);
     };
   }, []);
+
+  const closeLoginDialog = () => {
+    setIsLoginDialogOpen(false);
+  };
+
+  const closeSignupDialog = () => {
+    setIsSignupDialogOpen(false);
+  };
+
+  const openSignupDialog = () => {
+    setIsSignupDialogOpen(true);
+  };
+
+  const openLoginDialog = () => {
+    setIsLoginDialogOpen(true);
+  };
 
   return (
     <nav className="fixed top-0 z-50 flex items-center justify-between w-full p-4 min-h-10 text-primary bg-foreground">
@@ -89,20 +106,41 @@ function Navbar() {
         ) : (
           <>
             {/* if search bar unopened, render login and sign-up buttons */}
-            <Dialog>
-              <DialogTrigger className="text-xl font-black hover:text-secondary">
+            <Dialog
+              open={isLoginDialogOpen}
+              onOpenChange={setIsLoginDialogOpen}
+            >
+              <DialogTrigger
+                className="text-xl font-black hover:text-secondary"
+                onClick={() => setIsLoginDialogOpen(true)}
+              >
                 Login
               </DialogTrigger>
               <DialogContent>
-                <LoginForm />
+                <LoginForm
+                  closeLoginDialog={closeLoginDialog}
+                  openSignupDialog={openSignupDialog}
+                />
               </DialogContent>
             </Dialog>
-            <Link
-              className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
-              to={"/"}
+
+            <Dialog
+              open={isSignupDialogOpen}
+              onOpenChange={setIsSignupDialogOpen}
             >
-              Sign Up
-            </Link>
+              <DialogTrigger
+                className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
+                onClick={() => setIsSignupDialogOpen(true)}
+              >
+                Sign Up
+              </DialogTrigger>
+              <DialogContent>
+                <SignupForm
+                  closeSignupDialog={closeSignupDialog}
+                  openLoginDialog={openLoginDialog}
+                />
+              </DialogContent>
+            </Dialog>
           </>
         )}
         {/* if screen size is less then 640 and search bar unopened, render search icon next to the buttons*/}
