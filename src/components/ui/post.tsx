@@ -17,8 +17,9 @@ function Post(props: PostProps) {
   //will have to set this when content is loaded in the future
   //for now just keeping set to true
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loaded, setLoaded] = useState(true);
+  //add set loaded when ready to incorporate api
+  const [loaded] = useState(true);
+
   return (
     <div className="max-w-screen-md p-3 mx-auto space-y-3 overflow-hidden text-black border-2 border-transparent rounded cursor-pointer bg-zinc-300 hover:border-secondary max-h-96">
       {loaded && (
