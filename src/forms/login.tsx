@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Input from "./components/input";
+import useFetch from "@/hooks/useFetch";
 
 function LoginForm({
   closeLoginDialog,
@@ -11,31 +12,26 @@ function LoginForm({
   openSignupDialog: () => void;
 }) {
   const [user, setUser] = useState({ username: "", password: "" });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [invalidLogin, setInvalidLogin] = useState(false);
+  const { isLoading, error, responseData, fetchData } = useFetch(
+    "http://localhost:3000/api/user/login",
+    "POST"
+  );
 
-  async function handleLogin(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    if (user.password.length < 0 || user.username.length < 0) return;
-    const loginRequest = await fetch("http://localhost:3000/api/user/login", {
-      method: "POST",
-      body: JSON.stringify({
-        username: user.username,
-        password: user.password,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-    const loginJson = await loginRequest.json();
-
-    if ("token" in loginJson) {
-      localStorage.setItem("accessToken", loginJson.token);
+  useEffect(() => {
+    if (responseData && "token" in responseData) {
+      const token = (responseData as { token: string }).token;
+      localStorage.setItem("accessToken", token);
       closeLoginDialog();
       return;
     }
+    if (error) setInvalidLogin(true);
+  }, [responseData, error, closeLoginDialog]);
 
-    setInvalidLogin(true);
+  function handleLogin(e: { preventDefault: () => void }) {
+    e.preventDefault();
+    if (user.password.length === 0 || user.username.length === 0) return;
+    fetchData(user);
   }
 
   return (
@@ -113,7 +109,7 @@ function LoginForm({
         onClick={handleLogin}
         className="block w-1/4 mx-auto text-black"
       >
-        Login
+        {isLoading ? "Loading..." : "Login"}
       </Button>
     </form>
   );
