@@ -10,7 +10,7 @@ function Popular() {
     fetchData();
   }, []);
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p>Error: {error}</p>;
   return <div>{responseData}</div>;
 }
 
