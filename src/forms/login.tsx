@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Input from "./components/input";
 import useFetch from "@/hooks/useFetch";
+import { useContext } from "react";
+import { userContext } from "@/contexts/userContext";
 
 function LoginForm({
   closeLoginDialog,
@@ -11,6 +13,7 @@ function LoginForm({
   closeLoginDialog: () => void;
   openSignupDialog: () => void;
 }) {
+  const { isLoggedIn, setIsLoggedIn } = useContext(userContext);
   const [user, setUser] = useState({ username: "", password: "" });
   const [loginError, setLoginError] = useState("");
   const { isLoading, error, responseData, fetchData } = useFetch(
@@ -22,6 +25,7 @@ function LoginForm({
     if (responseData && "token" in responseData) {
       const token = (responseData as { token: string }).token;
       localStorage.setItem("accessToken", token);
+      setIsLoggedIn(true);
       closeLoginDialog();
       return;
     }
@@ -47,85 +51,94 @@ function LoginForm({
   }
 
   return (
-    <form className="space-y-4 " action="#">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-black text-white ">Login</h1>
-        <p className="font-normal text-white text-md">
-          By continuing, you agree to our{" "}
-          <Link className="text-secondary" to={""}>
-            User Agreement
-          </Link>{" "}
-          and acknowledge that you understand the{" "}
-          <Link className="text-secondary" to={""}>
-            Privacy Policy
-          </Link>
-        </p>
-      </div>
-      <div className="space-y-2">
-        <Input
-          label={"Username"}
-          id={"username"}
-          type={"text"}
-          invalidInput={
-            loginError === "Invalid username or password." ? true : false
-          }
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUser({ ...user, username: e.target.value });
-            setLoginError("");
-          }}
-        />
-        <Input
-          label={"Password"}
-          id={"password"}
-          type={"password"}
-          invalidInput={
-            loginError === "Invalid username or password." ? true : false
-          }
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUser({ ...user, password: e.target.value });
-            setLoginError("");
-          }}
-        />
-        {loginError && <p className="text-destructive">*{loginError}</p>}
-      </div>
-      <div className="space-y-2">
-        <p className="font-normal text-white text-md">
-          Forgot your{" "}
-          <Link className="text-secondary" to={""}>
-            username
-          </Link>
-          {" or "}
-          <Link className="text-secondary" to={""}>
-            password
-          </Link>
-          {"?"}
-        </p>
-        <p className="font-normal text-white text-md">
-          Don't have an account yet?{" "}
+    <>
+      {isLoggedIn && (
+        <h1 className="text-4xl text-white">You are already logged in.</h1>
+      )}
+      {!isLoggedIn && (
+        <form className="space-y-4 " action="#">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-black text-white ">Login</h1>
+            <p className="font-normal text-white text-md">
+              By continuing, you agree to our{" "}
+              <Link className="text-secondary" to={""}>
+                User Agreement
+              </Link>{" "}
+              and acknowledge that you understand the{" "}
+              <Link className="text-secondary" to={""}>
+                Privacy Policy
+              </Link>
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Input
+              label={"Username"}
+              id={"username"}
+              type={"text"}
+              invalidInput={
+                loginError === "Invalid username or password." ? true : false
+              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setUser({ ...user, username: e.target.value });
+                setLoginError("");
+              }}
+            />
+            <Input
+              label={"Password"}
+              id={"password"}
+              type={"password"}
+              invalidInput={
+                loginError === "Invalid username or password." ? true : false
+              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setUser({ ...user, password: e.target.value });
+                setLoginError("");
+              }}
+            />
+            {loginError && <p className="text-destructive">*{loginError}</p>}
+          </div>
+          <div className="space-y-2">
+            <p className="font-normal text-white text-md">
+              Forgot your{" "}
+              <Link className="text-secondary" to={""}>
+                username
+              </Link>
+              {" or "}
+              <Link className="text-secondary" to={""}>
+                password
+              </Link>
+              {"?"}
+            </p>
+            <p className="font-normal text-white text-md">
+              Don't have an account yet?{" "}
+              <Button
+                onClick={() => {
+                  closeLoginDialog();
+                  openSignupDialog();
+                }}
+                type="button"
+                variant={"link"}
+                className="p-0 m-0 font-normal text-secondary text-md "
+              >
+                Create One
+              </Button>
+            </p>
+          </div>
           <Button
-            onClick={() => {
-              closeLoginDialog();
-              openSignupDialog();
-            }}
-            type="button"
-            variant={"link"}
-            className="p-0 m-0 font-normal text-secondary text-md "
+            type="submit"
+            disabled={
+              user.username.length <= 0 || user.password.length < 5
+                ? true
+                : false
+            }
+            onClick={handleLogin}
+            className="block w-1/4 mx-auto text-black"
           >
-            Create One
+            {isLoading ? "Loading..." : "Login"}
           </Button>
-        </p>
-      </div>
-      <Button
-        type="submit"
-        disabled={
-          user.username.length <= 0 || user.password.length < 5 ? true : false
-        }
-        onClick={handleLogin}
-        className="block w-1/4 mx-auto text-black"
-      >
-        {isLoading ? "Loading..." : "Login"}
-      </Button>
-    </form>
+        </form>
+      )}
+    </>
   );
 }
 
