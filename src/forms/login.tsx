@@ -12,7 +12,7 @@ function LoginForm({
   openSignupDialog: () => void;
 }) {
   const [user, setUser] = useState({ username: "", password: "" });
-  const [invalidLogin, setInvalidLogin] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const { isLoading, error, responseData, fetchData } = useFetch(
     "http://localhost:3000/api/user/login",
     "POST"
@@ -25,7 +25,19 @@ function LoginForm({
       closeLoginDialog();
       return;
     }
-    if (error) setInvalidLogin(true);
+    if (error) {
+      if (error === 404 || error === 401) {
+        setLoginError("Invalid username or password.");
+      } else if (error === 400) {
+        setLoginError(
+          "Username must be at least 2 characters long. Passwords must be at least 5 characters long."
+        );
+      } else if (error === 500) {
+        setLoginError("Internal server error, try again later.");
+      } else {
+        setLoginError("An unexpected error occurred.");
+      }
+    }
   }, [responseData, error, closeLoginDialog]);
 
   function handleLogin(e: { preventDefault: () => void }) {
@@ -54,25 +66,27 @@ function LoginForm({
           label={"Username"}
           id={"username"}
           type={"text"}
-          invalidInput={invalidLogin}
+          invalidInput={
+            loginError === "Invalid username or password." ? true : false
+          }
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setUser({ ...user, username: e.target.value });
-            setInvalidLogin(false);
+            setLoginError("");
           }}
         />
         <Input
           label={"Password"}
           id={"password"}
           type={"password"}
-          invalidInput={invalidLogin}
+          invalidInput={
+            loginError === "Invalid username or password." ? true : false
+          }
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setUser({ ...user, password: e.target.value });
-            setInvalidLogin(false);
+            setLoginError("");
           }}
         />
-        {invalidLogin && (
-          <p className="text-destructive">*Invalid username or password</p>
-        )}
+        {loginError && <p className="text-destructive">*{loginError}</p>}
       </div>
       <div className="space-y-2">
         <p className="font-normal text-white text-md">
