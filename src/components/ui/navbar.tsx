@@ -14,6 +14,10 @@ function Navbar() {
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
 
   useEffect(() => {
+    console.log("test");
+  }, []);
+
+  useEffect(() => {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
       if (windowWidth > 640) {

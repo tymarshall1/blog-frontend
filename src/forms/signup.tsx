@@ -58,6 +58,11 @@ function SignupForm({
       setSignupError("Passwords do not match.");
       return;
     }
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (!regex.test(user.username)) {
+      setSignupError("Username can only be letters and numbers.");
+      return;
+    }
     fetchData(user);
   };
 
@@ -86,7 +91,10 @@ function SignupForm({
             setSignupError("");
           }}
           invalidInput={
-            signupError === "Username already taken." ? true : false
+            signupError === "Username already taken." ||
+            signupError === "Username can only be letters and numbers."
+              ? true
+              : false
           }
         ></Input>
         <Input
@@ -133,7 +141,7 @@ function SignupForm({
       </div>
       <Button
         disabled={
-          user.username.length <= 0 ||
+          user.username.length <= 1 ||
           user.password.length < 5 ||
           user.confirmPassword.length < 5
             ? true
