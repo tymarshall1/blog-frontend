@@ -2,12 +2,12 @@ import { useState } from "react";
 
 function useFetch(url: string, method: string) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<number | null>(null);
   const [responseData, setResponseData] = useState(null);
 
   const accessToken = localStorage.getItem("accessToken")
     ? localStorage.getItem("accessToken")
-    : null;
+    : "undefined";
 
   async function fetchData(requestBody: unknown = null) {
     setIsLoading(true);
@@ -21,7 +21,7 @@ function useFetch(url: string, method: string) {
     })
       .then((response) => {
         if (!response.ok) {
-          setError(new Error("error code " + response.status));
+          setError(response.status);
         }
         return response.json();
       })
@@ -29,9 +29,8 @@ function useFetch(url: string, method: string) {
         setResponseData(data);
         setError(null);
       })
-      .catch((e) => {
-        console.error("error...", e);
-        setError(e.message);
+      .catch(() => {
+        setError(500);
       })
       .finally(() => setIsLoading(false));
   }
