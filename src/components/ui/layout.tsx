@@ -4,6 +4,7 @@ import SidebarNav from "./sidebarNav";
 import MoreInformation from "./moreInformation";
 import { userContext } from "@/contexts/userContext";
 import useFetch from "@/hooks/useFetch";
+import { ProfileData } from "@/types/profile";
 type LayoutProps = {
   children: ReactNode;
 };
@@ -16,7 +17,7 @@ function Layout({ children }: LayoutProps) {
     error,
     responseData: userData,
     fetchData,
-  } = useFetch("http://localhost:3000/api/user/profile", "GET");
+  } = useFetch<ProfileData>("http://localhost:3000/api/user/profile", "GET");
 
   useEffect(() => {
     if (isLoggedIn) fetchData();
