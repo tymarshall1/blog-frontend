@@ -48,7 +48,7 @@ function DefaultInformation() {
 
 function MoreInformation() {
   const location = useLocation();
-  const defaultInformationLinks = ["/", "/popular"];
+  const defaultInformationLinks = ["/", "/popular", "/profile"];
 
   return (
     <div className="p-2 mt-4 mr-4 text-white rounded bg-moreInformation min-h-96 max-w-80">

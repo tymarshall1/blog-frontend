@@ -23,7 +23,7 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useContext(userContext);
+  const { isLoggedIn, setIsLoggedIn, userData } = useContext(userContext);
 
   useEffect(() => {
     const updateWindowWidth = () => {
@@ -117,6 +117,15 @@ function Navbar() {
           </>
         ) : (
           <>
+            {/* if screen size is less then 640 and search bar unopened, render search icon next to the buttons*/}
+            {windowWidth <= 640 && !searchOpen && (
+              <span
+                onClick={() => setSearchOpen(true)}
+                className="inline-block text-3xl cursor-pointer material-symbols-outlined"
+              >
+                search
+              </span>
+            )}
             {/* if search bar unopened and user is logged in, render user icon */}
             {isLoggedIn && (
               <>
@@ -128,7 +137,9 @@ function Navbar() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="font-normal text-md">
-                      Profile
+                      <Link to={`/user/${userData ? userData.username : ""}`}>
+                        Profile
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="font-normal text-md">
                       Billing
@@ -193,15 +204,6 @@ function Navbar() {
               </>
             )}
           </>
-        )}
-        {/* if screen size is less then 640 and search bar unopened, render search icon next to the buttons*/}
-        {windowWidth <= 640 && !searchOpen && (
-          <span
-            onClick={() => setSearchOpen(true)}
-            className="inline-block text-3xl cursor-pointer material-symbols-outlined"
-          >
-            search
-          </span>
         )}
       </div>
     </nav>

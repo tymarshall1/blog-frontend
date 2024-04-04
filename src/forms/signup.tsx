@@ -3,6 +3,8 @@ import Input from "./components/input";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import useFetch from "@/hooks/useFetch";
+import { useContext } from "react";
+import { userContext } from "@/contexts/userContext";
 
 function SignupForm({
   closeSignupDialog,
@@ -11,6 +13,7 @@ function SignupForm({
   closeSignupDialog: () => void;
   openLoginDialog: () => void;
 }) {
+  const { isLoggedIn, setIsLoggedIn } = useContext(userContext);
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -25,6 +28,7 @@ function SignupForm({
     if (responseData && "token" in responseData) {
       const token = (responseData as { token: string }).token;
       localStorage.setItem("accessToken", token);
+      setIsLoggedIn(true);
       closeSignupDialog();
       return;
     }
@@ -67,92 +71,99 @@ function SignupForm({
   };
 
   return (
-    <form className="space-y-4 " action="#">
-      <div>
-        <h1 className="text-4xl font-black text-white ">Sign Up</h1>
-        <p className="font-normal text-white text-md">
-          By continuing, you agree to our{" "}
-          <Link className="text-secondary" to={""}>
-            User Agreement
-          </Link>{" "}
-          and acknowledge that you understand the{" "}
-          <Link className="text-secondary" to={""}>
-            Privacy Policy
-          </Link>
-        </p>
-      </div>
-      <div className="space-y-2">
-        <Input
-          label={"Username"}
-          id={"username"}
-          type={"text"}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setUser({ ...user, username: event.target.value });
-            setSignupError("");
-          }}
-          invalidInput={
-            signupError === "Username already taken." ||
-            signupError === "Username can only be letters and numbers."
-              ? true
-              : false
-          }
-        ></Input>
-        <Input
-          label={"Password"}
-          id={"password"}
-          type={"password"}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setUser({ ...user, password: event.target.value });
-            setSignupError("");
-          }}
-          invalidInput={
-            signupError === "Passwords do not match." ? true : false
-          }
-        ></Input>
-        <Input
-          label={"Confirm Password"}
-          id={"confirmPassword"}
-          type={"password"}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setUser({ ...user, confirmPassword: event.target.value });
-            setSignupError("");
-          }}
-          invalidInput={
-            signupError === "Passwords do not match." ? true : false
-          }
-        ></Input>
-        {signupError && <p className="text-destructive">*{signupError}</p>}
-      </div>
-      <div className="space-y-2">
-        <p className="font-normal text-white text-md">
-          Already have an account?{" "}
+    <>
+      {isLoggedIn && (
+        <h1 className="text-4xl text-white">You are already logged in.</h1>
+      )}
+      {!isLoggedIn && (
+        <form className="space-y-4 " action="#">
+          <div>
+            <h1 className="text-4xl font-black text-white ">Sign Up</h1>
+            <p className="font-normal text-white text-md">
+              By continuing, you agree to our{" "}
+              <Link className="text-secondary" to={""}>
+                User Agreement
+              </Link>{" "}
+              and acknowledge that you understand the{" "}
+              <Link className="text-secondary" to={""}>
+                Privacy Policy
+              </Link>
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Input
+              label={"Username"}
+              id={"username"}
+              type={"text"}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setUser({ ...user, username: event.target.value });
+                setSignupError("");
+              }}
+              invalidInput={
+                signupError === "Username already taken." ||
+                signupError === "Username can only be letters and numbers."
+                  ? true
+                  : false
+              }
+            ></Input>
+            <Input
+              label={"Password"}
+              id={"password"}
+              type={"password"}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setUser({ ...user, password: event.target.value });
+                setSignupError("");
+              }}
+              invalidInput={
+                signupError === "Passwords do not match." ? true : false
+              }
+            ></Input>
+            <Input
+              label={"Confirm Password"}
+              id={"confirmPassword"}
+              type={"password"}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setUser({ ...user, confirmPassword: event.target.value });
+                setSignupError("");
+              }}
+              invalidInput={
+                signupError === "Passwords do not match." ? true : false
+              }
+            ></Input>
+            {signupError && <p className="text-destructive">*{signupError}</p>}
+          </div>
+          <div className="space-y-2">
+            <p className="font-normal text-white text-md">
+              Already have an account?{" "}
+              <Button
+                onClick={() => {
+                  closeSignupDialog();
+                  openLoginDialog();
+                }}
+                type="button"
+                variant={"link"}
+                className="p-0 m-0 font-normal text-secondary text-md "
+              >
+                Login
+              </Button>
+            </p>
+          </div>
           <Button
-            onClick={() => {
-              closeSignupDialog();
-              openLoginDialog();
-            }}
-            type="button"
-            variant={"link"}
-            className="p-0 m-0 font-normal text-secondary text-md "
+            disabled={
+              user.username.length <= 1 ||
+              user.password.length < 5 ||
+              user.confirmPassword.length < 5
+                ? true
+                : false
+            }
+            onClick={handleSignup}
+            className="block w-1/4 mx-auto text-black"
           >
-            Login
+            {isLoading ? "Loading..." : "Sign up"}
           </Button>
-        </p>
-      </div>
-      <Button
-        disabled={
-          user.username.length <= 1 ||
-          user.password.length < 5 ||
-          user.confirmPassword.length < 5
-            ? true
-            : false
-        }
-        onClick={handleSignup}
-        className="block w-1/4 mx-auto text-black"
-      >
-        {isLoading ? "Loading..." : "Sign up"}
-      </Button>
-    </form>
+        </form>
+      )}
+    </>
   );
 }
 

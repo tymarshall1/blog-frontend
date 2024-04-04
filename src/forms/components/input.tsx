@@ -1,5 +1,4 @@
 import { ChangeEventHandler } from "react";
-
 type InputProps = {
   label: string;
   id: string;
