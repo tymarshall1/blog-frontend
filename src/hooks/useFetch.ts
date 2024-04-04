@@ -21,7 +21,7 @@ function useFetch<T>(url: string, method: string) {
     })
       .then((response) => {
         if (!response.ok) {
-          setError(response.status);
+          throw new Error(response.status.toString());
         }
         return response.json();
       })
@@ -29,8 +29,12 @@ function useFetch<T>(url: string, method: string) {
         setResponseData(data);
         setError(null);
       })
-      .catch(() => {
-        setError(500);
+      .catch((errorCode) => {
+        if (isNaN(errorCode.message)) {
+          setError(500);
+          return;
+        }
+        setError(Number(errorCode.message));
       })
       .finally(() => setIsLoading(false));
   }

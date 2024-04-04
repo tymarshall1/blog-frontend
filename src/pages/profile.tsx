@@ -27,7 +27,6 @@ function AccountFilter() {
 
 function Profile() {
   const { username } = useParams();
-
   const { isLoading, error, responseData, fetchData } = useFetch<ProfileData>(
     `http://localhost:3000/api/user/profile/${username}`,
     "GET"
@@ -40,8 +39,13 @@ function Profile() {
   return (
     <>
       {isLoading && <>Loading...</>}
-      {error && <>An error occurred.</>}
-      {!isLoading && !error && (
+      {error && (
+        <>
+          {error === 404 && "sorry profile not found"}
+          {error === 500 && "Internal server error, try again later"}
+        </>
+      )}
+      {!error && !isLoading && (
         <>
           <div className="m-2">
             <div className="flex items-center gap-2 mb-4">

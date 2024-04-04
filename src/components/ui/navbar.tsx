@@ -133,7 +133,7 @@ function Navbar() {
                   <DropdownMenuTrigger className="w-10 h-10 bg-white rounded-full"></DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel className="text-lg font-semibold">
-                      My Account
+                      {userData ? userData.username : "My account"}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="font-normal text-md">
