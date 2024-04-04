@@ -5,7 +5,7 @@ import Input from "./components/input";
 import useFetch from "@/hooks/useFetch";
 import { useContext } from "react";
 import { userContext } from "@/contexts/userContext";
-
+import { LoginSignup } from "@/types/loginSignup";
 function LoginForm({
   closeLoginDialog,
   openSignupDialog,
@@ -16,14 +16,14 @@ function LoginForm({
   const { isLoggedIn, setIsLoggedIn } = useContext(userContext);
   const [user, setUser] = useState({ username: "", password: "" });
   const [loginError, setLoginError] = useState("");
-  const { isLoading, error, responseData, fetchData } = useFetch(
+  const { isLoading, error, responseData, fetchData } = useFetch<LoginSignup>(
     "http://localhost:3000/api/user/login",
     "POST"
   );
 
   useEffect(() => {
     if (responseData && "token" in responseData) {
-      const token = (responseData as { token: string }).token;
+      const token = responseData.token;
       localStorage.setItem("accessToken", token);
       setIsLoggedIn(true);
       closeLoginDialog();

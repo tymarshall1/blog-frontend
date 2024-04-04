@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-function useFetch(url: string, method: string) {
+function useFetch<T>(url: string, method: string) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<number | null>(null);
-  const [responseData, setResponseData] = useState(null);
+  const [responseData, setResponseData] = useState<T | null>(null);
 
   const accessToken = localStorage.getItem("accessToken")
     ? localStorage.getItem("accessToken")
@@ -25,7 +25,7 @@ function useFetch(url: string, method: string) {
         }
         return response.json();
       })
-      .then((data) => {
+      .then((data: T) => {
         setResponseData(data);
         setError(null);
       })

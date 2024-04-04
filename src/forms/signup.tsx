@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import useFetch from "@/hooks/useFetch";
 import { useContext } from "react";
 import { userContext } from "@/contexts/userContext";
+import { LoginSignup } from "@/types/loginSignup";
 
 function SignupForm({
   closeSignupDialog,
@@ -20,13 +21,13 @@ function SignupForm({
     confirmPassword: "",
   });
   const [signupError, setSignupError] = useState("");
-  const { isLoading, error, responseData, fetchData } = useFetch(
+  const { isLoading, error, responseData, fetchData } = useFetch<LoginSignup>(
     "http://localhost:3000/api/user/signup",
     "POST"
   );
   useEffect(() => {
     if (responseData && "token" in responseData) {
-      const token = (responseData as { token: string }).token;
+      const token = responseData.token;
       localStorage.setItem("accessToken", token);
       setIsLoggedIn(true);
       closeSignupDialog();
