@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useParams } from "react-router-dom";
 import { ProfileData } from "@/types/profile";
-
+import Loading from "@/components/ui/loading";
+import Error from "@/components/ui/error";
 function AccountFilter() {
   return (
     <div className="flex items-center justify-center gap-4">
@@ -38,10 +39,14 @@ function Profile() {
 
   return (
     <>
-      {isLoading && <>Loading...</>}
+      {isLoading && (
+        <div className="flex items-center justify-center">
+          <Loading />
+        </div>
+      )}
       {error && (
         <>
-          {error === 404 && "sorry profile not found"}
+          {error === 404 && <Error />}
           {error === 500 && "Internal server error, try again later"}
         </>
       )}

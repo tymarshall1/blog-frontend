@@ -7,8 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import LoginForm from "@/forms/login";
 import SignupForm from "@/forms/signup";
-import { useContext } from "react";
-import { userContext } from "@/contexts/userContext";
+import { useAuthContext } from "@/hooks/useAuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,8 +22,7 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
-  const { isLoggedIn, setIsLoggedIn, userData } = useContext(userContext);
-
+  const { dispatch } = useAuthContext();
   useEffect(() => {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
@@ -127,82 +125,79 @@ function Navbar() {
               </span>
             )}
             {/* if search bar unopened and user is logged in, render user icon */}
-            {isLoggedIn && (
-              <>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="w-10 h-10 bg-white rounded-full"></DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel className="text-lg font-semibold">
-                      {userData ? userData.username : "My account"}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="font-normal text-md">
-                      <Link to={`/user/${userData ? userData.username : ""}`}>
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="font-normal text-md">
-                      Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="font-normal text-md">
-                      Team
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="font-normal text-md">
-                      Subscription
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="font-normal text-md"
-                      onClick={() => {
-                        localStorage.removeItem("accessToken");
-                        setIsLoggedIn(false);
-                      }}
-                    >
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            )}
-            {/* if search bar unopened, render login and sign-up buttons */}
-            {!isLoggedIn && (
-              <>
-                <Dialog
-                  open={isLoginDialogOpen}
-                  onOpenChange={setIsLoginDialogOpen}
-                >
-                  <DialogTrigger
-                    className="text-xl font-black hover:text-secondary"
-                    onClick={() => setIsLoginDialogOpen(true)}
-                  >
-                    Login
-                  </DialogTrigger>
-                  <DialogContent>
-                    <LoginForm
-                      closeLoginDialog={closeLoginDialog}
-                      openSignupDialog={openSignupDialog}
-                    />
-                  </DialogContent>
-                </Dialog>
 
-                <Dialog
-                  open={isSignupDialogOpen}
-                  onOpenChange={setIsSignupDialogOpen}
-                >
-                  <DialogTrigger
-                    className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
-                    onClick={() => setIsSignupDialogOpen(true)}
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="w-10 h-10 bg-white rounded-full"></DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel className="text-lg font-semibold">
+                    "My account"
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="font-normal text-md">
+                    <Link to={`/user/tyler`}>Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="font-normal text-md">
+                    Billing
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="font-normal text-md">
+                    Team
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="font-normal text-md">
+                    Subscription
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="font-normal text-md"
+                    onClick={() => {
+                      localStorage.removeItem("accessToken");
+                      dispatch({ type: "LOGOUT" });
+                    }}
                   >
-                    Sign Up
-                  </DialogTrigger>
-                  <DialogContent>
-                    <SignupForm
-                      closeSignupDialog={closeSignupDialog}
-                      openLoginDialog={openLoginDialog}
-                    />
-                  </DialogContent>
-                </Dialog>
-              </>
-            )}
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+
+            {/* if search bar unopened, render login and sign-up buttons */}
+
+            <>
+              <Dialog
+                open={isLoginDialogOpen}
+                onOpenChange={setIsLoginDialogOpen}
+              >
+                <DialogTrigger
+                  className="text-xl font-black hover:text-secondary"
+                  onClick={() => setIsLoginDialogOpen(true)}
+                >
+                  Login
+                </DialogTrigger>
+                <DialogContent>
+                  <LoginForm
+                    closeLoginDialog={closeLoginDialog}
+                    openSignupDialog={openSignupDialog}
+                  />
+                </DialogContent>
+              </Dialog>
+
+              <Dialog
+                open={isSignupDialogOpen}
+                onOpenChange={setIsSignupDialogOpen}
+              >
+                <DialogTrigger
+                  className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
+                  onClick={() => setIsSignupDialogOpen(true)}
+                >
+                  Sign Up
+                </DialogTrigger>
+                <DialogContent>
+                  <SignupForm
+                    closeSignupDialog={closeSignupDialog}
+                    openLoginDialog={openLoginDialog}
+                  />
+                </DialogContent>
+              </Dialog>
+            </>
           </>
         )}
       </div>
