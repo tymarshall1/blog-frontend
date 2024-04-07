@@ -16,12 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLogout } from "@/hooks/useLogout";
 
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
+  const { logout } = useLogout();
   const { dispatch } = useAuthContext();
   useEffect(() => {
     const updateWindowWidth = () => {
@@ -149,8 +151,7 @@ function Navbar() {
                   <DropdownMenuItem
                     className="font-normal text-md"
                     onClick={() => {
-                      localStorage.removeItem("accessToken");
-                      dispatch({ type: "LOGOUT" });
+                      logout();
                     }}
                   >
                     Logout
