@@ -1,10 +1,21 @@
-import { createContext, useReducer, Dispatch, ReactNode } from "react";
+import {
+  createContext,
+  useReducer,
+  Dispatch,
+  ReactNode,
+  useEffect,
+} from "react";
+
+type User = {
+  accessToken: string;
+  username: string;
+};
 
 interface AuthState {
-  user: string | null;
+  user: User | null;
 }
 
-type AuthAction = { type: "LOGIN"; payload: string } | { type: "LOGOUT" };
+type AuthAction = { type: "LOGIN"; payload: User } | { type: "LOGOUT" };
 
 interface AuthContextType extends AuthState {
   dispatch: Dispatch<AuthAction>;
@@ -32,6 +43,31 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      fetch("http://localhost:3000/api/user/profile", {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + accessToken,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status.toString());
+          }
+          return response.json();
+        })
+        .then((data) => {
+          dispatch({ type: "LOGIN", payload: { accessToken, ...data } });
+        })
+        .catch(() => {
+          dispatch({ type: "LOGOUT" });
+          localStorage.removeItem("accessToken");
+        });
+    }
+  }, []);
 
   console.log("AuthContext state: ", state);
 

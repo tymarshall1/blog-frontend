@@ -31,7 +31,10 @@ export const useSignup = () => {
       } else {
         const json = await response.json();
         localStorage.setItem("accessToken", json.token);
-        dispatch({ type: "LOGIN", payload: json.token });
+        dispatch({
+          type: "LOGIN",
+          payload: { accessToken: json.token, username },
+        });
         setIsLoading(false);
         setStatusCode(200);
         onSuccess && onSuccess();

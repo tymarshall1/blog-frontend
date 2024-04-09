@@ -7,7 +7,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import LoginForm from "@/forms/login";
 import SignupForm from "@/forms/signup";
-import { useAuthContext } from "@/hooks/useAuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,14 +16,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/hooks/useLogout";
-
+import { useAuthContext } from "@/hooks/useAuthContext";
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
   const { logout } = useLogout();
-  const { dispatch } = useAuthContext();
+  const { user } = useAuthContext();
   useEffect(() => {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
@@ -129,75 +128,74 @@ function Navbar() {
             {/* if search bar unopened and user is logged in, render user icon */}
 
             <>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="w-10 h-10 bg-white rounded-full"></DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel className="text-lg font-semibold">
-                    "My account"
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="font-normal text-md">
-                    <Link to={`/user/tyler`}>Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="font-normal text-md">
-                    Billing
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="font-normal text-md">
-                    Team
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="font-normal text-md">
-                    Subscription
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="font-normal text-md"
-                    onClick={() => {
-                      logout();
-                    }}
-                  >
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {user && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="w-10 h-10 bg-white rounded-full"></DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel className="text-lg font-semibold">
+                      {user.username}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="font-normal text-md">
+                      <Link className="w-full" to={`/user/${user.username}`}>
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="w-full font-normal text-md"
+                      onClick={() => {
+                        logout();
+                      }}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </>
 
             {/* if search bar unopened, render login and sign-up buttons */}
 
             <>
-              <Dialog
-                open={isLoginDialogOpen}
-                onOpenChange={setIsLoginDialogOpen}
-              >
-                <DialogTrigger
-                  className="text-xl font-black hover:text-secondary"
-                  onClick={() => setIsLoginDialogOpen(true)}
-                >
-                  Login
-                </DialogTrigger>
-                <DialogContent>
-                  <LoginForm
-                    closeLoginDialog={closeLoginDialog}
-                    openSignupDialog={openSignupDialog}
-                  />
-                </DialogContent>
-              </Dialog>
+              {!user && (
+                <>
+                  <Dialog
+                    open={isLoginDialogOpen}
+                    onOpenChange={setIsLoginDialogOpen}
+                  >
+                    <DialogTrigger
+                      className="text-xl font-black hover:text-secondary"
+                      onClick={() => setIsLoginDialogOpen(true)}
+                    >
+                      Login
+                    </DialogTrigger>
+                    <DialogContent>
+                      <LoginForm
+                        closeLoginDialog={closeLoginDialog}
+                        openSignupDialog={openSignupDialog}
+                      />
+                    </DialogContent>
+                  </Dialog>
 
-              <Dialog
-                open={isSignupDialogOpen}
-                onOpenChange={setIsSignupDialogOpen}
-              >
-                <DialogTrigger
-                  className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
-                  onClick={() => setIsSignupDialogOpen(true)}
-                >
-                  Sign Up
-                </DialogTrigger>
-                <DialogContent>
-                  <SignupForm
-                    closeSignupDialog={closeSignupDialog}
-                    openLoginDialog={openLoginDialog}
-                  />
-                </DialogContent>
-              </Dialog>
+                  <Dialog
+                    open={isSignupDialogOpen}
+                    onOpenChange={setIsSignupDialogOpen}
+                  >
+                    <DialogTrigger
+                      className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
+                      onClick={() => setIsSignupDialogOpen(true)}
+                    >
+                      Sign Up
+                    </DialogTrigger>
+                    <DialogContent>
+                      <SignupForm
+                        closeSignupDialog={closeSignupDialog}
+                        openLoginDialog={openLoginDialog}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                </>
+              )}
             </>
           </>
         )}
