@@ -1,6 +1,10 @@
 import loadingSpinner from "../../assets/loadingSpinner.gif";
 function Loading() {
-  return <img src={loadingSpinner} alt="loading" />;
+  return (
+    <div className="flex items-center justify-center">
+      <img src={loadingSpinner} alt="loading" />
+    </div>
+  );
 }
 
 export default Loading;

@@ -1,5 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SeeMore from "./seeMore";
+import { ReactNode } from "react";
 
 type CommunityProps = {
   title: string;
@@ -45,20 +46,18 @@ function DefaultInformation() {
     </>
   );
 }
-
-function MoreInformation() {
-  const location = useLocation();
-  const defaultInformationLinks = ["/", "/popular", "/profile"];
-
+function MoreInformation({
+  children,
+  defaultInformation,
+}: {
+  children: ReactNode;
+  defaultInformation?: boolean;
+}) {
   return (
-    <div className="p-2 mt-4 mr-4 text-white rounded bg-moreInformation min-h-96 max-w-80">
-      {defaultInformationLinks.includes(location.pathname) ? (
-        <DefaultInformation />
-      ) : (
-        <div>test</div>
-      )}
+    <div className="p-2 mt-4 mr-4 text-white rounded bg-moreInformation min-h-96 max-w-80 min-w-60">
+      {defaultInformation && <DefaultInformation />}
+      {!defaultInformation && children}
     </div>
   );
 }
-
 export default MoreInformation;
