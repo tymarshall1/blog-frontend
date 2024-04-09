@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useParams } from "react-router-dom";
 import { ProfileData } from "@/types/profile";
@@ -9,22 +9,68 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import MoreInformation from "../components/ui/moreInformation";
 
 function AccountFilter({ isMyAccount }: { isMyAccount: boolean }) {
+  const [lastClicked, setLastClicked] = useState("overview");
+  const handleClick = (lastLinkSelected: string) => {
+    setLastClicked(lastLinkSelected);
+  };
   return (
     <div className="flex items-center justify-center gap-4">
-      <Button className="font-bold bg-none text-md" variant={"link"}>
+      <Button
+        onClick={() => handleClick("overview")}
+        className={`${
+          lastClicked === "overview" ? " bg-black " : ""
+        } font-bold bg-none text-md rounded-none rounded-t-lg`}
+        variant={"link"}
+      >
         Overview
       </Button>
-      <Button className="font-bold bg-none text-md" variant={"link"}>
+      <Button
+        onClick={() => handleClick("posts")}
+        className={`${
+          lastClicked === "posts" ? "bg-black" : ""
+        } font-bold bg-none text-md rounded-none rounded-t-lg`}
+        variant={"link"}
+      >
         Posts
       </Button>
-      <Button className="font-bold bg-none text-md" variant={"link"}>
+      <Button
+        onClick={() => handleClick("comments")}
+        className={`${
+          lastClicked === "comments" ? "bg-black" : ""
+        } font-bold bg-none text-md rounded-none  rounded-t-lg`}
+        variant={"link"}
+      >
         Comments
       </Button>
       {isMyAccount && (
-        <Button className="font-bold bg-none text-md" variant={"link"}>
+        <Button
+          onClick={() => handleClick("profile")}
+          className={`${
+            lastClicked === "profile" ? "bg-black" : ""
+          } font-bold bg-none text-md rounded-none  rounded-t-lg`}
+          variant={"link"}
+        >
           Profile
         </Button>
       )}
+    </div>
+  );
+}
+
+function ProfileHeader({
+  accountTitle,
+  isMyAccount,
+}: {
+  accountTitle: string;
+  isMyAccount: boolean;
+}) {
+  return (
+    <div className="px-4 pt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="bg-white rounded-full w-14 h-14"></div>
+        <h1 className="text-2xl font-bold text-white">{accountTitle}</h1>
+      </div>
+      <AccountFilter isMyAccount={isMyAccount} />
     </div>
   );
 }
@@ -55,11 +101,11 @@ function Profile() {
 
   useEffect(() => {
     fetchData();
-  }, [username, user]);
+  }, [username]);
 
   return (
-    <div className="flex gap-2">
-      <div className="flex-1">
+    <div className="flex gap-4 m-2">
+      <div className="flex-1 mt-4">
         {isLoading && <Loading />}
         {error && (
           <>
@@ -69,24 +115,19 @@ function Profile() {
         )}
         {!error && !isLoading && (
           <>
-            <div className="m-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="bg-white rounded-full w-14 h-14"></div>
-                <h1 className="text-xl font-bold text-white">
-                  {responseData ? responseData.username : "none"}
-                </h1>
-              </div>
-              <AccountFilter isMyAccount={user?.username === username} />
-              <h1></h1>
-            </div>
+            <ProfileHeader
+              accountTitle={responseData ? responseData.username : "none"}
+              isMyAccount={user?.username === username}
+            />
           </>
         )}
       </div>
       <MoreInformation defaultInformation={error ? true : false}>
         <>
           {isLoading && <Loading />}
-          {!error && (
-            <>
+          {!error && !isLoading && (
+            <div className="flex flex-col">
+              <div className="self-center w-20 h-20 bg-white rounded-full"></div>
               <ProfileSection
                 title={"Username"}
                 data={responseData?.username || "error"}
@@ -111,7 +152,7 @@ function Profile() {
                 title={"Joined"}
                 data={responseData?.accountCreated || "error"}
               />
-            </>
+            </div>
           )}
         </>
       </MoreInformation>
