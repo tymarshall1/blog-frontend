@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useAuthContext } from "./useAuthContext";
+import { useSetAccountDetails } from "@/hooks/useSetAccountDetails";
+import { useToast } from "./use-toast";
 
 export const useSignup = () => {
   const [statusCode, setStatusCode] = useState<number>(200);
   const [isLoading, setIsLoading] = useState(false);
-  const { dispatch } = useAuthContext();
-
+  const { fetchAccountDetails } = useSetAccountDetails();
+  const { toast } = useToast();
   const signup = async ({
     username,
     password,
@@ -31,13 +32,14 @@ export const useSignup = () => {
       } else {
         const json = await response.json();
         localStorage.setItem("accessToken", json.token);
-        dispatch({
-          type: "LOGIN",
-          payload: { accessToken: json.token, username },
-        });
         setIsLoading(false);
         setStatusCode(200);
         onSuccess && onSuccess();
+        fetchAccountDetails();
+        toast({
+          title: `Thanks for creating an account! ${username}`,
+          description: "Start by customizing your profile!",
+        });
       }
     } catch (er) {
       setStatusCode(500);

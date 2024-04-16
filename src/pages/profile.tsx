@@ -2,41 +2,55 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import { useParams } from "react-router-dom";
-import { ProfileData } from "@/types/profile";
+import { AccountData } from "@/types/accountData";
 import Loading from "@/components/ui/loading";
 import Error from "@/components/ui/error";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import MoreInformation from "../components/ui/moreInformation";
+import ProfileForm from "@/forms/profile";
+enum ProfileFilterOptions {
+  Overview = "overview",
+  Posts = "posts",
+  Comments = "comments",
+  Profile = "profile",
+}
 
-function AccountFilter({ isMyAccount }: { isMyAccount: boolean }) {
-  const [lastClicked, setLastClicked] = useState("overview");
-  const handleClick = (lastLinkSelected: string) => {
+function AccountFilter({
+  isMyAccount,
+  lastClicked,
+  setLastClicked,
+}: {
+  isMyAccount: boolean;
+  lastClicked: string;
+  setLastClicked: React.Dispatch<React.SetStateAction<ProfileFilterOptions>>;
+}) {
+  const handleClick = (lastLinkSelected: ProfileFilterOptions) => {
     setLastClicked(lastLinkSelected);
   };
   return (
     <div className="flex items-center justify-center gap-4">
       <Button
-        onClick={() => handleClick("overview")}
+        onClick={() => handleClick(ProfileFilterOptions.Overview)}
         className={`${
-          lastClicked === "overview" ? " bg-black " : ""
+          lastClicked === ProfileFilterOptions.Overview ? " bg-black " : ""
         } font-bold bg-none text-md rounded-none rounded-t-lg`}
         variant={"link"}
       >
         Overview
       </Button>
       <Button
-        onClick={() => handleClick("posts")}
+        onClick={() => handleClick(ProfileFilterOptions.Posts)}
         className={`${
-          lastClicked === "posts" ? "bg-black" : ""
+          lastClicked === ProfileFilterOptions.Posts ? "bg-black" : ""
         } font-bold bg-none text-md rounded-none rounded-t-lg`}
         variant={"link"}
       >
         Posts
       </Button>
       <Button
-        onClick={() => handleClick("comments")}
+        onClick={() => handleClick(ProfileFilterOptions.Comments)}
         className={`${
-          lastClicked === "comments" ? "bg-black" : ""
+          lastClicked === ProfileFilterOptions.Comments ? "bg-black" : ""
         } font-bold bg-none text-md rounded-none  rounded-t-lg`}
         variant={"link"}
       >
@@ -44,9 +58,9 @@ function AccountFilter({ isMyAccount }: { isMyAccount: boolean }) {
       </Button>
       {isMyAccount && (
         <Button
-          onClick={() => handleClick("profile")}
+          onClick={() => handleClick(ProfileFilterOptions.Profile)}
           className={`${
-            lastClicked === "profile" ? "bg-black" : ""
+            lastClicked === ProfileFilterOptions.Profile ? "bg-black" : ""
           } font-bold bg-none text-md rounded-none  rounded-t-lg`}
           variant={"link"}
         >
@@ -60,9 +74,13 @@ function AccountFilter({ isMyAccount }: { isMyAccount: boolean }) {
 function ProfileHeader({
   accountTitle,
   isMyAccount,
+  lastClicked,
+  setLastClicked,
 }: {
   accountTitle: string;
   isMyAccount: boolean;
+  lastClicked: string;
+  setLastClicked: React.Dispatch<React.SetStateAction<ProfileFilterOptions>>;
 }) {
   return (
     <div className="px-4 pt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
@@ -70,7 +88,11 @@ function ProfileHeader({
         <div className="bg-white rounded-full w-14 h-14"></div>
         <h1 className="text-2xl font-bold text-white">{accountTitle}</h1>
       </div>
-      <AccountFilter isMyAccount={isMyAccount} />
+      <AccountFilter
+        isMyAccount={isMyAccount}
+        lastClicked={lastClicked}
+        setLastClicked={setLastClicked}
+      />
     </div>
   );
 }
@@ -94,7 +116,10 @@ function ProfileSection(props: ProfileSectionProps) {
 function Profile() {
   const { username } = useParams();
   const { user } = useAuthContext();
-  const { isLoading, error, responseData, fetchData } = useFetch<ProfileData>(
+  const [lastClicked, setLastClicked] = useState<ProfileFilterOptions>(
+    ProfileFilterOptions.Overview
+  );
+  const { isLoading, error, responseData, fetchData } = useFetch<AccountData>(
     `http://localhost:3000/api/user/profile/${username}`,
     "GET"
   );
@@ -114,12 +139,26 @@ function Profile() {
           </>
         )}
         {!error && !isLoading && (
-          <>
+          <div className="h-full space-y-4">
             <ProfileHeader
-              accountTitle={responseData ? responseData.username : "none"}
+              accountTitle={
+                responseData?.username ? responseData.username : "none"
+              }
               isMyAccount={user?.username === username}
+              lastClicked={lastClicked}
+              setLastClicked={setLastClicked}
             />
-          </>
+            <div className=" border-[1px] rounded border-sideNav p-4">
+              {lastClicked === ProfileFilterOptions.Overview && <>overview</>}
+              {lastClicked === ProfileFilterOptions.Posts && <>posts</>}
+              {lastClicked === ProfileFilterOptions.Comments && <>comments</>}
+              {lastClicked === ProfileFilterOptions.Profile && (
+                <>
+                  <ProfileForm />
+                </>
+              )}
+            </div>
+          </div>
         )}
       </div>
       <MoreInformation defaultInformation={error ? true : false}>
@@ -134,19 +173,19 @@ function Profile() {
               />
               <ProfileSection
                 title={"First Name"}
-                data={responseData?.profile.firstName || "error"}
+                data={responseData?.profile?.firstName || "error"}
               />
               <ProfileSection
                 title={"Last Name"}
-                data={responseData?.profile.lastName || "error"}
+                data={responseData?.profile?.lastName || "error"}
               />
               <ProfileSection
                 title={"Posts"}
-                data={responseData?.profile.posts.length || "0"}
+                data={responseData?.profile?.posts.length || "0"}
               />
               <ProfileSection
                 title={"Comments"}
-                data={responseData?.profile.comments.length || "0"}
+                data={responseData?.profile?.comments.length || "0"}
               />
               <ProfileSection
                 title={"Joined"}

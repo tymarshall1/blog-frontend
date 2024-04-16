@@ -5,17 +5,16 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-
-type User = {
-  accessToken: string;
-  username: string;
-};
+import { AccountData } from "@/types/accountData";
 
 interface AuthState {
-  user: User | null;
+  user: AccountData | null;
 }
 
-type AuthAction = { type: "LOGIN"; payload: User } | { type: "LOGOUT" };
+type AuthAction =
+  | { type: "LOGIN"; payload: AccountData }
+  | { type: "LOGOUT" }
+  | { type: "UPDATE"; payload: AccountData };
 
 interface AuthContextType extends AuthState {
   dispatch: Dispatch<AuthAction>;
@@ -28,6 +27,8 @@ const initialState: AuthState = {
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN":
+      return { user: action.payload };
+    case "UPDATE":
       return { user: action.payload };
     case "LOGOUT":
       return { user: null };
