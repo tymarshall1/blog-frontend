@@ -90,7 +90,7 @@ function ProfileHeader({
     <div className="px-4 pt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
       <div className="flex items-center gap-2 mb-4">
         <img
-          className="bg-white rounded-full w-14 h-14"
+          className="bg-transparent rounded-full w-14 h-14"
           src={profileImg}
           alt="profile image"
         />
@@ -188,7 +188,7 @@ function Profile() {
           {!error && !isLoading && (
             <div className="flex flex-col">
               <img
-                className="self-center w-20 h-20 bg-white rounded-full"
+                className="self-center w-20 h-20 bg-transparent rounded-full"
                 src={
                   isMyAccount
                     ? user?.profile?.profileImg.toString()

@@ -37,6 +37,21 @@ function ProfileForm() {
     "image/svg+xml",
   ];
 
+  //used to convert the profile image url string to a file type
+  useEffect(() => {
+    fetch(user?.profile?.profileImg.toString() || "")
+      .then((response) => response.blob())
+      .then((blob) => {
+        setProfileFields({
+          ...profileFields,
+          profileImg: new File([blob], "profileImg", { type: "image/png" }),
+        });
+      })
+      .catch(() => {
+        setInputError("unable to fetch profile image");
+      });
+  }, []);
+
   useEffect(() => {
     if (error === 500) setInputError("Server error, try again later.");
     if (error === 400 || error === 403) {
@@ -84,52 +99,51 @@ function ProfileForm() {
       setEditing(false);
       setInputError("");
       setProfileImageChange(false);
-      toast({ title: "Profile has been updated!" });
     } else {
       navigate("/");
     }
   };
   return (
     <form className="max-w-lg mx-auto space-y-4" encType="multipart/form-data">
-      {!editing && (
-        <img
-          className="w-40 h-40 mx-auto bg-white rounded-full"
-          src={user?.profile?.profileImg.toString()}
-          alt="profile image"
-        />
-      )}
+      <label htmlFor="profilePicture" aria-hidden={!editing}>
+        <div
+          className={`${
+            editing ? "hover:opacity-70 hover:cursor-pointer" : ""
+          } flex items-end w-40 h-40 mx-auto `}
+        >
+          <img
+            className="mx-auto bg-white rounded-full"
+            src={user?.profile?.profileImg.toString()}
+            alt="profile image"
+          />
+          <span
+            className={`${
+              editing ? "block" : "hidden"
+            } text-2xl cursor-pointer text-secondary material-symbols-outlined`}
+          >
+            add_a_photo
+          </span>
+        </div>
+      </label>
       {editing && (
         <>
-          <div className="w-40 h-40 mx-auto hover:opacity-90 hover:cursor-pointer">
-            <label htmlFor="profilePicture">
-              <div className="flex items-end w-40 h-40">
-                <img
-                  className="mx-auto bg-white rounded-full cursor-pointer"
-                  src={user?.profile?.profileImg.toString()}
-                  alt="profile image"
-                />
-                <span className="text-2xl cursor-pointer text-secondary material-symbols-outlined">
-                  add_a_photo
-                </span>
-              </div>
-            </label>
-            <input
-              onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                if (profileFields && event.target.files) {
-                  setProfileFields({
-                    ...profileFields,
-                    profileImg: event.target.files?.[0],
-                  });
-                  setProfileImageChange(true);
-                  setInputError("");
-                  event.target.value = "";
-                }
-              }}
-              id="profilePicture"
-              className="hidden"
-              type="file"
-            />
-          </div>
+          <input
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+              if (profileFields && event.target.files) {
+                setProfileFields({
+                  ...profileFields,
+                  profileImg: event.target.files?.[0],
+                });
+                setProfileImageChange(true);
+                setInputError("");
+                event.target.value = "";
+              }
+            }}
+            id="profilePicture"
+            className="hidden"
+            type="file"
+          />
+
           {profileImageChange && (
             <div>
               <h3 className="text-xl font-medium text-white">

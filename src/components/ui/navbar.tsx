@@ -132,7 +132,7 @@ function Navbar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <img
-                      className="w-10 h-10 bg-white rounded-full"
+                      className="w-10 h-10 bg-transparent rounded-full"
                       src={user?.profile?.profileImg.toString()}
                       alt="profile image"
                     />

@@ -2,6 +2,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { AccountData } from "@/types/accountData";
 import { useEffect, useState } from "react";
 import { ProfileFields } from "@/types/profileFields";
+import { useToast } from "@/hooks/use-toast";
 
 export const useUpdateProfile = () => {
   const { user } = useAuthContext();
@@ -9,7 +10,7 @@ export const useUpdateProfile = () => {
   const profile = account?.profile;
   const { dispatch } = useAuthContext();
   const [error, setError] = useState<number | null>(null);
-
+  const { toast } = useToast();
   useEffect(() => {
     if (account) {
       dispatch({ type: "UPDATE", payload: account });
@@ -48,6 +49,7 @@ export const useUpdateProfile = () => {
                 profileImg: responseJson.profileImg,
               },
             });
+            toast({ title: "Profile has been updated!" });
           }
         }
       } catch (err) {
