@@ -1,12 +1,7 @@
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { AccountData } from "@/types/accountData";
 import { useEffect, useState } from "react";
-
-type ProfileFields = {
-  firstName: string;
-  lastName: string;
-  biography: string;
-};
+import { ProfileFields } from "@/types/profileFields";
 
 export const useUpdateProfile = () => {
   const { user } = useAuthContext();
@@ -23,15 +18,20 @@ export const useUpdateProfile = () => {
 
   async function updateProfile(profileFields: ProfileFields) {
     const accessToken = localStorage.getItem("accessToken");
+    const formData = new FormData();
+    formData.append("firstName", profileFields.firstName);
+    formData.append("lastName", profileFields.lastName);
+    formData.append("biography", profileFields.biography);
+    formData.append("profileImg", profileFields.profileImg);
+
     if (user) {
       try {
         const response = await fetch("http://localhost:3000/api/user/profile", {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
             Authorization: "Bearer " + accessToken,
           },
-          body: JSON.stringify(profileFields),
+          body: formData,
         });
         if (!response.ok) {
           throw new Error(response.status.toString());
@@ -45,6 +45,7 @@ export const useUpdateProfile = () => {
                 firstName: responseJson.firstName,
                 lastName: responseJson.lastName,
                 biography: responseJson.biography,
+                profileImg: responseJson.profileImg,
               },
             });
           }

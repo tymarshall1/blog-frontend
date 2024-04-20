@@ -10,6 +10,7 @@ export type AccountData = {
     posts: [];
     saved: [];
     id: string;
+    profileImg: File;
   };
   accountCreated?: string;
 };

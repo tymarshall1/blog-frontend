@@ -130,7 +130,13 @@ function Navbar() {
             <>
               {user && (
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="w-10 h-10 bg-white rounded-full"></DropdownMenuTrigger>
+                  <DropdownMenuTrigger>
+                    <img
+                      className="w-10 h-10 bg-white rounded-full"
+                      src={user?.profile?.profileImg.toString()}
+                      alt="profile image"
+                    />
+                  </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel className="text-lg font-semibold">
                       {user.username}

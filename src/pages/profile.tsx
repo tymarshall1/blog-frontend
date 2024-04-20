@@ -76,18 +76,29 @@ function ProfileHeader({
   isMyAccount,
   lastClicked,
   setLastClicked,
+  bio,
+  profileImg,
 }: {
   accountTitle: string;
   isMyAccount: boolean;
   lastClicked: string;
   setLastClicked: React.Dispatch<React.SetStateAction<ProfileFilterOptions>>;
+  bio: string;
+  profileImg: string | undefined;
 }) {
   return (
     <div className="px-4 pt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
       <div className="flex items-center gap-2 mb-4">
-        <div className="bg-white rounded-full w-14 h-14"></div>
+        <img
+          className="bg-white rounded-full w-14 h-14"
+          src={profileImg}
+          alt="profile image"
+        />
         <h1 className="text-2xl font-bold text-white">{accountTitle}</h1>
       </div>
+      <p className="max-w-lg overflow-hidden text-sm font-medium text-white break-words max-h-40 ">
+        {bio}
+      </p>
       <AccountFilter
         isMyAccount={isMyAccount}
         lastClicked={lastClicked}
@@ -123,6 +134,7 @@ function Profile() {
     `http://localhost:3000/api/user/profile/${username}`,
     "GET"
   );
+  const isMyAccount = user?.username === username;
 
   useEffect(() => {
     fetchData();
@@ -144,9 +156,18 @@ function Profile() {
               accountTitle={
                 responseData?.username ? responseData.username : "none"
               }
-              isMyAccount={user?.username === username}
+              isMyAccount={isMyAccount}
               lastClicked={lastClicked}
               setLastClicked={setLastClicked}
+              bio={
+                isMyAccount
+                  ? user?.profile?.biography || ""
+                  : responseData?.profile?.biography || ""
+              }
+              profileImg={
+                (isMyAccount && user?.profile?.profileImg.toString()) ||
+                responseData?.profile?.profileImg.toString()
+              }
             />
             <div className=" border-[1px] rounded border-sideNav p-4">
               {lastClicked === ProfileFilterOptions.Overview && <>overview</>}
@@ -166,18 +187,34 @@ function Profile() {
           {isLoading && <Loading />}
           {!error && !isLoading && (
             <div className="flex flex-col">
-              <div className="self-center w-20 h-20 bg-white rounded-full"></div>
+              <img
+                className="self-center w-20 h-20 bg-white rounded-full"
+                src={
+                  isMyAccount
+                    ? user?.profile?.profileImg.toString()
+                    : responseData?.profile?.profileImg.toString()
+                }
+                alt="profile image"
+              />
               <ProfileSection
                 title={"Username"}
                 data={responseData?.username || "error"}
               />
               <ProfileSection
                 title={"First Name"}
-                data={responseData?.profile?.firstName || "error"}
+                data={
+                  isMyAccount
+                    ? user?.profile?.firstName || "Error"
+                    : responseData?.profile?.firstName || "Error"
+                }
               />
               <ProfileSection
                 title={"Last Name"}
-                data={responseData?.profile?.lastName || "error"}
+                data={
+                  isMyAccount
+                    ? user?.profile?.lastName || "Error"
+                    : responseData?.profile?.lastName || "error"
+                }
               />
               <ProfileSection
                 title={"Posts"}
