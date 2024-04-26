@@ -147,6 +147,11 @@ function Navbar() {
                         Profile
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem className="font-normal text-md">
+                      <Link className="w-full" to="/community/create">
+                        Create a Community
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       className="w-full font-normal text-md"
                       onClick={() => {

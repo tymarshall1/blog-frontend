@@ -12,3 +12,8 @@ export function limitCharacters(text: string, maxLength: number): string {
     return text.slice(0, maxLength) + "...";
   }
 }
+
+export function separateCommas(string: string) {
+  const splitArray = string.split(",").map((item) => item.trim());
+  return splitArray;
+}
