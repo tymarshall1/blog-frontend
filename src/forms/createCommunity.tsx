@@ -15,8 +15,9 @@ enum InputError {
   noIcon = "Please choose an icon for the community.",
   iconToLarge = "Community icon must be under 1 mb.",
   iconIncorrectType = "Community icon must be of type png, jpg, jpeg, or svg.",
-  invalidName = "Community names must be at least 1 character long.",
-  invalidDescription = "Community descriptions must be at least 2 characters long.",
+  invalidName = "Community names must be between 1 and 15 characters and only consist of letters and numbers.",
+  invalidDescription = "Community descriptions must be between 2 and 300 characters long.",
+  communityAlreadyExists = "Community already exists.",
 }
 
 function FormHeader() {
@@ -66,7 +67,7 @@ function FormHeader() {
 
 function CreateCommunity() {
   const [community, setCommunity] = useState<Community>({
-    icon: "",
+    communityIcon: "",
     name: "",
     description: "",
     tags: "",
@@ -89,28 +90,37 @@ function CreateCommunity() {
       case 403:
         setError("Error verifying credentials");
         break;
+      case 409:
+        setError(InputError.communityAlreadyExists);
+        break;
     }
   }, [fetchError]);
 
   function handleSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
+    const regex = /^[a-zA-Z0-9]+$/;
     switch (true) {
-      case !community.icon:
+      case !community.communityIcon:
         setError(InputError.noIcon);
         break;
-      case typeof community.icon === "object" && community.icon.size > megaByte:
+      case typeof community.communityIcon === "object" &&
+        community.communityIcon.size > megaByte:
         setError(InputError.iconToLarge);
         break;
-      case typeof community.icon === "object" &&
+      case typeof community.communityIcon === "object" &&
         !Object.values(AcceptableImg).includes(
-          community.icon.type as AcceptableImg
+          community.communityIcon.type as AcceptableImg
         ):
         setError(InputError.iconIncorrectType);
         break;
-      case community.name.length < 1:
+      case !regex.test(community.name):
         setError(InputError.invalidName);
         break;
-      case community.description.length < 2:
+      case community.name.length < 1 || community.name.length > 15:
+        setError(InputError.invalidName);
+        break;
+      case community.description.length < 2 ||
+        community.description.length > 300:
         setError(InputError.invalidDescription);
         break;
       default:
@@ -134,7 +144,10 @@ function CreateCommunity() {
           id={"communityIcon"}
           onchange={function (event: ChangeEvent<HTMLInputElement>): void {
             if (event.target.files) {
-              setCommunity({ ...community, icon: event.target.files?.[0] });
+              setCommunity({
+                ...community,
+                communityIcon: event.target.files?.[0],
+              });
               setError(InputError.none);
             }
           }}
@@ -154,9 +167,18 @@ function CreateCommunity() {
           type={"text"}
           onChange={function (event: ChangeEvent<HTMLInputElement>): void {
             setCommunity({ ...community, name: event.target.value });
-            setError(InputError.none);
+            if (event.target.value.length > 15) {
+              setError(InputError.invalidName);
+            } else {
+              setError(InputError.none);
+            }
           }}
-          invalidInput={error === InputError.invalidName ? true : false}
+          invalidInput={
+            error === InputError.invalidName ||
+            error === InputError.communityAlreadyExists
+              ? true
+              : false
+          }
         ></Input>
 
         <TextArea
@@ -164,7 +186,11 @@ function CreateCommunity() {
           id={"description"}
           onChange={function (event: ChangeEvent<HTMLInputElement>): void {
             setCommunity({ ...community, description: event.target.value });
-            setError(InputError.none);
+            if (event.target.value.length > 300) {
+              setError(InputError.invalidDescription);
+            } else {
+              setError(InputError.none);
+            }
           }}
           error={error === InputError.invalidDescription ? true : false}
           className="min-h-48"
@@ -188,7 +214,18 @@ function CreateCommunity() {
         ></TextArea>
         {error && <p className="text-destructive">*{error}</p>}
 
-        <Button onClick={handleSubmit} className="block ml-auto">
+        <Button
+          disabled={
+            community.communityIcon &&
+            community.name &&
+            community.description &&
+            error === InputError.none
+              ? false
+              : true
+          }
+          onClick={handleSubmit}
+          className="block ml-auto"
+        >
           Create Community
         </Button>
       </div>

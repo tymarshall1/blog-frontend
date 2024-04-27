@@ -54,7 +54,7 @@ function ProfileForm() {
 
   useEffect(() => {
     if (error === 500) setInputError("Server error, try again later.");
-    if (error === 400 || error === 403) {
+    if (error === 400 || error === 403 || error === 401) {
       logout();
       toast({
         title: "Error verifying credentials",

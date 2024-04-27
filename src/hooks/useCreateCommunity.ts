@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Community } from "@/types/community";
+import { useNavigate } from "react-router-dom";
 
 export const useCreateCommunity = () => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<number | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   async function createCommunity(community: Community) {
     const accessToken = localStorage.getItem("accessToken")
@@ -20,11 +22,12 @@ export const useCreateCommunity = () => {
     const formData = new FormData();
     formData.append("communityName", community.name);
     formData.append("description", community.description);
-    formData.append("communityIcon", community.icon);
+    formData.append("communityIcon", community.communityIcon);
     for (let i = 0; i < community.tags.length; i++)
       formData.append("tags[]", community.tags[i]);
 
     try {
+      setFetchError(null);
       const response = await fetch(
         "http://localhost:3000/api/community/create",
         {
@@ -40,6 +43,7 @@ export const useCreateCommunity = () => {
       } else {
         const json = await response.json();
         setLoading(false);
+        navigate(`/community/${json.name}`);
         toast({ title: `Community '${json.name}' has been created ` });
       }
     } catch (err) {

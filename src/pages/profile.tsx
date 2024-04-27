@@ -146,7 +146,11 @@ function Profile() {
         {isLoading && <Loading />}
         {error && (
           <>
-            {error === 404 && <Error />}
+            {error === 404 && (
+              <div>
+                <Error />
+              </div>
+            )}
             {error === 500 && "Internal server error, try again later"}
           </>
         )}

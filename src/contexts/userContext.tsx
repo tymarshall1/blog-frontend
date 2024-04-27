@@ -47,6 +47,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
+
     if (accessToken) {
       fetch("http://localhost:3000/api/user/profile", {
         headers: {

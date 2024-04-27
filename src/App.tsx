@@ -6,7 +6,7 @@ import Profile from "./pages/profile";
 import CreateCommunity from "./forms/createCommunity";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import Unauthorized from "./components/ui/unauthorized";
-
+import CommunityPage from "./pages/community";
 function App() {
   const { user } = useAuthContext();
   return (
@@ -16,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/popular" element={<Popular />} />
           <Route path="/user/:username" element={<Profile />} />
+          <Route path="/community/:communityName" element={<CommunityPage />} />
           <Route
             path="/community/create"
             element={user ? <CreateCommunity /> : <Unauthorized />}

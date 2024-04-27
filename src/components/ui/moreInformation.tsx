@@ -54,7 +54,7 @@ function MoreInformation({
   defaultInformation?: boolean;
 }) {
   return (
-    <div className="hidden p-2 mt-4 mr-4 text-white rounded lg:block bg-moreInformation min-h-96 max-w-80 min-w-60 h-fit">
+    <div className="hidden p-2 mt-4 text-white rounded lg:block bg-moreInformation min-h-96 max-w-80 min-w-60 h-fit">
       {defaultInformation && <DefaultInformation />}
       {!defaultInformation && children}
     </div>
