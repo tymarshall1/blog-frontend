@@ -87,7 +87,7 @@ function ProfileHeader({
   profileImg: string | undefined;
 }) {
   return (
-    <div className="px-4 pt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
+    <div className="px-4 pt-4 mt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
       <div className="flex items-center gap-2 mb-4">
         <img
           className="bg-transparent rounded-full w-14 h-14"
@@ -134,7 +134,8 @@ function Profile() {
     `http://localhost:3000/api/user/profile/${username}`,
     "GET"
   );
-  const isMyAccount = user?.username === username;
+  const isMyAccount =
+    user?.username?.toLocaleLowerCase() === username?.toLocaleLowerCase();
 
   useEffect(() => {
     fetchData();
@@ -142,7 +143,7 @@ function Profile() {
 
   return (
     <div className="flex gap-4 m-2">
-      <div className="flex-1 mt-4">
+      <div className="flex-1 ">
         {isLoading && <Loading />}
         {error && (
           <>

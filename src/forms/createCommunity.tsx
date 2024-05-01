@@ -151,7 +151,7 @@ function CreateCommunity() {
               setError(InputError.none);
             }
           }}
-          helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb"
+          helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb. They also should be 1300 x 250 for best quality."
           error={
             error === InputError.iconIncorrectType ||
             error === InputError.iconToLarge ||
