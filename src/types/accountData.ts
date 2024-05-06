@@ -1,3 +1,4 @@
+import { Community } from "./community";
 export type AccountData = {
   username?: string;
   accessToken: string;
@@ -11,6 +12,7 @@ export type AccountData = {
     saved: [];
     id: string;
     profileImg: File;
+    followedCommunities: Community[];
   };
   accountCreated?: string;
 };

@@ -1,5 +1,5 @@
 import useFetch from "@/hooks/useFetch";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Community } from "@/types/community";
 import Error from "@/components/ui/error";
@@ -8,6 +8,9 @@ import MoreInformation from "@/components/ui/moreInformation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import PostFilter from "@/components/ui/postFilter";
+import { useToggleFollow } from "@/hooks/useToggleFollow";
+import { useAuthContext } from "@/hooks/useAuthContext";
+
 type CommunityHeaderProps = {
   communityName: string;
   communityDescription: string;
@@ -48,7 +51,7 @@ type CommunitySectionProps = {
 
 function CommunitySection(props: CommunitySectionProps) {
   return (
-    <div className="p-2 space-y-1">
+    <div className="px-2 pt-2 space-y-1 ">
       <h2 className="text-lg font-black text-secondary">{props.title}</h2>
       <div className="pb-2 tracking-wider border-b-[1px] border-white">
         {props.data}
@@ -59,13 +62,30 @@ function CommunitySection(props: CommunitySectionProps) {
 
 function CommunityPage() {
   const { communityName } = useParams();
+  const [follows, setFollows] = useState(false);
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
     `http://localhost:3000/api/community/${communityName}`,
     "GET"
   );
+  const { toggleFollow } = useToggleFollow();
+  const { user } = useAuthContext();
+
   useEffect(() => {
     fetchData();
   }, [communityName]);
+
+  useEffect(() => {
+    user?.profile?.followedCommunities.forEach((community) => {
+      if (community.name === communityName) {
+        setFollows(true);
+      }
+    });
+  }, [user]);
+
+  async function toggleFollowedCommunity() {
+    await toggleFollow(communityName);
+    setFollows(follows ? false : true);
+  }
 
   return (
     <div className="text-white ">
@@ -96,7 +116,7 @@ function CommunityPage() {
 
               <div>
                 <MoreInformation>
-                  <div className="p-2">
+                  <div className="px-2 pt-2">
                     <h3 className="mb-2 text-4xl font-black text-center text-secondary">
                       {responseData.name}
                     </h3>
@@ -130,14 +150,14 @@ function CommunityPage() {
                     title={"Created"}
                     data={responseData.formattedDateCreated || "error"}
                   />
-                  {true && (
-                    <Button
-                      variant={"secondary"}
-                      className="block mx-auto mt-4"
-                    >
-                      Follow
-                    </Button>
-                  )}
+
+                  <Button
+                    variant={"secondary"}
+                    className="block mx-auto mt-4"
+                    onClick={toggleFollowedCommunity}
+                  >
+                    {follows ? "Unfollow" : "Follow"}
+                  </Button>
                 </MoreInformation>
               </div>
             </div>

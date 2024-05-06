@@ -52,7 +52,7 @@ function PostFilter({ posts }: PostFilterProps) {
           }`}
           variant={"ghost"}
         >
-          <span className="material-symbols-outlined">breaking_news_alt_1</span>
+          <span className="material-symbols-outlined">rocket_launch</span>
           {Filters.NEW}
         </Button>
       </div>

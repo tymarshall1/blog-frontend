@@ -129,39 +129,47 @@ function Navbar() {
 
             <>
               {user && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <img
-                      className="w-10 h-10 bg-transparent rounded-full"
-                      src={user?.profile?.profileImg.toString()}
-                      alt="profile image"
-                    />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel className="text-lg font-semibold">
-                      {user.username}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="font-normal text-md">
-                      <Link className="w-full" to={`/user/${user.username}`}>
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="font-normal text-md">
-                      <Link className="w-full" to="/community/create">
-                        Create a Community
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="w-full font-normal text-md"
-                      onClick={() => {
-                        logout();
-                      }}
-                    >
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <>
+                  <Link
+                    className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-white/80"
+                    to={"/create-post"}
+                  >
+                    Create
+                  </Link>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <img
+                        className="w-10 h-10 bg-transparent rounded-full"
+                        src={user?.profile?.profileImg.toString()}
+                        alt="profile image"
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel className="text-lg font-semibold">
+                        {user.username}
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="font-normal text-md">
+                        <Link className="w-full" to={`/user/${user.username}`}>
+                          Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="font-normal text-md">
+                        <Link className="w-full" to="/community/create">
+                          Create a Community
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="w-full font-normal text-md"
+                        onClick={() => {
+                          logout();
+                        }}
+                      >
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
               )}
             </>
 
@@ -193,7 +201,7 @@ function Navbar() {
                     onOpenChange={setIsSignupDialogOpen}
                   >
                     <DialogTrigger
-                      className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-primary hover:text-secondary"
+                      className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-white/80 "
                       onClick={() => setIsSignupDialogOpen(true)}
                     >
                       Sign Up

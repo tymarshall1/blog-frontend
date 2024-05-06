@@ -7,6 +7,8 @@ import CreateCommunity from "./forms/createCommunity";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import Unauthorized from "./components/ui/unauthorized";
 import CommunityPage from "./pages/community";
+import PostCreation from "./pages/postCreation";
+
 function App() {
   const { user } = useAuthContext();
   return (
@@ -20,6 +22,10 @@ function App() {
           <Route
             path="/community/create"
             element={user ? <CreateCommunity /> : <Unauthorized />}
+          />
+          <Route
+            path="/create-post"
+            element={user ? <PostCreation /> : <Unauthorized />}
           />
         </Routes>
       </Layout>
