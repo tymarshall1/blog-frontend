@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import Input from "./components/input";
 import PostEditor from "./components/postEditor";
 import { Button } from "@/components/ui/button";
@@ -13,15 +13,72 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/forms/components/select";
+import { useCreatePost } from "@/hooks/useCreatePost";
+enum SubmitError {
+  NONE = "",
+  IncorrectCommunity = "You must choose a community.",
+  IncorrectTitle = "You must have a title thats between 2 and 50 characters long.",
+  IncorrectBody = "You must have a body thats at least 2 characters long.",
+}
+
+type PostFields = {
+  communityName: string;
+  title: string;
+  body: string;
+};
 function CreatePost() {
-  const [body, setBody] = useState("");
+  const [postFields, setPostFields] = useState<PostFields>({
+    communityName: "",
+    title: "",
+    body: "",
+  });
   const { user } = useAuthContext();
+  const [submitError, setSubmitError] = useState("");
+  const { createPost } = useCreatePost();
+  const defaultBodyText = "<p></p>";
+
+  function setBody(body: string) {
+    setPostFields({ ...postFields, body: body });
+    setSubmitError(SubmitError.NONE);
+  }
+
+  function handleSubmit(event: { preventDefault: () => void }) {
+    event.preventDefault();
+    switch (true) {
+      case !postFields.communityName:
+        setSubmitError(SubmitError.IncorrectCommunity);
+        return;
+      case !postFields.title ||
+        postFields.title.length < 2 ||
+        postFields.title.length > 50:
+        setSubmitError(SubmitError.IncorrectTitle);
+        return;
+      case !postFields.body ||
+        postFields.body === defaultBodyText ||
+        postFields.body.length < 9:
+        setSubmitError(SubmitError.IncorrectBody);
+        return;
+      default:
+        createPost(postFields);
+    }
+  }
 
   return (
     <form className="max-w-lg space-y-4">
       <h1 className="text-3xl font-black text-white">Create Post</h1>
-      <Select>
-        <SelectTrigger className="w-[180px]">
+      <Select
+        onValueChange={(event) => {
+          setPostFields({ ...postFields, communityName: event });
+          setSubmitError(SubmitError.NONE);
+        }}
+      >
+        <SelectTrigger
+          className={`w-[180px] ${
+            submitError === SubmitError.IncorrectCommunity
+              ? "outline outline-destructive"
+              : ""
+          }`}
+        >
           <SelectValue placeholder="Pick a community" />
         </SelectTrigger>
         <SelectContent>
@@ -30,34 +87,67 @@ function CreatePost() {
             {user?.profile?.followedCommunities.map((community) => {
               return (
                 <SelectItem key={community.name} value={community.name}>
-                  {community.name}
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={community.communityIcon.toString()}
+                      className="rounded-full w-7 h-7"
+                      alt="community icon"
+                    />
+                    <p>{community.name}</p>
+                  </div>
                 </SelectItem>
               );
             })}
           </SelectGroup>
         </SelectContent>
       </Select>
+
       <Input
         label={"Title"}
         id={"title"}
         type={"text"}
-        onChange={function (event: ChangeEvent<Element>): void {
-          throw new Error("Function not implemented.");
+        onChange={function (event: ChangeEvent<HTMLInputElement>): void {
+          setPostFields({ ...postFields, title: event.target.value });
+          setSubmitError(SubmitError.NONE);
         }}
-        invalidInput={false}
+        invalidInput={submitError === SubmitError.IncorrectTitle}
       />
       <div>
         <label className="text-xl font-medium text-white" htmlFor="body">
           Body
         </label>
-        <div className="bg-white rounded ">
+        <div
+          className={`bg-white rounded ${
+            submitError === SubmitError.IncorrectBody
+              ? "outline outline-destructive"
+              : ""
+          }`}
+        >
           <PostEditor setBody={setBody} />
         </div>
       </div>
-      <Button className="block ml-auto" variant={"secondary"}>
+      {submitError && <p className="text-destructive">*{submitError}</p>}
+
+      <Button
+        disabled={
+          !postFields.communityName ||
+          !postFields.title ||
+          !postFields.body ||
+          postFields.body === defaultBodyText ||
+          submitError
+            ? true
+            : false
+        }
+        onClick={handleSubmit}
+        className="block ml-auto"
+        variant={"secondary"}
+      >
         Submit
       </Button>
-      <div dangerouslySetInnerHTML={{ __html: body }}></div>
+      {/* <div
+        className="p-2 prose bg-white"
+        dangerouslySetInnerHTML={{ __html: postFields.body }}
+      ></div> */}
     </form>
   );
 }

@@ -20,6 +20,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() => editor.chain().focus().toggleBold().run()}
               disabled={!editor.can().chain().focus().toggleBold().run()}
               className={`${
@@ -39,6 +40,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() => editor.chain().focus().toggleItalic().run()}
               disabled={!editor.can().chain().focus().toggleItalic().run()}
               className={`${
@@ -58,6 +60,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() => editor.chain().focus().toggleStrike().run()}
               disabled={!editor.can().chain().focus().toggleStrike().run()}
               className={`${
@@ -77,6 +80,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() =>
                 editor.chain().focus().toggleHeading({ level: 1 }).run()
               }
@@ -97,6 +101,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() => editor.chain().focus().toggleBulletList().run()}
               className={`${
                 editor.isActive("bulletList") ? "bg-secondary" : ""
@@ -115,6 +120,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
               className={`${
                 editor.isActive("codeBlock") ? "bg-secondary" : ""
@@ -133,6 +139,7 @@ function MenuBar() {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
               className={`${
                 editor.isActive("blockquote") ? "bg-secondary" : ""
@@ -165,7 +172,6 @@ const extensions = [
   }),
 ];
 
-const content = "Body";
 type PostEditorProps = {
   setBody: (body: string) => void;
 };
@@ -174,7 +180,6 @@ export default function PostEditor({ setBody }: PostEditorProps) {
     <EditorProvider
       slotBefore={<MenuBar />}
       extensions={extensions}
-      content={content}
       onUpdate={({ editor }) => {
         setBody(editor.getHTML());
       }}

@@ -16,12 +16,16 @@ type CommunityHeaderProps = {
   communityDescription: string;
   communityIcon: string;
   currentlyFollows: boolean;
+  follows: boolean;
+  toggleFollowedCommunity: () => void;
 };
 
 function CommunityHeader({
   communityName,
   communityDescription,
   communityIcon,
+  follows,
+  toggleFollowedCommunity,
 }: CommunityHeaderProps) {
   return (
     <>
@@ -32,8 +36,12 @@ function CommunityHeader({
       <div className="flex flex-col gap-2 p-2 mt-4 lg:hidden">
         <div className="flex items-center gap-5">
           <h1 className="text-3xl font-black">{communityName}</h1>
-          <Button variant={"secondary"} className="h-8">
-            Follow
+          <Button
+            variant={"secondary"}
+            className="h-8"
+            onClick={toggleFollowedCommunity}
+          >
+            {follows ? "Unfollow" : "Follow"}
           </Button>
         </div>
 
@@ -67,7 +75,7 @@ function CommunityPage() {
     `http://localhost:3000/api/community/${communityName}`,
     "GET"
   );
-  const { toggleFollow } = useToggleFollow();
+  const { fetchError, toggleFollow } = useToggleFollow();
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -75,6 +83,7 @@ function CommunityPage() {
   }, [communityName]);
 
   useEffect(() => {
+    if (!user?.profile?.followedCommunities) return;
     user?.profile?.followedCommunities.forEach((community) => {
       if (community.name === communityName) {
         setFollows(true);
@@ -110,6 +119,8 @@ function CommunityPage() {
                   communityDescription={responseData.description}
                   communityIcon={responseData.communityIcon.toString()}
                   currentlyFollows={false}
+                  follows={follows}
+                  toggleFollowedCommunity={toggleFollowedCommunity}
                 />
                 <PostFilter posts={["test", "here", "there"]} />
               </div>
@@ -150,7 +161,11 @@ function CommunityPage() {
                     title={"Created"}
                     data={responseData.formattedDateCreated || "error"}
                   />
-
+                  {fetchError && (
+                    <p className="text-destructive">
+                      Server Error, try again later
+                    </p>
+                  )}
                   <Button
                     variant={"secondary"}
                     className="block mx-auto mt-4"

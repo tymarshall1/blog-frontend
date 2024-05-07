@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 export const useToggleFollow = () => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<number | null>(null);
   const { toast } = useToast();
+  const { user, dispatch } = useAuthContext();
+  const profile = user?.profile;
 
   async function toggleFollow(communityName: string | undefined) {
     const accessToken = localStorage.getItem("accessToken")
@@ -39,11 +42,29 @@ export const useToggleFollow = () => {
       } else {
         const json = await response.json();
         setLoading(false);
-        toast({
-          title: `${json.followed ? "Followed " : "Unfollowed"} ${
-            json.community
-          }`,
-        });
+        if (profile) {
+          dispatch({
+            type: "UPDATE",
+            payload: {
+              ...user,
+              profile: {
+                ...profile,
+                followedCommunities: json.followedCommunities,
+              },
+            },
+          });
+          toast({
+            title: `${json.followed ? "Followed " : "Unfollowed"} ${
+              json.community
+            }`,
+          });
+        } else {
+          dispatch({ type: "LOGOUT" });
+          toast({
+            title: "An Unexpected Error Occurred",
+            description: "Logging out",
+          });
+        }
       }
     } catch (err) {
       if (err instanceof Error) {
