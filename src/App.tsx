@@ -8,7 +8,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import Unauthorized from "./components/ui/unauthorized";
 import CommunityPage from "./pages/community";
 import PostCreation from "./pages/postCreation";
-
+import SinglePost from "./pages/singlePost";
 function App() {
   const { user } = useAuthContext();
   return (
@@ -19,6 +19,10 @@ function App() {
           <Route path="/popular" element={<Popular />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/community/:communityName" element={<CommunityPage />} />
+          <Route
+            path="/community/:communityName/:post/:id"
+            element={<SinglePost />}
+          />
           <Route
             path="/community/create"
             element={user ? <CreateCommunity /> : <Unauthorized />}

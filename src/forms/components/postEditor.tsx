@@ -15,7 +15,7 @@ function MenuBar() {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-4 p-1 text-black bg-white border-b-2 rounded justify-evenly">
+    <div className="flex flex-wrap items-center gap-2 p-1 text-black bg-white border-b-2 rounded justify-evenly">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -174,8 +174,14 @@ const extensions = [
 
 type PostEditorProps = {
   setBody: (body: string) => void;
+  className?: string;
+  id: string;
 };
-export default function PostEditor({ setBody }: PostEditorProps) {
+export default function PostEditor({
+  setBody,
+  className,
+  id,
+}: PostEditorProps) {
   return (
     <EditorProvider
       slotBefore={<MenuBar />}
@@ -185,8 +191,8 @@ export default function PostEditor({ setBody }: PostEditorProps) {
       }}
       editorProps={{
         attributes: {
-          class:
-            "rounded text-black min-h-48 px-2 prose prose-md prose-li:my-1 prose-p:my-1 prose-h1:text-xl prose-h1:my-1 bg-white prose-ul:list-disc outline-none prose-li:marker:text-black",
+          id: id,
+          class: `${className} max-w-none rounded prose text-black px-2 prose-li:my-1 prose-p:my-1 prose-h1:text-xl prose-h1:my-1 bg-white prose-ul:list-disc outline-none prose-li:marker:text-black`,
         },
       }}
     >

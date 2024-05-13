@@ -3,12 +3,13 @@ import { cn } from "@/lib/utils";
 type TextArea = {
   label: string;
   id: string;
-  onChange: ChangeEventHandler;
+  onChange?: ChangeEventHandler;
   error: boolean;
   helperText?: string;
   className?: string;
   placeHolder?: string;
   required?: boolean;
+  onClick?: () => void;
 };
 
 function TextArea({
@@ -16,10 +17,12 @@ function TextArea({
   label,
   onChange,
   error,
+
   helperText,
   className,
   placeHolder,
   required = true,
+  onClick,
 }: TextArea) {
   return (
     <div>
@@ -27,10 +30,11 @@ function TextArea({
         {label}
       </label>
       <textarea
+        onClick={onClick}
         className={cn(
           `${
             error ? "outline outline-destructive" : ""
-          } w-full rounded pl-2 pt-1 resize-none`,
+          } w-full rounded pl-2 pt-1 resize-none `,
           className
         )}
         onChange={onChange}

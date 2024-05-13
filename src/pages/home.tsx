@@ -1,77 +1,42 @@
+import { useEffect, useState } from "react";
 import Post from "../components/ui/post";
 import MoreInformation from "@/components/ui/moreInformation";
+import { UserPost } from "@/types/post";
+
 function Home() {
+  const [posts, setPosts] = useState<UserPost[] | null>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/posts")
+      .then((response) => response.json())
+      .then((data) => {
+        setPosts(data);
+      });
+  }, []);
+  console.log(posts);
+
   return (
-    <div className="flex justify-evenly">
-      <div className="p-4 space-y-4 ">
-        <Post
-          community={"Community"}
-          user={"User"}
-          timeCreated={"4"}
-          title={"Post Title"}
-          body={
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor."
-          }
-          likes={4321}
-          dislikes={213}
-          comments={5432}
-        />
-        <Post
-          community={"Community"}
-          user={"User"}
-          timeCreated={"4"}
-          title={"Post Title"}
-          body={
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor." +
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor."
-          }
-          likes={4321}
-          dislikes={213}
-          comments={5432}
-        />
-        <Post
-          community={"Community"}
-          user={"User"}
-          timeCreated={"4"}
-          title={"Post Title"}
-          body={
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor." +
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor." +
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor." +
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor."
-          }
-          likes={4321}
-          dislikes={213}
-          comments={5432}
-        />
-        <Post
-          community={"Community"}
-          user={"User"}
-          timeCreated={"4"}
-          title={"Post Title"}
-          body={
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. " +
-            "Animi mollitia dignissimos quam autem porro officia, asperiores cumque dolore " +
-            "earum molestiae ducimus temporibus, labore voluptatem quia veniam, voluptates maiores sed dolor."
-          }
-          likes={4321}
-          dislikes={213}
-          comments={5432}
-        />
+    <div className="flex justify-center ">
+      <div className="flex-1 p-4 space-y-4 lg:flex-[0] ">
+        {posts && (
+          <>
+            {posts.map((post) => (
+              <Post
+                key={post._id}
+                community={post.community.name}
+                user={post.author.account.username}
+                timeCreated={post.created}
+                title={post.title}
+                body={post.body}
+                likes={post.likes.length}
+                dislikes={post.dislikes.length}
+                comments={post.comments.length}
+                id={post._id}
+                communityIcon={post.community.communityIcon}
+              />
+            ))}
+          </>
+        )}
       </div>
       <MoreInformation defaultInformation={true}>
         <></>

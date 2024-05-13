@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export const useCreatePost = () => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<number | null>(null);
   const { toast } = useToast();
-
+  const navigate = useNavigate();
   type PostFields = {
     communityName: string;
     title: string;
@@ -38,7 +39,7 @@ export const useCreatePost = () => {
         const json = await response.json();
         setLoading(false);
         toast({ title: "Post Created!" });
-        //direct user to the post, probably should make a componenet for a single post
+        navigate(`/community/${json.communityName}/${json.title}/${json.id}`);
       }
     } catch (err) {
       if (err instanceof Error) {

@@ -12,7 +12,7 @@ function Layout({ children }: LayoutProps) {
       <SidebarNav className="hidden xl:block" />
       <Navbar />
       <main className="grid min-h-screen mx-auto xl:grid-cols-xlLayout max-w-[2000px] mt-[4.5rem] gap-4">
-        <div className="mr-1 xl:mr-4 lg:col-start-1 lg:col-end-3 xl:col-start-2 xl:col-end-3">
+        <div className=" xl:mr-4 lg:col-start-1 lg:col-end-3 xl:col-start-2 xl:col-end-3">
           {children}
           <Toaster />
         </div>

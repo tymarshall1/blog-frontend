@@ -64,7 +64,7 @@ function CreatePost() {
   }
 
   return (
-    <form className="max-w-lg space-y-4">
+    <form className="max-w-xl space-y-4">
       <h1 className="text-3xl font-black text-white">Create Post</h1>
       <Select
         onValueChange={(event) => {
@@ -123,7 +123,7 @@ function CreatePost() {
               : ""
           }`}
         >
-          <PostEditor setBody={setBody} />
+          <PostEditor id="body" className="min-h-48" setBody={setBody} />
         </div>
       </div>
       {submitError && <p className="text-destructive">*{submitError}</p>}
@@ -144,10 +144,6 @@ function CreatePost() {
       >
         Submit
       </Button>
-      {/* <div
-        className="p-2 prose bg-white"
-        dangerouslySetInnerHTML={{ __html: postFields.body }}
-      ></div> */}
     </form>
   );
 }

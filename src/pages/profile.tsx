@@ -138,6 +138,7 @@ function Profile() {
     user?.username?.toLocaleLowerCase() === username?.toLocaleLowerCase();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchData();
   }, [username]);
 
