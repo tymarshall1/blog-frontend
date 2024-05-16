@@ -3,4 +3,5 @@ export type ProfileFields = {
   lastName: string;
   biography: string;
   profileImg: File;
+  account?: { username: string };
 };

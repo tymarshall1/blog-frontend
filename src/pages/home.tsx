@@ -32,7 +32,7 @@ function Home() {
                 dislikes={post.dislikes.length}
                 comments={post.comments.length}
                 id={post._id}
-                communityIcon={post.community.communityIcon}
+                communityIcon={post.community.communityIcon.toString()}
               />
             ))}
           </>

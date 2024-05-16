@@ -43,7 +43,7 @@ function Post(props: PostProps) {
               <h2 className="font-normal text-md">{props.community}</h2>{" "}
             </Link>
 
-            <div className="text-sm font-normal  text-black/50">
+            <div className="text-sm font-normal text-black/50">
               Posted by{" "}
               <Link
                 onClick={(e) => e.stopPropagation()}
@@ -55,9 +55,12 @@ function Post(props: PostProps) {
               {props.timeCreated} hours ago
             </div>
           </div>
-          <div className="prose prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 ">
-            <h3 className="mb-2 text-2xl font-semibold">{props.title}</h3>
+          <div className="">
+            <h3 className="mb-2 text-2xl font-semibold break-words">
+              {props.title}
+            </h3>
             <p
+              className="max-w-4xl overflow-hidden prose text-black break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
               dangerouslySetInnerHTML={{
                 __html: limitCharacters(props.body, 200),
               }}

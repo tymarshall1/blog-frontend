@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Community } from "@/types/community";
-import { useNavigate } from "react-router-dom";
-import { useToggleFollow } from "./useToggleFollow";
 
-export const useCreateCommunity = () => {
+export const useComment = () => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<number | null>(null);
   const { toast } = useToast();
-  const navigate = useNavigate();
-  const { toggleFollow } = useToggleFollow();
-  async function createCommunity(community: Community) {
+  const [newComment, setNewComment] = useState(null);
+  type CommentFields = {
+    comment: string;
+  };
+
+  async function createComment(
+    commentFields: CommentFields,
+    postID: string | undefined
+  ) {
     const accessToken = localStorage.getItem("accessToken")
       ? localStorage.getItem("accessToken")
       : "undefined";
@@ -20,23 +23,17 @@ export const useCreateCommunity = () => {
       return;
     }
     setLoading(true);
-    const formData = new FormData();
-    formData.append("communityName", community.name);
-    formData.append("description", community.description);
-    formData.append("communityIcon", community.communityIcon);
-    for (let i = 0; i < community.tags.length; i++)
-      formData.append("tags[]", community.tags[i]);
-
     try {
       setFetchError(null);
       const response = await fetch(
-        "http://localhost:3000/api/community/create",
+        `http://localhost:3000/api/posts/${postID}/comment`,
         {
           method: "POST",
           headers: {
             Authorization: "Bearer " + accessToken,
+            "Content-Type": "application/json",
           },
-          body: formData,
+          body: JSON.stringify(commentFields),
         }
       );
       if (!response.ok) {
@@ -44,9 +41,9 @@ export const useCreateCommunity = () => {
       } else {
         const json = await response.json();
         setLoading(false);
-        toggleFollow(json.name);
-        navigate(`/community/${json.name}`);
-        toast({ title: `Community '${json.name}' has been created ` });
+        toast({ title: "Comment Created!" });
+        setFetchError(null);
+        setNewComment(json);
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -60,5 +57,5 @@ export const useCreateCommunity = () => {
     }
   }
 
-  return { loading, fetchError, createCommunity };
+  return { loading, fetchError, createComment, newComment };
 };

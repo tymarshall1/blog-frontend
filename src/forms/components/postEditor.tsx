@@ -186,12 +186,18 @@ export default function PostEditor({
     <EditorProvider
       slotBefore={<MenuBar />}
       extensions={extensions}
+      onCreate={({ editor }) => {
+        setTimeout(() => {
+          editor.commands.focus();
+        }, 100);
+      }}
       onUpdate={({ editor }) => {
         setBody(editor.getHTML());
       }}
       editorProps={{
         attributes: {
           id: id,
+
           class: `${className} max-w-none rounded prose text-black px-2 prose-li:my-1 prose-p:my-1 prose-h1:text-xl prose-h1:my-1 bg-white prose-ul:list-disc outline-none prose-li:marker:text-black`,
         },
       }}
