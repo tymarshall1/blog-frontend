@@ -10,4 +10,5 @@ export type UserPost = {
   likes: string[];
   dislikes: string[];
   community: Community;
+  type: "post";
 };

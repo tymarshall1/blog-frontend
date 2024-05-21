@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AccountData } from "@/types/accountData";
 import Loading from "@/components/ui/loading";
 import Error from "@/components/ui/error";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import MoreInformation from "../components/ui/moreInformation";
 import ProfileForm from "@/forms/profile";
+import { useNavigate } from "react-router-dom";
+import { UserPost } from "../types/post";
+import { Comment } from "@/types/comment";
+
 enum ProfileFilterOptions {
   Overview = "overview",
   Posts = "posts",
@@ -124,6 +128,196 @@ function ProfileSection(props: ProfileSectionProps) {
   );
 }
 
+type SectionDividerProps = {
+  communityName: string;
+  communityIcon: string;
+  title: string;
+  created: string;
+  username: string;
+  postName: string;
+  postID: string;
+  isPost: boolean;
+  postBody?: string;
+};
+
+function SectionDivider({
+  communityName,
+  communityIcon,
+  title,
+  created,
+  username,
+  postName,
+  postID,
+  isPost,
+  postBody,
+}: SectionDividerProps) {
+  const navigate = useNavigate();
+  return (
+    <div
+      onClick={() =>
+        navigate(`/community/${communityName}/${postName}/${postID}`)
+      }
+      className={`${
+        isPost ? "max-h-60" : "max-h-36"
+      } border-y-[1px] border-secondary  overflow-hidden hover:bg-gray-600 hover:cursor-pointer p-2`}
+    >
+      <div className="pt-2 mb-3">
+        <Link
+          className="text-lg font-bold text-white hover:text-secondary"
+          to={`/community/${communityName}`}
+        >
+          <img
+            className="inline-block w-8 h-8 mr-2 rounded-full"
+            src={communityIcon}
+            alt="community Icon"
+          />
+          {communityName}
+        </Link>
+      </div>
+      <h2 className="mb-2 font-medium text-white">
+        {username}
+        <span className="text-sm font-normal text-white/60">{` ${
+          isPost ? "posted" : "commented"
+        } ${created}`}</span>
+      </h2>
+      <p
+        className={`${
+          isPost ? "text-2xl" : "text-lg"
+        } max-w-4xl mb-3 overflow-hidden font-bold prose prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
+        dangerouslySetInnerHTML={{ __html: title }}
+      ></p>
+      {postBody && (
+        <p
+          className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
+          dangerouslySetInnerHTML={{ __html: postBody }}
+        ></p>
+      )}
+    </div>
+  );
+}
+
+function Comments({
+  comments,
+  username,
+}: {
+  comments: Comment[];
+  username: string;
+}) {
+  return (
+    <div>
+      {comments.length === 0 && (
+        <p className="text-xl font-semibold text-center text-white">
+          {`${username} has not posted a comment yet!`}
+        </p>
+      )}
+      {comments.map((comment, index) => {
+        return (
+          <SectionDivider
+            key={index}
+            communityName={comment.post.community.name}
+            communityIcon={comment.post.community.communityIcon.toString()}
+            title={comment.comment}
+            created={comment.created}
+            username={username}
+            postName={comment.post.title}
+            postID={comment.post._id}
+            isPost={false}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function Posts({ posts, username }: { posts: UserPost[]; username: string }) {
+  return (
+    <div>
+      {posts.length === 0 && (
+        <p className="text-xl font-semibold text-center text-white">
+          {`${username} has not created a post yet!`}
+        </p>
+      )}
+      {posts.map((post, index) => {
+        return (
+          <SectionDivider
+            key={index}
+            communityName={post.community.name}
+            communityIcon={post.community.communityIcon.toString()}
+            title={post.title}
+            created={post.created}
+            username={username}
+            postName={post.title}
+            postID={post._id}
+            isPost={true}
+            postBody={post.body}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function Overview({
+  comments,
+  posts,
+  username,
+}: {
+  posts: UserPost[];
+  comments: Comment[];
+  username: string;
+}) {
+  const combinedPostsAndComments = [...posts, ...comments];
+  const sortedByDate = combinedPostsAndComments.sort(dateSort);
+
+  function dateSort(a: { created: string }, b: { created: string }) {
+    if (new Date(a.created) > new Date(b.created)) {
+      return -1;
+    } else return 1;
+  }
+
+  return (
+    <div>
+      {sortedByDate.length === 0 && (
+        <p className="text-xl font-semibold text-center text-white">
+          {`${username} has not created a post or comment yet!`}
+        </p>
+      )}
+      {sortedByDate.map((element: Comment | UserPost, index) => {
+        if ("comment" in element) {
+          return (
+            <SectionDivider
+              key={index}
+              communityName={element.post.community.name}
+              communityIcon={element.post.community.communityIcon.toString()}
+              title={element.comment}
+              created={element.created}
+              username={username}
+              postName={element.post.title}
+              postID={element.post._id}
+              isPost={false}
+            />
+          );
+        } else {
+          return (
+            <SectionDivider
+              key={index}
+              communityName={element.community.name}
+              communityIcon={element.community.communityIcon.toString()}
+              title={element.title}
+              created={element.created}
+              username={username}
+              postName={element.title}
+              postID={element._id}
+              isPost={true}
+              postBody={element.body}
+            />
+          );
+        }
+      })}
+    </div>
+  );
+}
+
 function Profile() {
   const { username } = useParams();
   const { user } = useAuthContext();
@@ -176,14 +370,54 @@ function Profile() {
               }
             />
             <div className=" border-[1px] rounded border-sideNav p-4">
-              {lastClicked === ProfileFilterOptions.Overview && <>overview</>}
-              {lastClicked === ProfileFilterOptions.Posts && <>posts</>}
-              {lastClicked === ProfileFilterOptions.Comments && <>comments</>}
-              {lastClicked === ProfileFilterOptions.Profile && (
-                <>
-                  <ProfileForm />
-                </>
+              {lastClicked === ProfileFilterOptions.Overview && (
+                <Overview
+                  comments={
+                    responseData?.profile?.comments
+                      ? responseData?.profile?.comments
+                      : []
+                  }
+                  posts={
+                    responseData?.profile?.posts
+                      ? responseData?.profile?.posts
+                      : []
+                  }
+                  username={
+                    responseData?.username
+                      ? responseData?.username
+                      : "undefined"
+                  }
+                />
               )}
+              {lastClicked === ProfileFilterOptions.Posts && (
+                <Posts
+                  posts={
+                    responseData?.profile?.posts
+                      ? responseData?.profile?.posts
+                      : []
+                  }
+                  username={
+                    responseData?.username
+                      ? responseData?.username
+                      : "undefined"
+                  }
+                />
+              )}
+              {lastClicked === ProfileFilterOptions.Comments && (
+                <Comments
+                  comments={
+                    responseData?.profile?.comments
+                      ? responseData?.profile?.comments
+                      : []
+                  }
+                  username={
+                    responseData?.username
+                      ? responseData?.username
+                      : "undefined"
+                  }
+                />
+              )}
+              {lastClicked === ProfileFilterOptions.Profile && <ProfileForm />}
             </div>
           </div>
         )}
