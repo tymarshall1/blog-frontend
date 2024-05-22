@@ -7,7 +7,7 @@ import Loading from "@/components/ui/loading";
 import MoreInformation from "@/components/ui/moreInformation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import PostFilter from "@/components/ui/postFilter";
+import { PostFilter } from "@/components/ui/postFilter";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
 import { useAuthContext } from "@/hooks/useAuthContext";
 
@@ -123,7 +123,12 @@ function CommunityPage() {
                   follows={follows}
                   toggleFollowedCommunity={toggleFollowedCommunity}
                 />
-                <PostFilter posts={["test", "here", "there"]} />
+                <PostFilter
+                  posts={
+                    "posts" in responseData ? responseData.posts : undefined
+                  }
+                  communityName={responseData.name}
+                />
               </div>
 
               <div>
@@ -139,7 +144,7 @@ function CommunityPage() {
 
                   <CommunitySection
                     title={"Followers"}
-                    data={responseData.followers?.length || 0}
+                    data={responseData.followers}
                   />
 
                   <CommunitySection

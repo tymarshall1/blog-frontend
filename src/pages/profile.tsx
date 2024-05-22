@@ -11,6 +11,7 @@ import ProfileForm from "@/forms/profile";
 import { useNavigate } from "react-router-dom";
 import { UserPost } from "../types/post";
 import { Comment } from "@/types/comment";
+import { timeSince } from "@/lib/utils";
 
 enum ProfileFilterOptions {
   Overview = "overview",
@@ -158,7 +159,7 @@ function SectionDivider({
         navigate(`/community/${communityName}/${postName}/${postID}`)
       }
       className={`${
-        isPost ? "max-h-60" : "max-h-36"
+        isPost ? "max-h-96" : "max-h-36"
       } border-y-[1px] border-secondary  overflow-hidden hover:bg-gray-600 hover:cursor-pointer p-2`}
     >
       <div className="pt-2 mb-3">
@@ -178,7 +179,7 @@ function SectionDivider({
         {username}
         <span className="text-sm font-normal text-white/60">{` ${
           isPost ? "posted" : "commented"
-        } ${created}`}</span>
+        } ${timeSince(created)}`}</span>
       </h2>
       <p
         className={`${

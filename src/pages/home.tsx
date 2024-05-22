@@ -7,6 +7,7 @@ function Home() {
   const [posts, setPosts] = useState<UserPost[] | null>(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetch("http://localhost:3000/api/posts")
       .then((response) => response.json())
       .then((data) => {
@@ -17,7 +18,7 @@ function Home() {
 
   return (
     <div className="flex justify-center ">
-      <div className="flex-1 p-4 space-y-4 lg:flex-[0] ">
+      <div className="flex-1 p-4 space-y-4 lg:flex-[0]">
         {posts && (
           <>
             {posts.map((post) => (

@@ -2,6 +2,8 @@ import { limitCharacters } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { timeSince } from "@/lib/utils";
+import PostInteraction from "./postInteraction";
 type PostProps = {
   community: string;
   user: string;
@@ -52,7 +54,7 @@ function Post(props: PostProps) {
               >
                 {props.user}
               </Link>{" "}
-              {props.timeCreated} hours ago
+              {timeSince(props.timeCreated)}
             </div>
           </div>
           <div className="">
@@ -60,50 +62,17 @@ function Post(props: PostProps) {
               {props.title}
             </h3>
             <p
-              className="max-w-4xl overflow-hidden prose text-black break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
+              className="max-w-4xl overflow-hidden prose text-black break-words prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
               dangerouslySetInnerHTML={{
                 __html: limitCharacters(props.body, 200),
               }}
             ></p>
           </div>
-          <div className="flex flex-wrap justify-between">
-            <div className="flex text-sm font-light">
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log("like button click");
-                }}
-                className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary"
-              >
-                <span className="material-symbols-outlined">thumb_up</span>
-                <span>{props.likes}</span>
-              </div>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log("dislike button click");
-                }}
-                className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary"
-              >
-                <span className="material-symbols-outlined">thumb_down</span>
-                <span>{props.dislikes}</span>
-              </div>
-            </div>
-            <div className="flex gap-2 text-sm font-light tracking-wide">
-              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
-                <span className="material-symbols-outlined">forum</span>
-                <span>{props.comments} Comments</span>
-              </div>
-              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
-                <span className="material-symbols-outlined">share</span>
-                <span>Share</span>
-              </div>
-              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
-                <span className="material-symbols-outlined">bookmark</span>
-                <span>Save</span>
-              </div>
-            </div>
-          </div>
+          <PostInteraction
+            likes={props.likes}
+            dislikes={props.dislikes}
+            comments={props.comments}
+          />
         </>
       )}
       {!loaded && (

@@ -10,7 +10,7 @@ import PostEditor from "@/forms/components/postEditor";
 import { useComment } from "@/hooks/useComment";
 import { Comment } from "@/types/comment";
 import { useAuthContext } from "@/hooks/useAuthContext";
-
+import { timeSince } from "@/lib/utils";
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
@@ -65,7 +65,7 @@ function PostHeader(props: PostHeaderProps) {
             {props.communityName}
           </Link>
           <span className="text-sm font-light text-white/50">
-            {props.creationTime}
+            {timeSince(props.creationTime)}
           </span>
         </div>
         <Link
@@ -95,7 +95,7 @@ function PostBody(props: PostBodyProps) {
       <div className="max-w-4xl p-3 bg-white border-2 rounded border-secondary">
         <div
           dangerouslySetInnerHTML={{ __html: props.body }}
-          className="max-w-4xl overflow-hidden prose text-black break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
+          className="max-w-4xl overflow-hidden prose text-black prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
         ></div>
 
         <div className="flex mt-4">
@@ -189,10 +189,12 @@ function SingleComment(props: SingleCommentProps) {
             >
               {props.username}
             </Link>
-            <span className="ml-1 text-sm text-white/50">{props.created}</span>
+            <span className="ml-1 text-sm text-white/50">
+              {timeSince(props.created)}
+            </span>
           </div>
           <div
-            className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
+            className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words prose-pre:break-all md:prose-pre:break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
             dangerouslySetInnerHTML={{ __html: props.comment }}
           ></div>
         </div>
