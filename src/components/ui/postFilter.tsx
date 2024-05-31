@@ -4,7 +4,7 @@ import { useState } from "react";
 import PostInteraction from "./postInteraction";
 import { timeSince } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-
+import { useAuthContext } from "@/hooks/useAuthContext";
 export type CommunityPagePostProps = {
   profileImg: string;
   username: string;
@@ -20,6 +20,7 @@ export type CommunityPagePostProps = {
 
 function CommunityPagePost(props: CommunityPagePostProps) {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   return (
     <div
       onClick={() =>
@@ -51,6 +52,14 @@ function CommunityPagePost(props: CommunityPagePostProps) {
         likes={props.likes}
         dislikes={props.dislikes}
         comments={props.comments}
+        postID={props.id}
+        reactionScore={
+          user?.profile?.likedPosts.includes(props.id)
+            ? 1
+            : user?.profile?.dislikedPosts.includes(props.id)
+            ? -1
+            : 0
+        }
       />
     </div>
   );

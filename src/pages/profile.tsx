@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { UserPost } from "../types/post";
 import { Comment } from "@/types/comment";
 import { timeSince } from "@/lib/utils";
+import PostInteraction from "@/components/ui/postInteraction";
 
 enum ProfileFilterOptions {
   Overview = "overview",
@@ -139,6 +140,9 @@ type SectionDividerProps = {
   postID: string;
   isPost: boolean;
   postBody?: string;
+  likes?: number;
+  dislikes?: number;
+  comments?: number;
 };
 
 function SectionDivider({
@@ -151,19 +155,24 @@ function SectionDivider({
   postID,
   isPost,
   postBody,
+  comments,
+  dislikes,
+  likes,
 }: SectionDividerProps) {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   return (
     <div
       onClick={() =>
         navigate(`/community/${communityName}/${postName}/${postID}`)
       }
       className={`${
-        isPost ? "max-h-96" : "max-h-36"
-      } border-y-[1px] border-secondary  overflow-hidden hover:bg-gray-600 hover:cursor-pointer p-2`}
+        isPost ? "max-h-96" : "max-h-56"
+      } border-y-[1px] border-secondary overflow-hidden hover:bg-gray-600 hover:cursor-pointer p-2`}
     >
       <div className="pt-2 mb-3">
         <Link
+          onClick={(e) => e.stopPropagation()}
           className="text-lg font-bold text-white hover:text-secondary"
           to={`/community/${communityName}`}
         >
@@ -184,14 +193,30 @@ function SectionDivider({
       <p
         className={`${
           isPost ? "text-2xl" : "text-lg"
-        } max-w-4xl mb-3 overflow-hidden font-bold prose prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
+        } max-w-4xl mb-3 overflow-hidden font-bold prose max-h-12 prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
         dangerouslySetInnerHTML={{ __html: title }}
       ></p>
       {postBody && (
         <p
-          className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
+          className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words max-h-40 prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
           dangerouslySetInnerHTML={{ __html: postBody }}
         ></p>
+      )}
+      {isPost && (
+        <PostInteraction
+          likes={likes || 0}
+          dislikes={dislikes || 0}
+          comments={comments || 0}
+          postID={postID}
+          className="text-white"
+          reactionScore={
+            user?.profile?.likedPosts.includes(postID)
+              ? 1
+              : user?.profile?.dislikedPosts.includes(postID)
+              ? -1
+              : 0
+          }
+        />
       )}
     </div>
   );
@@ -251,6 +276,9 @@ function Posts({ posts, username }: { posts: UserPost[]; username: string }) {
             postID={post._id}
             isPost={true}
             postBody={post.body}
+            likes={post.likes}
+            dislikes={post.dislikes}
+            comments={typeof post.comments === "number" ? post.comments : 0}
           />
         );
       })}
@@ -311,6 +339,11 @@ function Overview({
               postID={element._id}
               isPost={true}
               postBody={element.body}
+              likes={element.likes}
+              dislikes={element.dislikes}
+              comments={
+                typeof element.comments === "number" ? element.comments : 0
+              }
             />
           );
         }

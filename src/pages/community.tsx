@@ -72,7 +72,7 @@ function CommunityPage() {
   const { communityName } = useParams();
   const [follows, setFollows] = useState(false);
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
-    `http://localhost:3000/api/community/${communityName}`,
+    `http://localhost:3000/api/community/${communityName}/`,
     "GET"
   );
   const { fetchError, toggleFollow } = useToggleFollow();

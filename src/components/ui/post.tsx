@@ -16,12 +16,12 @@ type PostProps = {
   id: string;
   communityIcon: string;
   onClick?: () => void;
+  reactionScore?: number;
 };
 
 function Post(props: PostProps) {
   const [loaded] = useState(true);
   const navigate = useNavigate();
-
   return (
     <div
       onClick={() =>
@@ -62,7 +62,7 @@ function Post(props: PostProps) {
               {props.title}
             </h3>
             <p
-              className="max-w-4xl overflow-hidden prose text-black break-words prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
+              className="max-w-4xl mb-3 overflow-hidden prose text-black break-words max-h-48 prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
               dangerouslySetInnerHTML={{
                 __html: limitCharacters(props.body, 200),
               }}
@@ -72,6 +72,8 @@ function Post(props: PostProps) {
             likes={props.likes}
             dislikes={props.dislikes}
             comments={props.comments}
+            postID={props.id}
+            reactionScore={props.reactionScore || 0}
           />
         </>
       )}

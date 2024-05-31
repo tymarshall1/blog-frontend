@@ -12,6 +12,8 @@ export type AccountData = {
     saved: [];
     id: string;
     profileImg: File;
+    likedPosts: string[];
+    dislikedPosts: string[];
     followedCommunities: Community[];
   };
   accountCreated?: string;

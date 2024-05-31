@@ -11,6 +11,8 @@ import { useComment } from "@/hooks/useComment";
 import { Comment } from "@/types/comment";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { timeSince } from "@/lib/utils";
+import PostInteraction from "@/components/ui/postInteraction";
+
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
@@ -84,6 +86,9 @@ type PostBodyProps = {
   body: string;
   likes: number;
   dislikes: number;
+  comments: number;
+  postID: string | undefined;
+  reactionScore: number;
 };
 
 function PostBody(props: PostBodyProps) {
@@ -95,29 +100,20 @@ function PostBody(props: PostBodyProps) {
       <div className="max-w-4xl p-3 bg-white border-2 rounded border-secondary">
         <div
           dangerouslySetInnerHTML={{ __html: props.body }}
-          className="max-w-4xl overflow-hidden prose text-black prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
+          className="max-w-4xl mb-4 overflow-hidden prose text-black prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
         ></div>
-
-        <div className="flex mt-4">
-          <div
-            onClick={() => {
-              console.log("like button click");
-            }}
-            className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary"
-          >
-            <span className="material-symbols-outlined">thumb_up</span>
-            <span>{props.likes}</span>
-          </div>
-          <div
-            onClick={() => {
-              console.log("dislike button click");
-            }}
-            className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary"
-          >
-            <span className="material-symbols-outlined">thumb_down</span>
-            <span>{props.dislikes}</span>
-          </div>
-        </div>
+        {props.postID && (
+          <PostInteraction
+            likes={props.likes}
+            dislikes={props.dislikes}
+            comments={props.comments}
+            postID={props.postID}
+            reactionScore={props.reactionScore}
+          />
+        )}
+        {!props.postID && (
+          <p className="text-destructive">An error occurred with post stats.</p>
+        )}
       </div>
     </section>
   );
@@ -255,6 +251,7 @@ function SinglePost() {
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
+
     fetch(`http://localhost:3000/api/posts/${id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -305,6 +302,7 @@ function SinglePost() {
         return;
       default:
         createComment({ comment: comment }, id);
+        setComment("");
         setTextAreaClick(false);
     }
   }
@@ -335,9 +333,23 @@ function SinglePost() {
               <PostBody
                 title={userPost.title}
                 body={userPost.body}
-                likes={userPost.likes.length}
-                dislikes={userPost.dislikes.length}
+                likes={userPost.likes}
+                dislikes={userPost.dislikes}
+                comments={
+                  typeof userPost.comments === "object"
+                    ? userPost.comments.length
+                    : userPost.comments
+                }
+                postID={id}
+                reactionScore={
+                  user?.profile?.likedPosts.includes(userPost._id)
+                    ? 1
+                    : user?.profile?.dislikedPosts.includes(userPost._id)
+                    ? -1
+                    : 0
+                }
               />
+
               <form action="" className="max-w-2xl mx-4">
                 {!textAreaClick && (
                   <>
@@ -405,7 +417,9 @@ function SinglePost() {
                 )}
               </form>
               <CommentSection
-                comments={userPost.comments}
+                comments={
+                  typeof userPost.comments === "object" ? userPost.comments : []
+                }
                 newComment={newComment}
               />
             </div>

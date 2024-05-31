@@ -3,11 +3,12 @@ import { Comment } from "./comment";
 export type UserPost = {
   author: { id: string; account: { username: string } };
   body: string;
-  comments: Comment[];
+  comments: Comment[] | number;
   created: string;
   title: string;
   _id: string;
-  likes: string[];
-  dislikes: string[];
+  likes: number;
+  dislikes: number;
   community: Community;
+  reactionScore: number;
 };
