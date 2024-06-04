@@ -163,12 +163,9 @@ function SectionDivider({
   const { user } = useAuthContext();
   return (
     <div
-      onClick={() =>
-        navigate(`/community/${communityName}/${postName}/${postID}`)
-      }
       className={`${
-        isPost ? "max-h-96" : "max-h-56"
-      } border-y-[1px] border-secondary overflow-hidden hover:bg-gray-600 hover:cursor-pointer p-2`}
+        isPost ? "max-h-[25rem]" : "max-h-56"
+      } border-y-[1px] border-secondary overflow-hidden  p-2`}
     >
       <div className="pt-2 mb-3">
         <Link
@@ -190,25 +187,32 @@ function SectionDivider({
           isPost ? "posted" : "commented"
         } ${timeSince(created)}`}</span>
       </h2>
-      <p
-        className={`${
-          isPost ? "text-2xl" : "text-lg"
-        } max-w-4xl mb-3 overflow-hidden font-bold prose max-h-12 prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
-        dangerouslySetInnerHTML={{ __html: title }}
-      ></p>
-      {postBody && (
+      <div
+        onClick={() =>
+          navigate(`/community/${communityName}/${postName}/${postID}`)
+        }
+        className="p-2 rounded hover:bg-gray-600 hover:cursor-pointer"
+      >
         <p
-          className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words max-h-40 prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
-          dangerouslySetInnerHTML={{ __html: postBody }}
+          className={`${
+            isPost ? "text-2xl" : "text-lg"
+          } max-w-4xl mb-3 overflow-hidden font-bold prose max-h-12 prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
+          dangerouslySetInnerHTML={{ __html: title }}
         ></p>
-      )}
+        {postBody && (
+          <p
+            className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words max-h-40 prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
+            dangerouslySetInnerHTML={{ __html: postBody }}
+          ></p>
+        )}
+      </div>
       {isPost && (
         <PostInteraction
           likes={likes || 0}
           dislikes={dislikes || 0}
           comments={comments || 0}
           postID={postID}
-          className="text-white"
+          className=""
           reactionScore={
             user?.profile?.likedPosts.includes(postID)
               ? 1

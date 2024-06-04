@@ -9,10 +9,10 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
   return (
     <>
-      <SidebarNav className="hidden xl:block" />
+      <SidebarNav className="hidden min-[1410px]:block" />
       <Navbar />
       <main className="grid min-h-screen mx-auto xl:grid-cols-xlLayout max-w-[2000px] mt-[4.5rem] gap-4">
-        <div className=" xl:mr-4 lg:col-start-1 lg:col-end-3 xl:col-start-2 xl:col-end-3">
+        <div className=" min-[1410px]:mr-4 lg:col-start-1 lg:col-end-3 min-[1410px]:col-start-2 min-[1410px]:col-end-3">
           {children}
           <Toaster />
         </div>

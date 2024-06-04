@@ -21,7 +21,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="flex justify-center ">
+    <div className="flex items-start justify-center">
       <div className="flex-1 p-4 space-y-4 lg:flex-[0]">
         {loading && <Loading />}
         {posts && (

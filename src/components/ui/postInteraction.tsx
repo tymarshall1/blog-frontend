@@ -1,6 +1,11 @@
 import { useRefreshUser } from "@/hooks/useRefreshUser";
 import { useState } from "react";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 enum Action {
   TOGGLE_ACTION_LIKE = "TOGGLE_LIKE",
   TOGGLE_ACTION_DISLIKE = "TOGGLE_DISLIKE",
@@ -51,7 +56,9 @@ function PostInteraction({
   }
 
   return (
-    <div className={`${className} flex flex-wrap justify-between mt-4`}>
+    <div
+      className={`${className} flex flex-wrap justify-between mt-4 rounded-full p-1 text-white bg-sideNav`}
+    >
       <div className="flex text-sm font-light">
         <div
           onClick={(e) => {
@@ -86,16 +93,46 @@ function PostInteraction({
           <span>{likesAndDislikes.dislikes}</span>
         </div>
       </div>
-      <div className="flex gap-2 text-sm font-light tracking-wide">
-        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
+      <div className="sm:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="rounded-full hover:bg-secondary hover:text-black">
+            <span className="text-2xl material-symbols-outlined">
+              more_vert
+            </span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <div className="flex items-center gap-1 p-1 rounded cursor-pointer sm:flex hover:bg-secondary hover:text-black">
+                <span className="material-symbols-outlined">forum</span>
+                <span>{comments} Comments</span>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
+                <span className="material-symbols-outlined">share</span>
+                <span>Share</span>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
+                <span className="material-symbols-outlined">bookmark</span>
+                <span>Save</span>
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      <div className="hidden gap-2 text-sm font-light tracking-wide sm:flex">
+        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
           <span className="material-symbols-outlined">forum</span>
           <span>{comments} Comments</span>
         </div>
-        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
+        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
           <span className="material-symbols-outlined">share</span>
           <span>Share</span>
         </div>
-        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary">
+        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
           <span className="material-symbols-outlined">bookmark</span>
           <span>Save</span>
         </div>

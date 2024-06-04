@@ -94,13 +94,13 @@ type PostBodyProps = {
 function PostBody(props: PostBodyProps) {
   return (
     <section className="px-4 space-y-4 ">
-      <h1 className="max-w-4xl py-1 overflow-hidden text-4xl font-bold text-white break-words break-all">
+      <h1 className="max-w-4xl py-1 overflow-hidden text-4xl font-bold text-white break-words break-all ">
         {props.title}
       </h1>
-      <div className="max-w-4xl p-3 bg-white border-2 rounded border-secondary">
+      <div className="max-w-4xl bg-white border-2 border-gray-600 rounded">
         <div
           dangerouslySetInnerHTML={{ __html: props.body }}
-          className="max-w-4xl mb-4 overflow-hidden prose text-black prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
+          className="max-w-4xl p-3 mb-4 overflow-hidden prose text-black prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
         ></div>
         {props.postID && (
           <PostInteraction
@@ -109,6 +109,7 @@ function PostBody(props: PostBodyProps) {
             comments={props.comments}
             postID={props.postID}
             reactionScore={props.reactionScore}
+            className="rounded-none"
           />
         )}
         {!props.postID && (

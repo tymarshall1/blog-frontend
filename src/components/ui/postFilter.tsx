@@ -26,26 +26,26 @@ function CommunityPagePost(props: CommunityPagePostProps) {
       onClick={() =>
         navigate(`/community/${props.communityName}/${props.title}/${props.id}`)
       }
-      className="max-w-4xl p-2 mx-auto overflow-hidden text-black border-2 border-transparent rounded cursor-pointer bg-zinc-300 hover:border-secondary max-h-96"
+      className="max-w-4xl pt-2 mx-auto overflow-hidden text-black border-2 border-transparent rounded cursor-pointer bg-zinc-300 hover:border-secondary max-h-96"
     >
       <Link
         onClick={(e) => e.stopPropagation()}
-        className="space-x-2 hover:text-secondary"
+        className="px-2 space-x-2 hover:text-secondary "
         to={`/user/${props.username}`}
       >
         <img
-          className="inline-block w-10 h-10 rounded-full"
+          className="inline-block w-10 h-10 rounded-full "
           src={props.profileImg}
           alt={`${props.username}'s icon`}
         />
         <p className="inline-block ">{props.username}</p>
       </Link>
       <span className="text-sm text-black/50"> {timeSince(props.created)}</span>
-      <h2 className="mt-3 mb-2 text-2xl font-semibold break-words">
+      <h2 className="px-2 mt-3 mb-2 text-2xl font-semibold break-words ">
         {props.title}
       </h2>
       <p
-        className="max-w-4xl overflow-hidden prose text-black break-words prose-blockquote:border-l-[#1f2937] max-h-48 prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
+        className="px-2 max-w-4xl overflow-hidden prose text-black break-words prose-blockquote:border-l-[#1f2937] max-h-48 prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black"
         dangerouslySetInnerHTML={{ __html: props.body }}
       ></p>
       <PostInteraction
@@ -53,6 +53,7 @@ function CommunityPagePost(props: CommunityPagePostProps) {
         dislikes={props.dislikes}
         comments={props.comments}
         postID={props.id}
+        className="rounded-none"
         reactionScore={
           user?.profile?.likedPosts.includes(props.id)
             ? 1
