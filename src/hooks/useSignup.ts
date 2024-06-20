@@ -21,11 +21,14 @@ export const useSignup = () => {
     setIsLoading(true);
     setStatusCode(200);
     try {
-      const response = await fetch("http://localhost:3000/api/user/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, confirmPassword }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/user/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password, confirmPassword }),
+        }
+      );
       if (!response.ok) {
         setIsLoading(false);
         setStatusCode(response.status);

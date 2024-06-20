@@ -27,13 +27,16 @@ export const useUpdateProfile = () => {
 
     if (user) {
       try {
-        const response = await fetch("http://localhost:3000/api/user/profile", {
-          method: "PUT",
-          headers: {
-            Authorization: "Bearer " + accessToken,
-          },
-          body: formData,
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/user/profile`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: "Bearer " + accessToken,
+            },
+            body: formData,
+          }
+        );
         if (!response.ok) {
           throw new Error(response.status.toString());
         } else {

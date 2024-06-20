@@ -18,11 +18,14 @@ export const useLogin = () => {
     setIsLoading(true);
     setStatusCode(200);
     try {
-      const response = await fetch("http://localhost:3000/api/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/user/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        }
+      );
       if (!response.ok) {
         setIsLoading(false);
         setStatusCode(response.status);

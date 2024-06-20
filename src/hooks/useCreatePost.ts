@@ -25,14 +25,17 @@ export const useCreatePost = () => {
     setLoading(true);
     try {
       setFetchError(null);
-      const response = await fetch("http://localhost:3000/api/posts/create", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + accessToken,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postFields),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts/create`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + accessToken,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postFields),
+        }
+      );
       if (!response.ok) {
         throw new Error(response.status.toString());
       } else {
