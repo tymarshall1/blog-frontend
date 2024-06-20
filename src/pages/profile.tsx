@@ -34,7 +34,7 @@ function AccountFilter({
     setLastClicked(lastLinkSelected);
   };
   return (
-    <div className="flex items-center justify-center gap-4">
+    <div className="flex flex-wrap items-center justify-center gap-4">
       <Button
         onClick={() => handleClick(ProfileFilterOptions.Overview)}
         className={`${
@@ -196,12 +196,12 @@ function SectionDivider({
         <p
           className={`${
             isPost ? "text-2xl" : "text-lg"
-          } max-w-4xl mb-3 overflow-hidden font-bold prose max-h-12 prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
+          } max-w-4xl mb-3 overflow-hidden font-bold prose max-h-12 break-all  prose-strong:text-white text-white break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
           dangerouslySetInnerHTML={{ __html: title }}
         ></p>
         {postBody && (
           <p
-            className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words max-h-40 prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
+            className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words prose-pre:break-all max-h-40 prose-strong:text-white prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
             dangerouslySetInnerHTML={{ __html: postBody }}
           ></p>
         )}
