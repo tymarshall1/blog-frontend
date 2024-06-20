@@ -26,7 +26,9 @@ export const useComment = () => {
     try {
       setFetchError(null);
       const response = await fetch(
-        `http://localhost:3000/api/posts/${postID}/comment`,
+        `${
+          import.meta.env.VITE_LIMELEAF_BACKEND_URL
+        }/api/posts/${postID}/comment`,
         {
           method: "POST",
           headers: {

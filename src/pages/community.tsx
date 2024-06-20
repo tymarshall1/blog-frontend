@@ -72,7 +72,9 @@ function CommunityPage() {
   const { communityName } = useParams();
   const [follows, setFollows] = useState(false);
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
-    `http://localhost:3000/api/community/${communityName}/`,
+    `${
+      import.meta.env.VITE_LIMELEAF_BACKEND_URL
+    }/api/community/${communityName}/`,
     "GET"
   );
   const { fetchError, toggleFollow } = useToggleFollow();

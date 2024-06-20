@@ -39,14 +39,19 @@ function PostInteraction({
 
     if (accessToken === "undefined") return;
 
-    fetch(`http://localhost:3000/api/posts/${postID}/reaction`, {
-      method: "PATCH",
-      headers: {
-        Authorization: "Bearer " + accessToken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action: action }),
-    })
+    fetch(
+      `${
+        import.meta.env.VITE_LIMELEAF_BACKEND_URL
+      }/api/posts/${postID}/reaction`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: action }),
+      }
+    )
       .then((response) => response.json())
       .then((json) => {
         setLikesAndDislikes(json);

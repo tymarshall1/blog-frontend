@@ -363,7 +363,7 @@ function Profile() {
     ProfileFilterOptions.Overview
   );
   const { isLoading, error, responseData, fetchData } = useFetch<AccountData>(
-    `http://localhost:3000/api/user/profile/${username}`,
+    `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/user/profile/${username}`,
     "GET"
   );
   const isMyAccount =

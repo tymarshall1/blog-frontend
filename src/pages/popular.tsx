@@ -4,7 +4,7 @@
 function Popular() {
   return <></>;
   // const { isLoading, error, responseData, fetchData } = useFetch(
-  //   "http://localhost:3000/api/posts",
+  //   `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts`,
   //   "GET"
   // );
   // useEffect(() => {

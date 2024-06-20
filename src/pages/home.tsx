@@ -4,6 +4,7 @@ import MoreInformation from "@/components/ui/moreInformation";
 import { UserPost } from "@/types/post";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import Loading from "@/components/ui/loading";
+
 function Home() {
   const [posts, setPosts] = useState<UserPost[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ function Home() {
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
-    fetch("http://localhost:3000/api/posts")
+    fetch(`${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts`)
       .then((response) => response.json())
       .then((data) => {
         setPosts(data);

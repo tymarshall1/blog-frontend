@@ -253,7 +253,7 @@ function SinglePost() {
     window.scrollTo(0, 0);
     setLoading(true);
 
-    fetch(`http://localhost:3000/api/posts/${id}`)
+    fetch(`${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts/${id}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {

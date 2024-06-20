@@ -7,7 +7,7 @@ export const useRefreshUser = () => {
     const accessToken = localStorage.getItem("accessToken");
 
     if (accessToken) {
-      fetch("http://localhost:3000/api/user/profile", {
+      fetch(`${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/user/profile`, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Authorization: "Bearer " + accessToken,

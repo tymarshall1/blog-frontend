@@ -27,7 +27,9 @@ export const useToggleFollow = () => {
     try {
       setFetchError(null);
       const response = await fetch(
-        "http://localhost:3000/api/user/profile/toggle-followed-community",
+        `${
+          import.meta.env.VITE_LIMELEAF_BACKEND_URL
+        }/api/user/profile/toggle-followed-community`,
         {
           method: "PATCH",
           headers: {

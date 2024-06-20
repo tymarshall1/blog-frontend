@@ -30,7 +30,7 @@ export const useCreateCommunity = () => {
     try {
       setFetchError(null);
       const response = await fetch(
-        "http://localhost:3000/api/community/create",
+        `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/community/create`,
         {
           method: "POST",
           headers: {
