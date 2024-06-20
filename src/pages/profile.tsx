@@ -13,6 +13,12 @@ import { UserPost } from "../types/post";
 import { Comment } from "@/types/comment";
 import { timeSince } from "@/lib/utils";
 import PostInteraction from "@/components/ui/postInteraction";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 enum ProfileFilterOptions {
   Overview = "overview",
@@ -34,46 +40,114 @@ function AccountFilter({
     setLastClicked(lastLinkSelected);
   };
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4">
-      <Button
-        onClick={() => handleClick(ProfileFilterOptions.Overview)}
-        className={`${
-          lastClicked === ProfileFilterOptions.Overview ? " bg-black " : ""
-        } font-bold bg-none text-md rounded-none rounded-t-lg`}
-        variant={"link"}
-      >
-        Overview
-      </Button>
-      <Button
-        onClick={() => handleClick(ProfileFilterOptions.Posts)}
-        className={`${
-          lastClicked === ProfileFilterOptions.Posts ? "bg-black" : ""
-        } font-bold bg-none text-md rounded-none rounded-t-lg`}
-        variant={"link"}
-      >
-        Posts
-      </Button>
-      <Button
-        onClick={() => handleClick(ProfileFilterOptions.Comments)}
-        className={`${
-          lastClicked === ProfileFilterOptions.Comments ? "bg-black" : ""
-        } font-bold bg-none text-md rounded-none  rounded-t-lg`}
-        variant={"link"}
-      >
-        Comments
-      </Button>
-      {isMyAccount && (
+    <>
+      <div className="flex-wrap items-center justify-center hidden gap-4 sm:flex">
         <Button
-          onClick={() => handleClick(ProfileFilterOptions.Profile)}
+          onClick={() => handleClick(ProfileFilterOptions.Overview)}
           className={`${
-            lastClicked === ProfileFilterOptions.Profile ? "bg-black" : ""
+            lastClicked === ProfileFilterOptions.Overview ? " bg-black " : ""
+          } font-bold bg-none text-md rounded-none rounded-t-lg`}
+          variant={"link"}
+        >
+          Overview
+        </Button>
+        <Button
+          onClick={() => handleClick(ProfileFilterOptions.Posts)}
+          className={`${
+            lastClicked === ProfileFilterOptions.Posts ? "bg-black" : ""
+          } font-bold bg-none text-md rounded-none rounded-t-lg`}
+          variant={"link"}
+        >
+          Posts
+        </Button>
+        <Button
+          onClick={() => handleClick(ProfileFilterOptions.Comments)}
+          className={`${
+            lastClicked === ProfileFilterOptions.Comments ? "bg-black" : ""
           } font-bold bg-none text-md rounded-none  rounded-t-lg`}
           variant={"link"}
         >
-          Profile
+          Comments
         </Button>
-      )}
-    </div>
+        {isMyAccount && (
+          <Button
+            onClick={() => handleClick(ProfileFilterOptions.Profile)}
+            className={`${
+              lastClicked === ProfileFilterOptions.Profile ? "bg-black" : ""
+            } font-bold bg-none text-md rounded-none  rounded-t-lg`}
+            variant={"link"}
+          >
+            Profile
+          </Button>
+        )}
+      </div>
+
+      <div className="text-right sm:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="rounded-full hover:bg-white/50 ">
+            <span className="text-3xl rotate-90 material-symbols-outlined text-secondary">
+              more_vert
+            </span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <Button
+                onClick={() => handleClick(ProfileFilterOptions.Overview)}
+                className={`${
+                  lastClicked === ProfileFilterOptions.Overview
+                    ? " bg-black text-white"
+                    : "text-black"
+                } font-bold bg-none text-md w-full rounded-none rounded-t-lg `}
+                variant={"link"}
+              >
+                Overview
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Button
+                onClick={() => handleClick(ProfileFilterOptions.Posts)}
+                className={`${
+                  lastClicked === ProfileFilterOptions.Posts
+                    ? "bg-black text-white"
+                    : "text-black"
+                } font-bold bg-none text-md w-full rounded-none rounded-t-lg`}
+                variant={"link"}
+              >
+                Posts
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Button
+                onClick={() => handleClick(ProfileFilterOptions.Comments)}
+                className={`${
+                  lastClicked === ProfileFilterOptions.Comments
+                    ? "bg-black text-white"
+                    : "text-black"
+                } font-bold bg-none text-md w-full rounded-none  rounded-t-lg`}
+                variant={"link"}
+              >
+                Comments
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              {isMyAccount && (
+                <Button
+                  onClick={() => handleClick(ProfileFilterOptions.Profile)}
+                  className={`${
+                    lastClicked === ProfileFilterOptions.Profile
+                      ? "bg-black text-white"
+                      : "text-black"
+                  } font-bold bg-none text-md  w-full rounded-none  rounded-t-lg`}
+                  variant={"link"}
+                >
+                  Profile
+                </Button>
+              )}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </>
   );
 }
 

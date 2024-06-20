@@ -3,7 +3,11 @@ type LoadingProps = {
 };
 function Loading({ color }: LoadingProps) {
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
+      <p className="text-lg text-center text-white min-w-52">
+        Free servers have a spin up time of approximately 50 seconds.
+      </p>
+      <p className="text-lg text-center text-white">Please be patient!</p>
       <div className="w-14 h-14">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
           <radialGradient
