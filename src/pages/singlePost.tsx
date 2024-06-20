@@ -1,7 +1,7 @@
 import { UserPost } from "@/types/post";
 import { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
-import MoreInformation from "@/components/ui/moreInformation";
+import { MoreInformation } from "@/components/ui/moreInformation";
 import { Badge } from "@/components/ui/badge";
 import Loading from "@/components/ui/loading";
 import TextArea from "@/forms/components/textArea";

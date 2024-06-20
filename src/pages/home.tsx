@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Post from "../components/ui/post";
-import MoreInformation from "@/components/ui/moreInformation";
+import { MoreInformation } from "@/components/ui/moreInformation";
 import { UserPost } from "@/types/post";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import Loading from "@/components/ui/loading";

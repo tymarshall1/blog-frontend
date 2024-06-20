@@ -6,7 +6,7 @@ import { AccountData } from "@/types/accountData";
 import Loading from "@/components/ui/loading";
 import Error from "@/components/ui/error";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import MoreInformation from "../components/ui/moreInformation";
+import { MoreInformation } from "../components/ui/moreInformation";
 import ProfileForm from "@/forms/profile";
 import { useNavigate } from "react-router-dom";
 import { UserPost } from "../types/post";

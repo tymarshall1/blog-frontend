@@ -2,6 +2,46 @@ import { Link } from "react-router-dom";
 import SeeMore from "./seeMore";
 import { ReactNode } from "react";
 
+type CommunitySectionProps = {
+  title: string;
+  data: string | number | string[] | React.ReactNode;
+};
+
+function MoreInformationContainer({ children }: { children: ReactNode }) {
+  return (
+    <div className="p-1 space-y-2 overflow-y-scroll max-h-dvh scrollbar">
+      {children}
+    </div>
+  );
+}
+
+function MoreInformationTitle({ children }: { children: ReactNode }) {
+  return (
+    <div className="text-4xl font-black text-center text-secondary hover:text-white/70">
+      {children}
+    </div>
+  );
+}
+
+function MoreInformationDescription({ children }: { children: ReactNode }) {
+  return (
+    <div className="font-light pt-4 tracking-wide border-b-[1px] border-white pb-2">
+      {children}
+    </div>
+  );
+}
+
+function MoreInformationBlock(props: CommunitySectionProps) {
+  return (
+    <div className="space-y-1 ">
+      <h2 className="text-lg font-black text-secondary">{props.title}</h2>
+      <div className="pb-2 tracking-wider border-b-[1px] border-white">
+        {props.data}
+      </div>
+    </div>
+  );
+}
+
 type CommunityProps = {
   title: string;
   members: number;
@@ -60,4 +100,10 @@ function MoreInformation({
     </div>
   );
 }
-export default MoreInformation;
+export {
+  MoreInformation,
+  MoreInformationContainer,
+  MoreInformationTitle,
+  MoreInformationDescription,
+  MoreInformationBlock,
+};

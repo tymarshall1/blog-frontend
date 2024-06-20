@@ -4,6 +4,7 @@ import PostEditor from "./components/postEditor";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 import {
   Select,
   SelectContent,
@@ -37,6 +38,7 @@ function CreatePost() {
   const { createPost } = useCreatePost();
   const defaultBodyText = "<p></p>";
 
+  const Navigate = useNavigate();
   function setBody(body: string) {
     setPostFields({ ...postFields, body: body });
     setSubmitError(SubmitError.NONE);
@@ -70,6 +72,7 @@ function CreatePost() {
         onValueChange={(event) => {
           setPostFields({ ...postFields, communityName: event });
           setSubmitError(SubmitError.NONE);
+          Navigate(`../community/${event}/create-post`);
         }}
       >
         <SelectTrigger

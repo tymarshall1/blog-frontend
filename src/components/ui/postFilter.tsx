@@ -73,7 +73,7 @@ function NoPostsYet() {
       <p>you could be the first.</p>
       <Link
         className="block px-2 py-1 mx-auto text-xl font-black rounded max-w-20 text-foreground bg-secondary hover:bg-white/80"
-        to={"/create-post"}
+        to={"create-post"}
       >
         Create
       </Link>

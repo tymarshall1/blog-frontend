@@ -77,7 +77,7 @@
   }
 
   .scrollbar::-webkit-scrollbar-track {
-    background: #000000;
+    background: transparent;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {

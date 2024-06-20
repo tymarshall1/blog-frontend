@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Community } from "@/types/community";
 import Error from "@/components/ui/error";
 import Loading from "@/components/ui/loading";
-import MoreInformation from "@/components/ui/moreInformation";
+import { MoreInformation } from "@/components/ui/moreInformation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PostFilter } from "@/components/ui/postFilter";

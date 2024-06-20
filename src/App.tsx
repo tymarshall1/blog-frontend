@@ -28,6 +28,10 @@ function App() {
             element={user ? <CreateCommunity /> : <Unauthorized />}
           />
           <Route
+            path="/community/:communityName/create-post"
+            element={user ? <PostCreation /> : <Unauthorized />}
+          />
+          <Route
             path="/create-post"
             element={user ? <PostCreation /> : <Unauthorized />}
           />
