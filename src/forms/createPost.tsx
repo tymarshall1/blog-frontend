@@ -4,7 +4,7 @@ import PostEditor from "./components/postEditor";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Select,
   SelectContent,
@@ -68,6 +68,14 @@ function CreatePost() {
   return (
     <form className="max-w-xl space-y-4">
       <h1 className="text-3xl font-black text-white">Create Post</h1>
+      {user?.profile?.followedCommunities.length === 0 && (
+        <p className="p-1 text-white rounded bg-destructive/50">
+          You must be following the community you wish to post to. View{" "}
+          <Link to={"/"} className="text-secondary">
+            Communities
+          </Link>
+        </p>
+      )}
       <Select
         onValueChange={(event) => {
           setPostFields({ ...postFields, communityName: event });

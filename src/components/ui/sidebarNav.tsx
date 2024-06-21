@@ -113,6 +113,7 @@ function HeadSideBar() {
         to={"/"}
         onClick={() => {
           setLinkSelected("home");
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       >
         <span className="material-symbols-outlined">home</span>

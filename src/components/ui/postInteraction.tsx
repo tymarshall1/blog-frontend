@@ -1,5 +1,7 @@
 import { useRefreshUser } from "@/hooks/useRefreshUser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import LoginSignupDialogs from "./loginSignupDialogs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +34,13 @@ function PostInteraction({
     reactionScore: reactionScore,
   });
   const { refreshUser } = useRefreshUser();
+  const { user } = useAuthContext();
+  const [nonUserTriedInteraction, setNonUserTriedInteraction] = useState(false);
+
+  useEffect(() => {
+    setNonUserTriedInteraction(false);
+  }, [user]);
+
   function toggleLikeOrDislike(action: Action) {
     const accessToken = localStorage.getItem("accessToken")
       ? localStorage.getItem("accessToken")
@@ -64,39 +73,59 @@ function PostInteraction({
     <div
       className={`${className} flex flex-wrap justify-between mt-4 rounded-full p-1 text-white bg-sideNav`}
     >
-      <div className="flex text-sm font-light">
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleLikeOrDislike(Action.TOGGLE_ACTION_LIKE);
-          }}
-          className="flex items-center gap-1 p-1 rounded cursor-pointer "
-        >
-          <span
-            className={`${
-              likesAndDislikes.reactionScore === 1 && "text-green-500  "
-            } material-symbols-outlined hover:text-green-500`}
-          >
-            thumb_up
-          </span>
-          <span>{likesAndDislikes.likes}</span>
-        </div>
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleLikeOrDislike(Action.TOGGLE_ACTION_DISLIKE);
-          }}
-          className="flex items-center gap-1 p-1 rounded cursor-pointer"
-        >
-          <span
-            className={`${
-              likesAndDislikes.reactionScore === -1 && " text-destructive"
-            } material-symbols-outlined hover:text-destructive`}
-          >
-            thumb_down
-          </span>
-          <span>{likesAndDislikes.dislikes}</span>
-        </div>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex text-sm font-light"
+      >
+        {nonUserTriedInteraction && (
+          <div className="pl-1">
+            <LoginSignupDialogs />
+          </div>
+        )}
+        {!nonUserTriedInteraction && (
+          <>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!user) {
+                  setNonUserTriedInteraction(true);
+                  return;
+                }
+                toggleLikeOrDislike(Action.TOGGLE_ACTION_LIKE);
+              }}
+              className="flex items-center gap-1 p-1 rounded cursor-pointer "
+            >
+              <span
+                className={`${
+                  likesAndDislikes.reactionScore === 1 && "text-green-500  "
+                } material-symbols-outlined hover:text-green-500`}
+              >
+                thumb_up
+              </span>
+              <span>{likesAndDislikes.likes}</span>
+            </div>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!user) {
+                  setNonUserTriedInteraction(true);
+                  return;
+                }
+                toggleLikeOrDislike(Action.TOGGLE_ACTION_DISLIKE);
+              }}
+              className="flex items-center gap-1 p-1 rounded cursor-pointer"
+            >
+              <span
+                className={`${
+                  likesAndDislikes.reactionScore === -1 && " text-destructive"
+                } material-symbols-outlined hover:text-destructive`}
+              >
+                thumb_down
+              </span>
+              <span>{likesAndDislikes.dislikes}</span>
+            </div>
+          </>
+        )}
       </div>
       <div className="sm:hidden">
         <DropdownMenu>

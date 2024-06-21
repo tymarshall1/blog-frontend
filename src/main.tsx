@@ -5,9 +5,7 @@ import "./index.css";
 import { AuthContextProvider } from "./contexts/userContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <App />
-    </AuthContextProvider>
-  </React.StrictMode>
+  <AuthContextProvider>
+    <App />
+  </AuthContextProvider>
 );

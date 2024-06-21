@@ -4,9 +4,7 @@ import closeIcon from "../../assets/close.svg";
 import leafLogo from "../../assets/leaf-logo.svg";
 import SidebarNav from "./sidebarNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import LoginForm from "@/forms/login";
-import SignupForm from "@/forms/signup";
+import LoginSignupDialogs from "./loginSignupDialogs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,11 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/hooks/useLogout";
 import { useAuthContext } from "@/hooks/useAuthContext";
+
 function Navbar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
-  const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
   const { logout } = useLogout();
   const { user } = useAuthContext();
   useEffect(() => {
@@ -38,22 +35,6 @@ function Navbar() {
     };
   }, []);
 
-  const closeLoginDialog = () => {
-    setIsLoginDialogOpen(false);
-  };
-
-  const closeSignupDialog = () => {
-    setIsSignupDialogOpen(false);
-  };
-
-  const openSignupDialog = () => {
-    setIsSignupDialogOpen(true);
-  };
-
-  const openLoginDialog = () => {
-    setIsLoginDialogOpen(true);
-  };
-
   return (
     <nav className="fixed top-0 z-50 flex items-center justify-between w-full p-4 min-h-10 text-primary bg-foreground">
       <div className="flex items-center gap-2">
@@ -68,12 +49,16 @@ function Navbar() {
           </SheetContent>
         </Sheet>
 
-        <Link to={""}>
+        <Link
+          to={""}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
           <img src={leafLogo} className="w-10 h-10 " alt="" />
         </Link>
         <Link
           className="hidden text-4xl font-black hover:text-secondary sm:block"
           to={"/"}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           LimeLeaf
         </Link>
@@ -174,45 +159,10 @@ function Navbar() {
             </>
 
             {/* if search bar unopened, render login and sign-up buttons */}
-
             <>
               {!user && (
                 <>
-                  <Dialog
-                    open={isLoginDialogOpen}
-                    onOpenChange={setIsLoginDialogOpen}
-                  >
-                    <DialogTrigger
-                      className="text-xl font-black hover:text-secondary"
-                      onClick={() => setIsLoginDialogOpen(true)}
-                    >
-                      Login
-                    </DialogTrigger>
-                    <DialogContent>
-                      <LoginForm
-                        closeLoginDialog={closeLoginDialog}
-                        openSignupDialog={openSignupDialog}
-                      />
-                    </DialogContent>
-                  </Dialog>
-
-                  <Dialog
-                    open={isSignupDialogOpen}
-                    onOpenChange={setIsSignupDialogOpen}
-                  >
-                    <DialogTrigger
-                      className="px-2 py-1 text-xl font-black rounded text-foreground bg-secondary hover:bg-white/80 "
-                      onClick={() => setIsSignupDialogOpen(true)}
-                    >
-                      Sign Up
-                    </DialogTrigger>
-                    <DialogContent>
-                      <SignupForm
-                        closeSignupDialog={closeSignupDialog}
-                        openLoginDialog={openLoginDialog}
-                      />
-                    </DialogContent>
-                  </Dialog>
+                  <LoginSignupDialogs />
                 </>
               )}
             </>
