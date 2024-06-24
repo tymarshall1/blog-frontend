@@ -21,11 +21,10 @@ export type CommunityPagePostProps = {
 function CommunityPagePost(props: CommunityPagePostProps) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const postLink = `/community/${props.communityName}/${props.title}/${props.id}`;
   return (
     <div
-      onClick={() =>
-        navigate(`/community/${props.communityName}/${props.title}/${props.id}`)
-      }
+      onClick={() => navigate(postLink)}
       className="max-w-4xl pt-2 mx-auto overflow-hidden text-black border-2 border-transparent rounded cursor-pointer bg-zinc-300 hover:border-secondary max-h-96"
     >
       <Link
@@ -54,6 +53,7 @@ function CommunityPagePost(props: CommunityPagePostProps) {
         comments={props.comments}
         postID={props.id}
         className="rounded-none"
+        postLink={postLink}
         reactionScore={
           user?.profile?.likedPosts.includes(props.id)
             ? 1

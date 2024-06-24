@@ -1,7 +1,8 @@
 import { useRefreshUser } from "@/hooks/useRefreshUser";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import LoginSignupDialogs from "./loginSignupDialogs";
+import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +21,7 @@ function PostInteraction({
   postID,
   reactionScore,
   className,
+  postLink,
 }: {
   likes: number;
   dislikes: number;
@@ -27,6 +29,7 @@ function PostInteraction({
   postID: string;
   reactionScore: number;
   className?: string;
+  postLink: string;
 }) {
   const [likesAndDislikes, setLikesAndDislikes] = useState({
     likes: likes,
@@ -36,6 +39,11 @@ function PostInteraction({
   const { refreshUser } = useRefreshUser();
   const { user } = useAuthContext();
   const [nonUserTriedInteraction, setNonUserTriedInteraction] = useState(false);
+  const [shareOpened, setShareOpened] = useState(false);
+  const [moreInteractionsOpened, setMoreInteractionsOpened] = useState(false);
+  const dropdownRef = useRef<HTMLButtonElement>(null);
+  const moreInteractionsRef = useRef<HTMLButtonElement>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     setNonUserTriedInteraction(false);
@@ -69,6 +77,35 @@ function PostInteraction({
       .catch((err) => console.log(err));
   }
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShareOpened(false);
+      }
+
+      if (
+        moreInteractionsRef.current &&
+        !moreInteractionsRef.current.contains(event.target as Node)
+      ) {
+        setMoreInteractionsOpened(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <div
       className={`${className} flex flex-wrap justify-between mt-4 rounded-full p-1 text-white bg-sideNav`}
@@ -128,27 +165,53 @@ function PostInteraction({
         )}
       </div>
       <div className="sm:hidden">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-full hover:bg-secondary hover:text-black">
+        <DropdownMenu open={moreInteractionsOpened}>
+          <DropdownMenuTrigger
+            ref={moreInteractionsRef}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMoreInteractionsOpened(true);
+            }}
+            className="rounded-full hover:bg-secondary hover:text-black"
+          >
             <span className="text-2xl material-symbols-outlined">
               more_vert
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
-              <div className="flex items-center gap-1 p-1 rounded cursor-pointer sm:flex hover:bg-secondary hover:text-black">
+              <button
+                onClick={() => {
+                  scrollToSection("comments");
+                  setMoreInteractionsOpened(false);
+                }}
+                className="flex items-center gap-1 p-1 rounded cursor-pointer sm:flex hover:text-black"
+              >
                 <span className="material-symbols-outlined">forum</span>
                 <span>{comments} Comments</span>
-              </div>
+              </button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.clipboard.writeText(
+                    window.location.origin + postLink
+                  );
+                  setMoreInteractionsOpened(false);
+                  toast({ title: "Link Copied to Clipboard!" });
+                }}
+                className="flex items-center w-full h-full gap-1 p-1 rounded cursor-pointer hover:text-black"
+              >
                 <span className="material-symbols-outlined">share</span>
                 <span>Share</span>
-              </div>
+              </button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
+              <div
+                onClick={() => setMoreInteractionsOpened(false)}
+                className="flex items-center gap-1 p-1 rounded cursor-pointer hover:text-black"
+              >
                 <span className="material-symbols-outlined">bookmark</span>
                 <span>Save</span>
               </div>
@@ -158,14 +221,45 @@ function PostInteraction({
       </div>
 
       <div className="hidden gap-2 text-sm font-light tracking-wide sm:flex">
-        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
+        <button
+          onClick={() => scrollToSection("comments")}
+          className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black"
+        >
           <span className="material-symbols-outlined">forum</span>
           <span>{comments} Comments</span>
-        </div>
-        <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
-          <span className="material-symbols-outlined">share</span>
-          <span>Share</span>
-        </div>
+        </button>
+
+        <DropdownMenu open={shareOpened}>
+          <DropdownMenuTrigger
+            ref={dropdownRef}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShareOpened(true);
+            }}
+            className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black"
+          >
+            <span className="material-symbols-outlined">share</span>
+            <span>Share</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <button
+                className="w-full h-full text-left"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.clipboard.writeText(
+                    window.location.origin + postLink
+                  );
+                  setShareOpened(false);
+                  toast({ title: "Link Copied to Clipboard!" });
+                }}
+              >
+                Copy Link
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
           <span className="material-symbols-outlined">bookmark</span>
           <span>Save</span>

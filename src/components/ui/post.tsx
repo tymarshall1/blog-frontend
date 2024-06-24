@@ -21,11 +21,10 @@ type PostProps = {
 function Post(props: PostProps) {
   const [loaded] = useState(true);
   const navigate = useNavigate();
+  const postLink = `/community/${props.community}/${props.title}/${props.id}`;
   return (
     <div
-      onClick={() =>
-        navigate(`/community/${props.community}/${props.title}/${props.id}`)
-      }
+      onClick={() => navigate(postLink)}
       className="max-w-screen-md  mx-auto space-y-1 overflow-hidden text-black border-2 border-transparent rounded cursor-pointer lg:w-[45rem] bg-zinc-300 hover:border-secondary max-h-[30rem]"
     >
       {loaded && (
@@ -74,6 +73,7 @@ function Post(props: PostProps) {
             postID={props.id}
             reactionScore={props.reactionScore || 0}
             className="rounded-none"
+            postLink={postLink}
           />
         </>
       )}

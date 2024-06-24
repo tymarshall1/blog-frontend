@@ -46,7 +46,7 @@ function PostHeader(props: PostHeaderProps) {
   }
 
   return (
-    <section className="flex items-center gap-2 mx-4 mt-2 text-white">
+    <section className="flex items-center gap-2 pb-2 mx-4 mt-2 text-white border-b-2 border-sideNav">
       <Link to={`/community/${props.communityName}`}>
         <img
           src={props.communityIcon}
@@ -89,9 +89,11 @@ type PostBodyProps = {
   comments: number;
   postID: string | undefined;
   reactionScore: number;
+  community: string;
 };
 
 function PostBody(props: PostBodyProps) {
+  const postLink = `/community/${props.community}/${props.title}/${props.postID}`;
   return (
     <section className="px-4 space-y-4 ">
       <h1 className="max-w-4xl py-1 overflow-hidden text-4xl font-bold text-white break-words break-all ">
@@ -110,6 +112,7 @@ function PostBody(props: PostBodyProps) {
             postID={props.postID}
             reactionScore={props.reactionScore}
             className="rounded-none"
+            postLink={postLink}
           />
         )}
         {!props.postID && (
@@ -336,6 +339,7 @@ function SinglePost() {
                 body={userPost.body}
                 likes={userPost.likes}
                 dislikes={userPost.dislikes}
+                community={userPost.community.name}
                 comments={
                   typeof userPost.comments === "object"
                     ? userPost.comments.length
@@ -350,7 +354,7 @@ function SinglePost() {
                     : 0
                 }
               />
-
+              <div className="sr-only" id="comments"></div>
               <form action="" className="max-w-2xl mx-4">
                 {!textAreaClick && (
                   <>
