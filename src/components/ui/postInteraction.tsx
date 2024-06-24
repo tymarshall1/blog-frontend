@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import LoginSignupDialogs from "./loginSignupDialogs";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +46,7 @@ function PostInteraction({
   const dropdownRef = useRef<HTMLButtonElement>(null);
   const moreInteractionsRef = useRef<HTMLButtonElement>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setNonUserTriedInteraction(false);
@@ -182,6 +185,7 @@ function PostInteraction({
             <DropdownMenuItem>
               <button
                 onClick={() => {
+                  navigate(postLink);
                   scrollToSection("comments");
                   setMoreInteractionsOpened(false);
                 }}
@@ -222,7 +226,10 @@ function PostInteraction({
 
       <div className="hidden gap-2 text-sm font-light tracking-wide sm:flex">
         <button
-          onClick={() => scrollToSection("comments")}
+          onClick={() => {
+            navigate(postLink);
+            scrollToSection("comments");
+          }}
           className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black"
         >
           <span className="material-symbols-outlined">forum</span>

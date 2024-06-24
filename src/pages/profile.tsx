@@ -286,6 +286,7 @@ function SectionDivider({
           dislikes={dislikes || 0}
           comments={comments || 0}
           postID={postID}
+          postLink={`/community/${communityName}/${postName}/${postID}`}
           className=""
           reactionScore={
             user?.profile?.likedPosts.includes(postID)
