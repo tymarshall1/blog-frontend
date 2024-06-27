@@ -10,6 +10,7 @@ import { AcceptableImg } from "@/types/acceptableImgs";
 import { separateCommas } from "@/lib/utils";
 import { useCreateCommunity } from "@/hooks/useCreateCommunity";
 import Loading from "@/components/ui/loading";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 enum InputError {
   none = "",
   noIcon = "Please choose an icon for the community.",
@@ -62,6 +63,155 @@ function FormHeader() {
         </li>
       </ul>
     </div>
+  );
+}
+
+function DefaultBackgroundSelector() {
+  enum defaultBgImgs {
+    none = "none",
+    defaultNature1 = "defaultNature1",
+    defaultNature2 = "defaultNature2",
+    defaultSpace1 = "defaultSpace1",
+    defaultSpace2 = "defaultSpace2",
+  }
+
+  const [selectedBackground, setSelectedBackground] = useState(
+    defaultBgImgs.none
+  );
+
+  const handleChange = (event) => {
+    setSelectedBackground(event.target.value);
+  };
+
+  const handleButtonClick = () => {
+    console.log("Selected Background:", selectedBackground);
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger className="p-1 text-black bg-white rounded hover:bg-secondary max-w-32 max-h-8">
+        Default Images
+      </DialogTrigger>
+      <DialogContent className="bg-black pt-5 border-2 border-white/50  overflow-y-scroll max-h-[75%] max-w-screen-2xl scrollbar">
+        <form action="" className="space-y-4">
+          <fieldset className="space-y-3">
+            <legend className="pb-2 text-xl font-bold text-white border-b-2 md:text-3xl border-white/50">
+              Choose a <span className="text-secondary">Background</span> For
+              Your New Community!
+            </legend>
+
+            <h2 className="text-lg font-medium text-white md:text-xl">
+              Nature
+            </h2>
+
+            <div className="flex flex-col gap-2 md:flex-row md:max-h-72">
+              <input
+                id={defaultBgImgs.defaultNature1}
+                type="radio"
+                name="defaultCommunityBg"
+                className="appearance-none"
+                value={defaultBgImgs.defaultNature1}
+                onChange={handleChange}
+              />
+              <label
+                className={`${
+                  selectedBackground === defaultBgImgs.defaultNature1
+                    ? "border-secondary"
+                    : "border-transparent"
+                } border-2 hover:border-secondary`}
+                htmlFor={defaultBgImgs.defaultNature1}
+              >
+                <img
+                  src="https://res.cloudinary.com/de7we6c9g/image/upload/v1719451063/Community%20Icons/defaultNature1.jpg"
+                  alt="nature community background"
+                  className="w-full h-full"
+                />
+              </label>
+
+              <input
+                id={defaultBgImgs.defaultNature2}
+                type="radio"
+                name="defaultCommunityBg"
+                className="appearance-none"
+                value={defaultBgImgs.defaultNature2}
+                onChange={handleChange}
+              />
+              <label
+                className={`${
+                  selectedBackground === defaultBgImgs.defaultNature2
+                    ? "border-secondary"
+                    : "border-transparent"
+                } border-2 hover:border-secondary`}
+                htmlFor={defaultBgImgs.defaultNature2}
+              >
+                <img
+                  src="https://res.cloudinary.com/de7we6c9g/image/upload/v1719450981/Community%20Icons/defaultNature2.jpg"
+                  alt="nature community background"
+                  className="w-full h-full"
+                />
+              </label>
+            </div>
+
+            <h2 className="text-lg font-medium text-white md:text-xl">Space</h2>
+
+            <div className="flex flex-col gap-2 md:flex-row max-h-60">
+              <input
+                id={defaultBgImgs.defaultSpace1}
+                type="radio"
+                name="defaultCommunityBg"
+                className="appearance-none"
+                value={defaultBgImgs.defaultSpace1}
+                onChange={handleChange}
+              />
+              <label
+                className={`${
+                  selectedBackground === defaultBgImgs.defaultSpace1
+                    ? "border-secondary"
+                    : "border-transparent"
+                } border-2 hover:border-secondary`}
+                htmlFor={defaultBgImgs.defaultSpace1}
+              >
+                <img
+                  src="https://res.cloudinary.com/de7we6c9g/image/upload/v1719450600/Community%20Icons/defaultSpace1.jpg"
+                  alt="nature community background"
+                  className="w-full h-full"
+                />
+              </label>
+
+              <input
+                id={defaultBgImgs.defaultSpace2}
+                type="radio"
+                name="defaultCommunityBg"
+                className="appearance-none"
+                value={defaultBgImgs.defaultSpace2}
+                onChange={handleChange}
+              />
+              <label
+                className={`${
+                  selectedBackground === defaultBgImgs.defaultSpace2
+                    ? "border-secondary"
+                    : "border-transparent"
+                } border-2 hover:border-secondary`}
+                htmlFor={defaultBgImgs.defaultSpace2}
+              >
+                <img
+                  src="https://res.cloudinary.com/de7we6c9g/image/upload/v1719450856/Community%20Icons/defaultSpace2.jpg"
+                  alt="nature community background"
+                  className="w-full h-full"
+                />
+              </label>
+            </div>
+          </fieldset>
+          <Button
+            onClick={handleButtonClick}
+            type="button"
+            className="block ml-auto"
+          >
+            Choose Background
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -139,27 +289,30 @@ function CreateCommunity() {
           </div>
         )}
 
-        <FileInput
-          label={"Community Icon"}
-          id={"communityIcon"}
-          onchange={function (event: ChangeEvent<HTMLInputElement>): void {
-            if (event.target.files) {
-              setCommunity({
-                ...community,
-                communityIcon: event.target.files?.[0],
-              });
-              setError(InputError.none);
+        <div>
+          <FileInput
+            label={"Community Icon"}
+            id={"communityIcon"}
+            onchange={function (event: ChangeEvent<HTMLInputElement>): void {
+              if (event.target.files) {
+                setCommunity({
+                  ...community,
+                  communityIcon: event.target.files?.[0],
+                });
+                setError(InputError.none);
+              }
+            }}
+            helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb. They also should be 1300 x 250 for best quality."
+            error={
+              error === InputError.iconIncorrectType ||
+              error === InputError.iconToLarge ||
+              error === InputError.noIcon
+                ? true
+                : false
             }
-          }}
-          helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb. They also should be 1300 x 250 for best quality."
-          error={
-            error === InputError.iconIncorrectType ||
-            error === InputError.iconToLarge ||
-            error === InputError.noIcon
-              ? true
-              : false
-          }
-        ></FileInput>
+          ></FileInput>
+          <DefaultBackgroundSelector />
+        </div>
 
         <Input
           label={"Name"}
