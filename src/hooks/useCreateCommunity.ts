@@ -24,6 +24,7 @@ export const useCreateCommunity = () => {
     formData.append("communityName", community.name);
     formData.append("description", community.description);
     formData.append("communityIcon", community.communityIcon);
+    formData.append("communityBG", community.communityBG);
     for (let i = 0; i < community.tags.length; i++)
       formData.append("tags[]", community.tags[i]);
 

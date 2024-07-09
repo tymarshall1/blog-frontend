@@ -161,7 +161,7 @@ function MoreInformation({
   defaultInformation?: boolean;
 }) {
   return (
-    <div className="sticky hidden p-2 mt-4 text-white rounded top-20 min-[1080px]:block bg-moreInformation min-h-96 max-w-80 min-w-72 h-fit mb-3">
+    <div className="sticky hidden p-2 mt-4 text-white rounded top-20 min-[1080px]:block bg-moreInformation min-h-96 max-w-80 min-w-72 mb-3 overflow-y-scroll max-h-[700px] scrollbar">
       {defaultInformation && <DefaultInformation />}
       {!defaultInformation && children}
     </div>

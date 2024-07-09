@@ -19,15 +19,6 @@ import {
   DefaultImgContainer,
   DefaultImg,
 } from "@/components/ui/defaultImgSelector";
-enum InputError {
-  none = "",
-  noIcon = "Please choose an icon for the community.",
-  iconToLarge = "Community icon must be under 1 mb.",
-  iconIncorrectType = "Community icon must be of type png, jpg, jpeg, or svg.",
-  invalidName = "Community names must be between 1 and 15 characters and only consist of letters and numbers.",
-  invalidDescription = "Community descriptions must be between 2 and 300 characters long.",
-  communityAlreadyExists = "Community already exists.",
-}
 
 function FormHeader() {
   return (
@@ -77,6 +68,7 @@ function FormHeader() {
 function CreateCommunity() {
   const [community, setCommunity] = useState<Community>({
     communityIcon: "",
+    communityBG: "",
     name: "",
     description: "",
     tags: "",
@@ -93,7 +85,37 @@ function CreateCommunity() {
     defaultSpace2 = "defaultSpace2",
   }
 
-  const handleDefaultImgChange = (event) => {
+  enum defaultIcons {
+    none = "",
+    defaultGreen = "defaultGreen",
+    defaultOrange = "defaultOrange",
+    defaultPurple = "defaultPurple",
+    defaultBlue = "defaultBlue",
+    defaultRed = "defaultRed",
+    defaultYellow = "defaultYellow",
+  }
+
+  enum InputError {
+    none = "",
+    noIcon = "Please choose an icon for the community.",
+    iconToLarge = "Community icon must be under 1 mb.",
+    iconIncorrectType = "Community icon must be of type png, jpg, jpeg, or svg.",
+    noBg = "Please choose a background for the community.",
+    bgToLarge = "Community background must be under 1 mb.",
+    bgIncorrectType = "Community background must be of type png, jpg, jpeg, or svg.",
+    invalidName = "Community names must be between 1 and 15 characters and only consist of letters and numbers.",
+    invalidDescription = "Community descriptions must be between 2 and 300 characters long.",
+    communityAlreadyExists = "Community already exists.",
+  }
+
+  const handleDefaultBgImgChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCommunity({
+      ...community,
+      communityBG: event.target.value,
+    });
+  };
+
+  const handleDefaultIconChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCommunity({
       ...community,
       communityIcon: event.target.value,
@@ -137,6 +159,21 @@ function CreateCommunity() {
         ):
         setError(InputError.iconIncorrectType);
         break;
+
+      case !community.communityBG:
+        setError(InputError.noBg);
+        break;
+      case typeof community.communityBG === "object" &&
+        community.communityBG.size > megaByte:
+        setError(InputError.bgToLarge);
+        break;
+      case typeof community.communityBG === "object" &&
+        !Object.values(AcceptableImg).includes(
+          community.communityBG.type as AcceptableImg
+        ):
+        setError(InputError.bgIncorrectType);
+        break;
+
       case !regex.test(community.name):
         setError(InputError.invalidName);
         break;
@@ -163,94 +200,6 @@ function CreateCommunity() {
           </div>
         )}
 
-        <div>
-          <FileInput
-            label={"Community Icon"}
-            id={"communityIcon"}
-            onchange={function (event: ChangeEvent<HTMLInputElement>): void {
-              if (event.target.files) {
-                setCommunity({
-                  ...community,
-                  communityIcon: event.target.files?.[0],
-                });
-                setError(InputError.none);
-              }
-            }}
-            helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb. They also should be 1300 x 250 for best quality."
-            error={
-              error === InputError.iconIncorrectType ||
-              error === InputError.iconToLarge ||
-              error === InputError.noIcon
-                ? true
-                : false
-            }
-          ></FileInput>
-
-          <DefaultImgSelector
-            resetDefaultImg={() =>
-              setCommunity({ ...community, communityIcon: defaultBgImgs.none })
-            }
-          >
-            <DefaultImgHeader>
-              <p>
-                Choose a <span className="text-secondary">Background</span> For
-                Your New Community!
-              </p>
-            </DefaultImgHeader>
-            <DefaultImgSection>
-              <DefaultImgTitle title={"Nature"} />
-              <DefaultImgContainer>
-                <DefaultImg
-                  id={defaultBgImgs.defaultNature1}
-                  handleChange={handleDefaultImgChange}
-                  selectedBackground={community.communityIcon.toString()}
-                  imgUrl={
-                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719451063/Community%20Icons/defaultNature1.jpg"
-                  }
-                />
-                <DefaultImg
-                  id={defaultBgImgs.defaultNature2}
-                  handleChange={handleDefaultImgChange}
-                  selectedBackground={community.communityIcon.toString()}
-                  imgUrl={
-                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719450981/Community%20Icons/defaultNature2.jpg"
-                  }
-                />
-              </DefaultImgContainer>
-            </DefaultImgSection>
-            <DefaultImgSection>
-              <DefaultImgTitle title={"Space"} />
-              <DefaultImgContainer>
-                <DefaultImg
-                  id={defaultBgImgs.defaultSpace1}
-                  handleChange={handleDefaultImgChange}
-                  selectedBackground={community.communityIcon.toString()}
-                  imgUrl={
-                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719450600/Community%20Icons/defaultSpace1.jpg"
-                  }
-                />
-                <DefaultImg
-                  id={defaultBgImgs.defaultSpace2}
-                  handleChange={handleDefaultImgChange}
-                  selectedBackground={community.communityIcon.toString()}
-                  imgUrl={
-                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719450600/Community%20Icons/defaultSpace2.jpg"
-                  }
-                />
-              </DefaultImgContainer>
-            </DefaultImgSection>
-          </DefaultImgSelector>
-          <span className="text-white">
-            {" "}
-            Currently selected:{" "}
-            <span className="text-secondary">
-              {typeof community.communityIcon === "string"
-                ? "Default"
-                : community.communityIcon.name}
-            </span>
-          </span>
-        </div>
-
         <Input
           label={"Name"}
           id={"communityName"}
@@ -270,7 +219,116 @@ function CreateCommunity() {
               : false
           }
         ></Input>
+        <div>
+          <FileInput
+            label={"Icon"}
+            id={"communityIcon"}
+            onchange={function (event: ChangeEvent<HTMLInputElement>): void {
+              if (event.target.files) {
+                setCommunity({
+                  ...community,
+                  communityIcon: event.target.files?.[0],
+                });
+                setError(InputError.none);
+              }
+            }}
+            helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb. They also should be 24 x 24 for best quality."
+            error={
+              error === InputError.iconIncorrectType ||
+              error === InputError.iconToLarge ||
+              error === InputError.noIcon
+                ? true
+                : false
+            }
+          ></FileInput>
 
+          <DefaultImgSelector
+            itemHasBeenSelected={community.communityIcon !== ""}
+            resetDefaultImg={() =>
+              setCommunity({ ...community, communityIcon: defaultBgImgs.none })
+            }
+          >
+            <DefaultImgHeader>
+              <p>
+                Choose an <span className="text-secondary">Icon</span> For Your
+                New Community!
+              </p>
+            </DefaultImgHeader>
+            <DefaultImgSection>
+              <DefaultImgTitle title={""} />
+              <DefaultImgContainer className="flex flex-col items-center gap-2 sm:flex-row md:max-h-72">
+                <DefaultImg
+                  id={defaultIcons.defaultGreen}
+                  handleChange={handleDefaultIconChange}
+                  selectedBackground={community.communityIcon.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1720553127/Community%20Icons/defaultGreen.svg"
+                  }
+                  className="p-2 w-60 h-60"
+                />
+                <DefaultImg
+                  id={defaultIcons.defaultOrange}
+                  handleChange={handleDefaultIconChange}
+                  selectedBackground={community.communityIcon.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1720554284/Community%20Icons/defaultOrange.svg"
+                  }
+                  className="p-2 w-60 h-60 "
+                />
+                <DefaultImg
+                  id={defaultIcons.defaultPurple}
+                  handleChange={handleDefaultIconChange}
+                  selectedBackground={community.communityIcon.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1720554420/Community%20Icons/defaultPurple.svg"
+                  }
+                  className="p-2 w-60 h-60"
+                />
+              </DefaultImgContainer>
+            </DefaultImgSection>
+            <DefaultImgSection>
+              <DefaultImgTitle title={""} />
+              <DefaultImgContainer className="flex flex-col items-center gap-2 sm:flex-row md:max-h-72">
+                <DefaultImg
+                  id={defaultIcons.defaultBlue}
+                  handleChange={handleDefaultIconChange}
+                  selectedBackground={community.communityIcon.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1720553127/Community%20Icons/defaultBlue.svg"
+                  }
+                  className="p-2 w-60 h-60"
+                />
+                <DefaultImg
+                  id={defaultIcons.defaultRed}
+                  handleChange={handleDefaultIconChange}
+                  selectedBackground={community.communityIcon.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1720554284/Community%20Icons/defaultRed.svg"
+                  }
+                  className="p-2 w-60 h-60 "
+                />
+                <DefaultImg
+                  id={defaultIcons.defaultYellow}
+                  handleChange={handleDefaultIconChange}
+                  selectedBackground={community.communityIcon.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1720554420/Community%20Icons/defaultYellow.svg"
+                  }
+                  className="p-2 w-60 h-60"
+                />
+              </DefaultImgContainer>
+            </DefaultImgSection>
+          </DefaultImgSelector>
+          <span className="text-white">
+            {" "}
+            Currently selected:{" "}
+            <span className="text-secondary">
+              {typeof community.communityIcon === "string"
+                ? "Default"
+                : community.communityIcon.name}
+            </span>
+          </span>
+        </div>
         <TextArea
           label={"Description"}
           id={"description"}
@@ -285,7 +343,95 @@ function CreateCommunity() {
           error={error === InputError.invalidDescription ? true : false}
           className="min-h-48"
         ></TextArea>
+        {/* background */}
+        <div>
+          <FileInput
+            label={"Background"}
+            id={"communityBg"}
+            onchange={function (event: ChangeEvent<HTMLInputElement>): void {
+              if (event.target.files) {
+                setCommunity({
+                  ...community,
+                  communityBG: event.target.files?.[0],
+                });
+                setError(InputError.none);
+              }
+            }}
+            helperText="Files must be png, jpeg, jpg, or svg and be under 1 mb. They also should be 1300 x 250 for best quality."
+            error={
+              error === InputError.bgIncorrectType ||
+              error === InputError.bgToLarge ||
+              error === InputError.noBg
+                ? true
+                : false
+            }
+          ></FileInput>
 
+          <DefaultImgSelector
+            itemHasBeenSelected={community.communityBG !== ""}
+            resetDefaultImg={() =>
+              setCommunity({ ...community, communityBG: defaultBgImgs.none })
+            }
+          >
+            <DefaultImgHeader>
+              <p>
+                Choose a <span className="text-secondary">Background</span> For
+                Your New Community!
+              </p>
+            </DefaultImgHeader>
+            <DefaultImgSection>
+              <DefaultImgTitle title={"Nature"} />
+              <DefaultImgContainer className="flex flex-col gap-2 md:flex-row md:max-h-72">
+                <DefaultImg
+                  id={defaultBgImgs.defaultNature1}
+                  handleChange={handleDefaultBgImgChange}
+                  selectedBackground={community.communityBG.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719451063/Community%20Backgrounds/defaultNature1.jpg"
+                  }
+                />
+                <DefaultImg
+                  id={defaultBgImgs.defaultNature2}
+                  handleChange={handleDefaultBgImgChange}
+                  selectedBackground={community.communityBG.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719451063/Community%20Backgrounds/defaultNature2.jpg"
+                  }
+                />
+              </DefaultImgContainer>
+            </DefaultImgSection>
+            <DefaultImgSection>
+              <DefaultImgTitle title={"Space"} />
+              <DefaultImgContainer className="flex flex-col gap-2 md:flex-row md:max-h-72">
+                <DefaultImg
+                  id={defaultBgImgs.defaultSpace1}
+                  handleChange={handleDefaultBgImgChange}
+                  selectedBackground={community.communityBG.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719450600/Community%20Backgrounds/defaultSpace1.jpg"
+                  }
+                />
+                <DefaultImg
+                  id={defaultBgImgs.defaultSpace2}
+                  handleChange={handleDefaultBgImgChange}
+                  selectedBackground={community.communityBG.toString()}
+                  imgUrl={
+                    "https://res.cloudinary.com/de7we6c9g/image/upload/v1719450600/Community%20Backgrounds/defaultSpace2.jpg"
+                  }
+                />
+              </DefaultImgContainer>
+            </DefaultImgSection>
+          </DefaultImgSelector>
+          <span className="text-white">
+            {" "}
+            Currently selected:{" "}
+            <span className="text-secondary">
+              {typeof community.communityBG === "string"
+                ? "Default"
+                : community.communityBG.name}
+            </span>
+          </span>
+        </div>
         <TextArea
           label={"Tags"}
           id={"tags"}
@@ -307,6 +453,7 @@ function CreateCommunity() {
         <Button
           disabled={
             community.communityIcon &&
+            community.communityBG &&
             community.name &&
             community.description &&
             error === InputError.none

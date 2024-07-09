@@ -17,6 +17,7 @@ type CommunityHeaderProps = {
   communityIcon: string;
   currentlyFollows: boolean;
   follows: boolean;
+  communityBG: string;
   toggleFollowedCommunity: () => void;
 };
 
@@ -24,18 +25,27 @@ function CommunityHeader({
   communityName,
   communityDescription,
   communityIcon,
+  communityBG,
   follows,
   toggleFollowedCommunity,
 }: CommunityHeaderProps) {
   return (
     <>
       <div
-        style={{ backgroundImage: `url('${communityIcon}')` }}
+        style={{ backgroundImage: `url('${communityBG}')` }}
         className="p-4 mt-4 bg-center bg-no-repeat bg-cover rounded h-60"
       ></div>
-      <div className="flex flex-col gap-2 p-2 mt-4 lg:hidden">
+      <div className="flex flex-col gap-2 p-2 mt-4 min-[1080px]:hidden">
         <div className="flex items-center gap-5">
-          <h1 className="text-3xl font-black">{communityName}</h1>
+          <div className="flex items-center gap-2">
+            <img
+              className="w-16 h-16 border-2 rounded-full border-white/20"
+              src={communityIcon}
+              alt=""
+            />
+            <h1 className="text-3xl font-black">{communityName}</h1>
+          </div>
+
           <Button
             variant={"secondary"}
             className="h-8"
@@ -115,12 +125,13 @@ function CommunityPage() {
       ) : (
         <>
           {responseData && (
-            <div className="flex gap-4 ml-4 xl:ml-0">
+            <div className="flex gap-4 p-2 ml-4 xl:ml-0">
               <div className="flex-1 space-y-4">
                 <CommunityHeader
                   communityName={responseData.name}
                   communityDescription={responseData.description}
                   communityIcon={responseData.communityIcon.toString()}
+                  communityBG={responseData.communityBG.toString()}
                   currentlyFollows={false}
                   follows={follows}
                   toggleFollowedCommunity={toggleFollowedCommunity}
@@ -136,9 +147,17 @@ function CommunityPage() {
               <div>
                 <MoreInformation>
                   <div className="px-2 pt-2">
-                    <h3 className="mb-2 text-4xl font-black text-center text-secondary">
-                      {responseData.name}
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <img
+                        className="w-16 h-16 border-2 rounded-full border-white/20"
+                        src={responseData.communityIcon.toString()}
+                        alt={responseData.name + "icon"}
+                      />
+                      <h3 className="mb-2 text-4xl font-black text-center text-secondary">
+                        {responseData.name}
+                      </h3>
+                    </div>
+
                     <p className="pb-2 border-b-[1px] border-white">
                       {responseData.description}
                     </p>

@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ChangeEvent, ReactNode, useState } from "react";
 import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
 function DefaultImgHeader({ children }: { children: ReactNode }) {
   return (
-    <legend className="pb-2 text-xl font-bold text-white border-b-2 md:text-3xl border-white/50">
+    <legend className="pb-2 text-3xl font-bold text-white border-b-2 border-white/50">
       {children}
     </legend>
   );
@@ -22,12 +23,14 @@ function DefaultImgTitle({ title }: { title: string }) {
   );
 }
 
-function DefaultImgContainer({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-2 md:flex-row md:max-h-72">
-      {children}
-    </div>
-  );
+function DefaultImgContainer({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <div className={cn("", className)}>{children}</div>;
 }
 
 function DefaultImg({
@@ -35,11 +38,13 @@ function DefaultImg({
   handleChange,
   selectedBackground,
   imgUrl,
+  className,
 }: {
   id: string;
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   selectedBackground: string;
   imgUrl: string;
+  className?: string;
 }) {
   return (
     <>
@@ -56,10 +61,10 @@ function DefaultImg({
           selectedBackground === imgUrl
             ? "border-secondary"
             : "border-transparent"
-        } border-2 hover:border-secondary hover:cursor-pointer`}
+        } border-2 hover:border-secondary rounded hover:cursor-pointer`}
         htmlFor={id}
       >
-        <img src={imgUrl} alt={id} className="w-full h-full" />
+        <img src={imgUrl} alt={id} className={cn("w-full h-full", className)} />
       </label>
     </>
   );
@@ -68,11 +73,13 @@ function DefaultImg({
 type DefaultImgSelectorProps = {
   children: ReactNode;
   resetDefaultImg: () => void;
+  itemHasBeenSelected?: boolean;
 };
 
 function DefaultImgSelector({
   children,
   resetDefaultImg,
+  itemHasBeenSelected,
 }: DefaultImgSelectorProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -111,6 +118,7 @@ function DefaultImgSelector({
               Cancel
             </Button>
             <Button
+              disabled={!itemHasBeenSelected}
               onClick={() => {
                 closeDialog();
               }}
