@@ -50,7 +50,7 @@ function PostHeader(props: PostHeaderProps) {
       <Link to={`/community/${props.communityName}`}>
         <img
           src={props.communityIcon}
-          className="w-12 h-12 rounded-full"
+          className="w-12 h-12 border-2 rounded-full border-white/20"
           alt="community icon"
           onMouseEnter={toggleTextHighlightOnHover}
           onMouseLeave={toggleTextHighlightOnHover}
@@ -434,11 +434,18 @@ function SinglePost() {
             <MoreInformation defaultInformation={fetchError}>
               <>
                 <div className="px-2 pt-2">
-                  <Link to={`/community/${userPost.community.name}`}>
-                    <h3 className="mb-2 text-4xl font-black text-center text-secondary hover:opacity-80">
-                      {userPost.community.name}
-                    </h3>
-                  </Link>
+                  <div className="flex items-center gap-2 pb-2">
+                    <img
+                      src={userPost.community.communityIcon.toString()}
+                      alt={userPost.community.name + " icon"}
+                      className="w-16 h-16 border-2 rounded-full border-white/20"
+                    />
+                    <Link to={`/community/${userPost.community.name}`}>
+                      <h3 className="mb-2 text-4xl font-black text-center text-secondary hover:opacity-80">
+                        {userPost.community.name}
+                      </h3>
+                    </Link>
+                  </div>
 
                   <p className="pb-2 border-b-[1px] border-white">
                     {userPost.community.description}

@@ -119,6 +119,10 @@
     animation: slideUp 200ms ease-out;
   }
 
+  .text-shadow {
+    text-shadow: 4px 4px 4px black;
+  }
+
   @keyframes slideDown {
     from {
       opacity: 10%;

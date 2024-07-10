@@ -33,7 +33,7 @@ function CommunityHeader({
     <>
       <div
         style={{ backgroundImage: `url('${communityBG}')` }}
-        className="p-4 mt-4 bg-center bg-no-repeat bg-cover rounded h-60"
+        className="p-4 mt-4 bg-center bg-no-repeat bg-cover border-[1px] rounded h-60 border-white/20"
       ></div>
       <div className="flex flex-col gap-2 p-2 mt-4 min-[1080px]:hidden">
         <div className="flex items-center gap-5">
@@ -125,7 +125,7 @@ function CommunityPage() {
       ) : (
         <>
           {responseData && (
-            <div className="flex gap-4 p-2 ml-4 xl:ml-0">
+            <div className="flex gap-4 ml-4 xl:ml-0 lg:p-2">
               <div className="flex-1 space-y-4">
                 <CommunityHeader
                   communityName={responseData.name}

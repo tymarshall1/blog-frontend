@@ -40,16 +40,23 @@ function PostCreation() {
                 </div>
               )}
               <img
-                src={responseData?.communityIcon.toString()}
+                src={responseData?.communityBG.toString()}
                 className="rounded "
                 alt=""
               />
               <MoreInformationTitle>
-                <h3>
-                  <Link to={`/community/${responseData?.name}`}>
-                    {responseData?.name}
-                  </Link>
-                </h3>
+                <div className="flex items-center gap-2">
+                  <img
+                    src={responseData?.communityIcon.toString()}
+                    className="w-12 h-12 border-2 rounded-full border-white/20"
+                    alt=""
+                  />
+                  <h3>
+                    <Link to={`/community/${responseData?.name}`}>
+                      {responseData?.name}
+                    </Link>
+                  </h3>
+                </div>
               </MoreInformationTitle>
               <MoreInformationDescription>
                 <p>{responseData?.description}</p>

@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import Loading from "./loading";
 import { Community } from "@/types/community";
+import { cn } from "@/lib/utils";
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
@@ -55,7 +56,10 @@ function SingleCommunity(props: CommunityProps) {
       className="flex items-center gap-3 p-2 rounded hover:bg-secondary hover:text-moreInformation"
       to={`/community/${props.title}`}
     >
-      <img src={props.icon} className="rounded-full w-9 h-9" />
+      <img
+        src={props.icon}
+        className="border-2 rounded-full w-11 h-11 border-white/20"
+      />
       <div>
         <h2 className="tracking-wide">{props.title}</h2>{" "}
         <p className="text-sm font-thin tracking-wider">
@@ -120,7 +124,7 @@ function DefaultInformation() {
       {error && <p className="text-center text-white">Server error</p>}
       {!error && (
         <>
-          <h1 className="mb-3 text-xl font-normal tracking-tight">
+          <h1 className="mb-3 text-2xl tracking-tight font-semi-bold">
             Popular Communities
           </h1>
           {communities?.map((community) => (
@@ -156,12 +160,19 @@ function DefaultInformation() {
 function MoreInformation({
   children,
   defaultInformation,
+  className,
 }: {
   children: ReactNode;
   defaultInformation?: boolean;
+  className?: string;
 }) {
   return (
-    <div className="sticky hidden p-2 mt-4 text-white rounded top-20 min-[1080px]:block bg-moreInformation min-h-96 max-w-80 min-w-72 mb-3 overflow-y-scroll max-h-[700px] scrollbar">
+    <div
+      className={cn(
+        "sticky hidden p-2 mt-4 text-white rounded top-20 min-[1080px]:block bg-moreInformation min-h-96 max-w-96 min-w-72 mb-3 overflow-y-scroll max-h-[700px] scrollbar",
+        className
+      )}
+    >
       {defaultInformation && <DefaultInformation />}
       {!defaultInformation && children}
     </div>

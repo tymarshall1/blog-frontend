@@ -101,7 +101,7 @@ function CreatePost() {
                   <div className="flex items-center gap-2">
                     <img
                       src={community.communityIcon.toString()}
-                      className="rounded-full w-7 h-7"
+                      className="border-[1px] rounded-full border-black/10 w-7 h-7"
                       alt="community icon"
                     />
                     <p>{community.name}</p>

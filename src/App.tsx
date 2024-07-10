@@ -9,6 +9,7 @@ import Unauthorized from "./components/ui/unauthorized";
 import CommunityPage from "./pages/community";
 import PostCreation from "./pages/postCreation";
 import SinglePost from "./pages/singlePost";
+import Explore from "./pages/explore";
 function App() {
   const { user } = useAuthContext();
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/popular" element={<Popular />} />
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/community/:communityName" element={<CommunityPage />} />
+          <Route path="/explore" element={<Explore />} />
           <Route
             path="/community/:communityName/:post/:id"
             element={<SinglePost />}

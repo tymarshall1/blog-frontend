@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import closeIcon from "../../assets/close.svg";
 import leafLogo from "../../assets/leaf-logo.svg";
 import SidebarNav from "./sidebarNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useNavigate } from "react-router-dom";
+
 import LoginSignupDialogs from "./loginSignupDialogs";
 import {
   DropdownMenu,
@@ -21,6 +23,9 @@ function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { logout } = useLogout();
   const { user } = useAuthContext();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
@@ -34,6 +39,23 @@ function Navbar() {
       window.removeEventListener("resize", updateWindowWidth);
     };
   }, []);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = () => {
+    if (search) {
+      navigate(`/explore?search=${search}`);
+    }
+  };
 
   return (
     <nav className="fixed top-0 z-50 flex items-center justify-between w-full p-4 min-h-10 text-primary bg-foreground">
@@ -67,11 +89,16 @@ function Navbar() {
       {/*render search bar if screen size greater than 640*/}
       {windowWidth > 640 && (
         <div className="relative">
-          <span className="absolute top-0 left-0 p-2 material-symbols-outlined">
+          <span
+            onClick={handleSubmit}
+            className="absolute top-0 left-0 p-2 cursor-pointer hover:text-secondary material-symbols-outlined"
+          >
             search
           </span>
           <input
             type="search"
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Search"
             className="py-2 pl-10 rounded-full sm:w-48 md:w-80 lg:w-96 bg-background"
           />
@@ -83,13 +110,18 @@ function Navbar() {
         {searchOpen ? (
           <>
             <div className="relative flex ml-2">
-              <span className="absolute top-0 left-0 p-2 material-symbols-outlined">
+              <span
+                onClick={handleSubmit}
+                className="absolute top-0 left-0 p-2 cursor-pointer hover:text-secondary material-symbols-outlined"
+              >
                 search
               </span>
               <input
                 type="search"
                 placeholder="Search"
                 className="py-2 pl-10 rounded bg-background"
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
               />
               <img
                 src={closeIcon}

@@ -30,70 +30,80 @@ function NavLink({
 }
 
 function Explore() {
+  const seeMoreItemNumberBreak = 5;
+  const currentNavLinks = [
+    {
+      name: "Gaming",
+      icon: (
+        <span className="material-symbols-outlined">stadia_controller</span>
+      ),
+    },
+    {
+      name: "Sports",
+      icon: <span className="material-symbols-outlined">sports_football</span>,
+    },
+    {
+      name: "Music",
+      icon: <span className="material-symbols-outlined">headphones</span>,
+    },
+    {
+      name: "Places",
+      icon: <span className="material-symbols-outlined">storefront</span>,
+    },
+    {
+      name: "Programming",
+      icon: <span className="material-symbols-outlined">code</span>,
+    },
+    {
+      name: "Fashion",
+      icon: <span className="material-symbols-outlined">styler</span>,
+    },
+    {
+      name: "Food",
+      icon: <span className="material-symbols-outlined">restaurant</span>,
+    },
+    {
+      name: "Art",
+      icon: <span className="material-symbols-outlined">palette</span>,
+    },
+    {
+      name: "Animals and Pets",
+      icon: <span className="material-symbols-outlined">pets</span>,
+    },
+    {
+      name: "Crypto",
+      icon: <span className="material-symbols-outlined">currency_bitcoin</span>,
+    },
+  ];
+
   return (
     <CollapseMenu title="Explore">
       <>
-        <NavLink
-          linkName={"Gaming"}
-          icon={
-            <span className="material-symbols-outlined">stadia_controller</span>
-          }
-          link={"/"}
-        />
-        <NavLink
-          linkName={"Sports"}
-          icon={
-            <span className="material-symbols-outlined">sports_football</span>
-          }
-          link={"/"}
-        />
-        <NavLink
-          linkName={"Music"}
-          icon={<span className="material-symbols-outlined">headphones</span>}
-          link={"/"}
-        />
-        <NavLink
-          linkName={"Places"}
-          icon={<span className="material-symbols-outlined">storefront</span>}
-          link={"/"}
-        />
-        <NavLink
-          linkName={"Programming"}
-          icon={<span className="material-symbols-outlined">code</span>}
-          link={"/"}
-        />
-        <NavLink
-          linkName={"Fashion"}
-          icon={<span className="material-symbols-outlined">styler</span>}
-          link={"/"}
-        />
-        <NavLink
-          linkName={"Food"}
-          icon={<span className="material-symbols-outlined">restaurant</span>}
-          link={"/"}
-        />
+        {currentNavLinks.map((link, index) => {
+          if (index <= seeMoreItemNumberBreak)
+            return (
+              <NavLink
+                key={index}
+                linkName={link.name}
+                icon={link.icon}
+                link={`/explore?search=${link.name}`}
+              />
+            );
+        })}
+
         <SeeMore
-          additionalItems={[
-            <NavLink
-              linkName={"Art"}
-              icon={<span className="material-symbols-outlined">palette</span>}
-              link={"/"}
-            />,
-            <NavLink
-              linkName={"Animals and Pets"}
-              icon={<span className="material-symbols-outlined">pets</span>}
-              link={"/"}
-            />,
-            <NavLink
-              linkName={"Crypto"}
-              icon={
-                <span className="material-symbols-outlined">
-                  currency_bitcoin
-                </span>
-              }
-              link={"/"}
-            />,
-          ]}
+          additionalItems={currentNavLinks.map((link, index) => {
+            if (index > seeMoreItemNumberBreak) {
+              return (
+                <NavLink
+                  key={index}
+                  linkName={link.name}
+                  icon={link.icon}
+                  link={`/explore?search=${link.name}`}
+                />
+              );
+            }
+          })}
         />
       </>
     </CollapseMenu>
