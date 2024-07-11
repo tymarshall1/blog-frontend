@@ -10,11 +10,7 @@ type CommunitySectionProps = {
 };
 
 function MoreInformationContainer({ children }: { children: ReactNode }) {
-  return (
-    <div className="p-1 space-y-2 overflow-y-scroll max-h-dvh scrollbar">
-      {children}
-    </div>
-  );
+  return <div className="space-y-2 max-h-dvh">{children}</div>;
 }
 
 function MoreInformationTitle({ children }: { children: ReactNode }) {
@@ -27,7 +23,7 @@ function MoreInformationTitle({ children }: { children: ReactNode }) {
 
 function MoreInformationDescription({ children }: { children: ReactNode }) {
   return (
-    <div className="font-light pt-4 tracking-wide border-b-[1px] border-white pb-2">
+    <div className="font-light tracking-wide border-b-[1px] border-white pb-2">
       {children}
     </div>
   );
@@ -35,7 +31,7 @@ function MoreInformationDescription({ children }: { children: ReactNode }) {
 
 function MoreInformationBlock(props: CommunitySectionProps) {
   return (
-    <div className="space-y-1 ">
+    <div className="space-y-1">
       <h2 className="text-lg font-black text-secondary">{props.title}</h2>
       <div className="pb-2 tracking-wider border-b-[1px] border-white">
         {props.data}
@@ -173,7 +169,7 @@ function MoreInformation({
   return (
     <div
       className={cn(
-        "sticky hidden border-[1px] border-white/20 p-2 mt-4 text-white rounded top-20 min-[1080px]:block bg-moreInformation max-w-96 min-w-72 mb-3 overflow-y-scroll max-h-[600px]  scrollbar",
+        "sticky hidden border-[1px] border-white/20 p-2 mt-4 h-fit text-white rounded top-20 min-[1080px]:block bg-moreInformation max-w-96 min-w-72 mb-3 overflow-y-scroll max-h-[600px]  scrollbar",
         className
       )}
     >
