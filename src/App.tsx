@@ -16,6 +16,7 @@ import Careers from "./pages/careers";
 import ContentPolicy from "./pages/contentPolicy";
 import PrivacyPolicy from "./pages/privacyPolicy";
 import UserAgreement from "./pages/userAgreement";
+import FindCommunities from "./pages/communities";
 function App() {
   const { user } = useAuthContext();
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/content-policy" element={<ContentPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/user-agreement" element={<UserAgreement />} />
+          <Route path="/communities" element={<FindCommunities />} />
 
           <Route
             path="/community/:communityName/:post/:id"

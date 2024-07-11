@@ -138,6 +138,7 @@ function HeadSideBar() {
         to={"/popular"}
         onClick={() => {
           setLinkSelected("popular");
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       >
         <span className="material-symbols-outlined">data_thresholding</span>

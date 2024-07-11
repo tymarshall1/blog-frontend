@@ -1,6 +1,10 @@
 import LearningExperience from "@/components/ui/learningExperience";
 import { MoreInformation } from "@/components/ui/moreInformation";
+import { useEffect } from "react";
 function PrivacyPolicy() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="flex gap-2 p-2 ">
       <div className="flex-1">

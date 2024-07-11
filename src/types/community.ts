@@ -6,7 +6,7 @@ export type Community = {
   description: string;
   tags: string | string[];
   posts?: CommunityPagePostProps[];
-  followers?: string[];
+  followers?: string[] | number;
   owner?: string;
   created?: string;
   formattedDateCreated?: string;

@@ -69,9 +69,12 @@ function CreatePost() {
     <form className="max-w-xl space-y-4">
       <h1 className="text-3xl font-black text-white">Create Post</h1>
       {user?.profile?.followedCommunities.length === 0 && (
-        <p className="p-1 text-white rounded bg-destructive/50">
+        <p className="p-2 text-white rounded bg-destructive/50">
           You must be following the community you wish to post to. View{" "}
-          <Link to={"/"} className="text-secondary">
+          <Link
+            to={"/communities"}
+            className="underline text-secondary hover:text-gray-400"
+          >
             Communities
           </Link>
         </p>
