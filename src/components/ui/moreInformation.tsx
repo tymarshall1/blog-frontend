@@ -124,10 +124,12 @@ function DefaultInformation() {
       {error && <p className="text-center text-white">Server error</p>}
       {!error && (
         <>
-          <Link to={"/communities"}>
-            <h4 className="mb-3 text-2xl tracking-tight font-semi-bold hover:text-secondary">
-              Popular Communities
-            </h4>
+          <Link
+            className="flex items-end gap-1 mb-3 text-2xl tracking-tight font-semi-bold hover:text-secondary"
+            to={"/communities"}
+          >
+            <h4 className="">Popular Communities</h4>
+            <span className="material-symbols-outlined">open_in_new</span>
           </Link>
           {communities?.map((community, index) => (
             <SingleCommunity

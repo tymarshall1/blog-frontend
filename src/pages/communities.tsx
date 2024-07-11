@@ -117,7 +117,7 @@ function FindCommunities() {
 
   return (
     <div className="p-2 pb-4 space-y-4">
-      <div className="p-1 flex items-start justify-center h-40 rounded bg-sideNav border-[1px] border-white/20">
+      <div className="py-5 flex items-start justify-center rounded bg-sideNav border-[1px] border-white/20">
         <h1 className="text-4xl font-bold text-white">Popular Communities</h1>
       </div>
       {error && <Error />}
