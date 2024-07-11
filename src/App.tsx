@@ -10,6 +10,12 @@ import CommunityPage from "./pages/community";
 import PostCreation from "./pages/postCreation";
 import SinglePost from "./pages/singlePost";
 import Explore from "./pages/explore";
+import About from "./pages/about";
+import Help from "./pages/help";
+import Careers from "./pages/careers";
+import ContentPolicy from "./pages/contentPolicy";
+import PrivacyPolicy from "./pages/privacyPolicy";
+import UserAgreement from "./pages/userAgreement";
 function App() {
   const { user } = useAuthContext();
   return (
@@ -21,6 +27,14 @@ function App() {
           <Route path="/user/:username" element={<Profile />} />
           <Route path="/community/:communityName" element={<CommunityPage />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/about" element={<About />} />
+
+          <Route path="/help" element={<Help />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/content-policy" element={<ContentPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/user-agreement" element={<UserAgreement />} />
+
           <Route
             path="/community/:communityName/:post/:id"
             element={<SinglePost />}

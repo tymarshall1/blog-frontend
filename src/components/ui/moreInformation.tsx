@@ -127,9 +127,9 @@ function DefaultInformation() {
           <h1 className="mb-3 text-2xl tracking-tight font-semi-bold">
             Popular Communities
           </h1>
-          {communities?.map((community) => (
+          {communities?.map((community, index) => (
             <SingleCommunity
-              key={community.name}
+              key={index}
               title={community.name}
               icon={community.communityIcon.toString()}
               members={

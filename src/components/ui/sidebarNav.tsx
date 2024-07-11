@@ -154,17 +154,17 @@ function Resources() {
         <NavLink
           linkName={"About"}
           icon={<img className="w-6 h-6" src={leafLogo} />}
-          link={"/"}
+          link={"/about"}
         />
         <NavLink
           linkName={"Help"}
           icon={<span className="material-symbols-outlined">help</span>}
-          link={"/"}
+          link={"/help"}
         />
         <NavLink
           linkName={"Careers"}
           icon={<span className="material-symbols-outlined">plumbing</span>}
-          link={"/"}
+          link={"/careers"}
         />
         <SeeMore
           additionalItems={[
@@ -173,17 +173,17 @@ function Resources() {
               icon={
                 <span className="material-symbols-outlined">description</span>
               }
-              link={"/"}
+              link={"/content-policy"}
             />,
             <NavLink
               linkName={"Privacy Policy"}
               icon={<span className="material-symbols-outlined">article</span>}
-              link={"/"}
+              link={"/privacy-policy"}
             />,
             <NavLink
               linkName={"User Agreement"}
               icon={<span className="material-symbols-outlined">contract</span>}
-              link={"/"}
+              link={"/user-agreement"}
             />,
           ]}
         />

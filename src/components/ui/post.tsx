@@ -36,7 +36,7 @@ function Post(props: PostProps) {
               to={`/community/${props.community}`}
             >
               <img
-                className="rounded-full w-7 h-7"
+                className="rounded-full w-8 h-8 border-[1px] border-black/30"
                 src={props.communityIcon}
                 alt="community icon"
               />

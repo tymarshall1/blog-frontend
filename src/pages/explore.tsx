@@ -112,7 +112,7 @@ function ExploreComment({
 
         <h3
           dangerouslySetInnerHTML={{ __html: comment }}
-          className="px-2 max-w-4xl overflow-hidden prose text-white break-words prose-blockquote:border-l-[#1f2937] max-h-48 prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-black "
+          className="px-2 max-w-4xl overflow-hidden prose text-white break-words prose-h1:text-white prose-blockquote:border-l-[#1f2937] max-h-48 prose-pre:break-all md:prose-pre:break-words prose-pre:whitespace-pre-wrap prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white  "
         ></h3>
       </div>
     </Link>
