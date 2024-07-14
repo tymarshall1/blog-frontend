@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 
 function DefaultImgHeader({ children }: { children: ReactNode }) {
   return (
-    <legend className="pb-2 text-3xl font-bold text-white border-b-2 border-white/50">
+    <legend className="sticky top-0 z-20 w-full px-2 py-2 text-3xl font-bold text-white bg-black border-b-2 border-white/50">
       {children}
     </legend>
   );
 }
 
 function DefaultImgSection({ children }: { children: ReactNode }) {
-  return <div className="space-y-3">{children}</div>;
+  return <div className="p-2 space-y-3">{children}</div>;
 }
 
 function DefaultImgTitle({ title }: { title: string }) {
@@ -95,18 +95,18 @@ function DefaultImgSelector({
     <Dialog open={isDialogOpen}>
       <DialogTrigger
         onClick={openDialog}
-        className="p-1 text-black rounded bg-secondary hover:bg-white/50 max-w-32 max-h-8"
+        className="px-1 text-black rounded bg-secondary hover:bg-white/50 max-w-32 max-h-8"
       >
         Default Images
       </DialogTrigger>
 
       <DialogContent
         handleClose={closeDialog}
-        className="bg-black pt-5 border-2 border-white/50  overflow-y-scroll max-h-[75%] max-w-screen-2xl scrollbar"
+        className="bg-black p-0 border-2 border-white/50 overflow-y-scroll max-h-[75%] max-w-screen-2xl scrollbar"
       >
-        <form action="" className="space-y-3">
-          <fieldset className="space-y-3">{children}</fieldset>
-          <div className="flex justify-end gap-2">
+        <form action="" className="">
+          <fieldset className="">{children}</fieldset>
+          <div className="sticky bottom-0 z-50 flex justify-end gap-2 p-2 bg-black">
             <Button
               onClick={() => {
                 closeDialog();
