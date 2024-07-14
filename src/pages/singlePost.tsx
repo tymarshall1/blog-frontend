@@ -12,7 +12,7 @@ import { Comment } from "@/types/comment";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { timeSince } from "@/lib/utils";
 import PostInteraction from "@/components/ui/postInteraction";
-
+import { scrollToSection } from "@/lib/utils";
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
@@ -287,6 +287,14 @@ function SinglePost() {
         return;
     }
   }, [commentFetchError]);
+
+  useEffect(() => {
+    if (location.hash === "#comments") {
+      setTimeout(() => {
+        scrollToSection("comments");
+      }, 250);
+    }
+  }, [location]);
 
   function handleSetComment(comment: string) {
     setCommentError("");

@@ -4,7 +4,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import LoginSignupDialogs from "./loginSignupDialogs";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-
+import { scrollToSection } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -80,12 +80,6 @@ function PostInteraction({
       .catch((err) => console.log(err));
   }
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -184,15 +178,18 @@ function PostInteraction({
           <DropdownMenuContent>
             <DropdownMenuItem>
               <button
-                onClick={() => {
-                  navigate(postLink);
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`${postLink}#comments`);
                   scrollToSection("comments");
                   setMoreInteractionsOpened(false);
                 }}
                 className="flex items-center gap-1 p-1 rounded cursor-pointer sm:flex hover:text-black"
               >
                 <span className="material-symbols-outlined">forum</span>
-                <span>{comments} Comments</span>
+                <span>
+                  {comments} {comments === 1 ? " Comment" : " Comments"}
+                </span>
               </button>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -226,14 +223,17 @@ function PostInteraction({
 
       <div className="hidden gap-2 text-sm font-light tracking-wide sm:flex">
         <button
-          onClick={() => {
-            navigate(postLink);
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`${postLink}#comments`);
             scrollToSection("comments");
           }}
           className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black"
         >
           <span className="material-symbols-outlined">forum</span>
-          <span>{comments} Comments</span>
+          <span>
+            {comments} {comments === 1 ? " Comment" : " Comments"}
+          </span>
         </button>
 
         <DropdownMenu open={shareOpened}>
