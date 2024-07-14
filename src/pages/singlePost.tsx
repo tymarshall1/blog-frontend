@@ -13,6 +13,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { timeSince } from "@/lib/utils";
 import PostInteraction from "@/components/ui/postInteraction";
 import { scrollToSection } from "@/lib/utils";
+import CommentInteraction from "@/components/ui/commentInteraction";
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
@@ -123,39 +124,15 @@ function PostBody(props: PostBodyProps) {
   );
 }
 
-function CommentInteraction() {
-  return (
-    <div className="flex">
-      <div className="flex items-center gap-1 p-1 hover:rounded-full hover:bg-secondary hover:text-black hover:cursor-pointer ">
-        <span className="text-sm font-thin material-symbols-outlined ">
-          thumb_up
-        </span>
-        <span className="text-sm ">{"435k"}</span>
-      </div>
-
-      <div className="flex items-center gap-1 p-1 hover:rounded-full hover:bg-secondary hover:text-black hover:cursor-pointer ">
-        <span className="text-sm font-thin material-symbols-outlined">
-          thumb_down
-        </span>
-        <span className="text-sm ">{"12.5k"}</span>
-      </div>
-
-      <div className="flex items-center gap-1 p-1 hover:rounded-full hover:bg-secondary hover:text-black hover:cursor-pointer">
-        <span className="text-sm font-thin material-symbols-outlined">
-          mode_comment
-        </span>
-        <span className="text-sm">Reply</span>
-      </div>
-    </div>
-  );
-}
-
 type SingleCommentProps = {
   userIcon: string;
   username: string;
+  commentID: string;
   created: string;
   comment: string;
   newComment?: boolean;
+  likes: number;
+  dislikes: number;
 };
 function SingleComment(props: SingleCommentProps) {
   const userRef = useRef<HTMLAnchorElement | null>(null);
@@ -199,7 +176,12 @@ function SingleComment(props: SingleCommentProps) {
           ></div>
         </div>
       </div>
-      <CommentInteraction />
+      <CommentInteraction
+        likes={props.likes}
+        dislikes={props.dislikes}
+        commentID={props.commentID}
+        reactionScore={0}
+      />
     </div>
   );
 }
@@ -220,6 +202,9 @@ function CommentSection({
           created={newComment.created}
           comment={newComment.comment}
           newComment={newComment ? true : false}
+          likes={0}
+          dislikes={0}
+          commentID={newComment._id}
         />
       )}
       {comments &&
@@ -230,6 +215,9 @@ function CommentSection({
             username={comment.profile.account?.username || ""}
             created={comment.created}
             comment={comment.comment}
+            likes={comment.likes}
+            dislikes={comment.dislikes}
+            commentID={comment._id}
           />
         ))}
     </section>

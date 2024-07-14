@@ -6,4 +6,7 @@ export type Comment = {
   post: UserPost;
   replies: Comment[];
   created: string;
+  likes: number;
+  dislikes: number;
+  _id: string;
 };
