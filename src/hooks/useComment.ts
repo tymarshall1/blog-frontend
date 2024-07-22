@@ -8,6 +8,7 @@ export const useComment = () => {
   const [newComment, setNewComment] = useState(null);
   type CommentFields = {
     comment: string;
+    isReply: boolean;
   };
 
   async function createComment(

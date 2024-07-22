@@ -14,6 +14,12 @@ import { timeSince } from "@/lib/utils";
 import PostInteraction from "@/components/ui/postInteraction";
 import { scrollToSection } from "@/lib/utils";
 import CommentInteraction from "@/components/ui/commentInteraction";
+import { cn } from "@/lib/utils";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
@@ -133,55 +139,106 @@ type SingleCommentProps = {
   newComment?: boolean;
   likes: number;
   dislikes: number;
+  isReply: boolean;
+  replies: Comment[];
+  className?: string;
 };
 function SingleComment(props: SingleCommentProps) {
   const userRef = useRef<HTMLAnchorElement | null>(null);
-
+  const [commentOpened, setCommentOpened] = useState(false);
   function toggleTextHighlightOnHover() {
     userRef.current ? userRef.current.classList.toggle("text-secondary") : "";
   }
   return (
-    <div
-      className={`${
-        props.newComment ? "bg-gray-600" : ""
-      } text-white border-l-[1px] border-secondary pl-2 py-1`}
-    >
-      <div className="flex gap-2">
-        <Link to={`/user/${props.username}`}>
-          <img
-            className="w-10 h-10 rounded-full min-w-10 min-h-10"
-            src={props.userIcon}
-            alt="users icon"
-            onMouseEnter={toggleTextHighlightOnHover}
-            onMouseLeave={toggleTextHighlightOnHover}
-          />
-        </Link>
-
-        <div>
-          <div>
-            <Link
-              ref={userRef}
-              className="font-bold hover:text-secondary"
-              to={`/user/${props.username}`}
-            >
-              {props.username}
-            </Link>
-            <span className="ml-1 text-sm text-white/50">
-              {timeSince(props.created)}
-            </span>
-          </div>
+    <div className={cn("rounded bg-white/5", props.className)}>
+      <Collapsible className="text-left ">
+        <CollapsibleTrigger
+          onClick={() => {
+            setCommentOpened(commentOpened ? false : true);
+          }}
+          className="w-full "
+        >
           <div
-            className="max-w-4xl mb-3 overflow-hidden font-normal prose text-white break-words break-all prose-pre:break-all md:prose-pre:break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
-            dangerouslySetInnerHTML={{ __html: props.comment }}
-          ></div>
-        </div>
-      </div>
-      <CommentInteraction
-        likes={props.likes}
-        dislikes={props.dislikes}
-        commentID={props.commentID}
-        reactionScore={0}
-      />
+            className={`${
+              props.newComment ? "bg-gray-600" : ""
+            } text-white  border-l-[1px] border-secondary pl-2 py-1 text-left`}
+          >
+            <div className="flex gap-2 pt-1">
+              <Link to={`/user/${props.username}`}>
+                <img
+                  className="w-10 h-10 rounded-full min-w-10 min-h-10"
+                  src={props.userIcon}
+                  alt="users icon"
+                  onMouseEnter={toggleTextHighlightOnHover}
+                  onMouseLeave={toggleTextHighlightOnHover}
+                />
+              </Link>
+
+              <div className="w-full">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Link
+                      ref={userRef}
+                      className="font-bold hover:text-secondary"
+                      to={`/user/${props.username}`}
+                    >
+                      {props.username}
+                    </Link>
+                    <span className="ml-1 text-sm text-white/50">
+                      {timeSince(props.created)}
+                    </span>
+                  </div>
+
+                  {props.replies.length > 0 && (
+                    <button
+                      className={`${
+                        commentOpened ? "rotate-180" : ""
+                      } mr-2 text-black rounded bg-secondary hover:bg-white/50 transition-transform flex`}
+                    >
+                      <span className="material-symbols-outlined">
+                        keyboard_arrow_down
+                      </span>
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className="max-w-4xl pr-4 mb-3 overflow-hidden font-normal prose text-left text-white break-words break-all prose-pre:break-all md:prose-pre:break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
+                  dangerouslySetInnerHTML={{ __html: props.comment }}
+                ></div>
+              </div>
+            </div>
+            <CommentInteraction
+              likes={props.likes}
+              dislikes={props.dislikes}
+              commentID={props.commentID}
+              reactionScore={0}
+            />
+          </div>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          {props.replies.map((reply, index) => {
+            return (
+              <div className={`pl-8  ${index > 0 ? "" : "mybox"}`}>
+                {reply && (
+                  <SingleComment
+                    key={index}
+                    userIcon={reply.profile.profileImg.toString()}
+                    username={reply.profile.account?.username || "error"}
+                    commentID={reply._id}
+                    created={reply.created}
+                    comment={reply.comment}
+                    likes={reply.likes}
+                    dislikes={reply.dislikes}
+                    isReply={true}
+                    replies={reply.replies ? reply.replies : []}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 }
@@ -205,21 +262,30 @@ function CommentSection({
           likes={0}
           dislikes={0}
           commentID={newComment._id}
+          isReply={newComment.isReply}
+          replies={newComment.replies}
+          key={newComment._id}
         />
       )}
       {comments &&
-        comments.map((comment: Comment, index) => (
-          <SingleComment
-            key={index}
-            userIcon={comment.profile.profileImg.toString()}
-            username={comment.profile.account?.username || ""}
-            created={comment.created}
-            comment={comment.comment}
-            likes={comment.likes}
-            dislikes={comment.dislikes}
-            commentID={comment._id}
-          />
-        ))}
+        comments.map((comment: Comment, index) => {
+          if (!comment.isReply) {
+            return (
+              <SingleComment
+                key={index}
+                userIcon={comment.profile.profileImg.toString()}
+                username={comment.profile.account?.username || ""}
+                created={comment.created}
+                comment={comment.comment}
+                likes={comment.likes}
+                dislikes={comment.dislikes}
+                commentID={comment._id}
+                isReply={comment.isReply}
+                replies={comment.replies}
+              />
+            );
+          }
+        })}
     </section>
   );
 }
@@ -301,7 +367,7 @@ function SinglePost() {
         setCommentError("Comment be at least 2 characters long.");
         return;
       default:
-        createComment({ comment: comment }, id);
+        createComment({ comment: comment, isReply: false }, id);
         setComment("");
         setTextAreaClick(false);
     }
@@ -476,4 +542,4 @@ function SinglePost() {
   );
 }
 
-export default SinglePost;
+export { SinglePost, SingleComment };

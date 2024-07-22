@@ -8,7 +8,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import Unauthorized from "./components/ui/unauthorized";
 import CommunityPage from "./pages/community";
 import PostCreation from "./pages/postCreation";
-import SinglePost from "./pages/singlePost";
+import { SinglePost } from "./pages/singlePost";
 import Explore from "./pages/explore";
 import About from "./pages/about";
 import Help from "./pages/help";

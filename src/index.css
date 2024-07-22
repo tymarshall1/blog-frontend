@@ -123,6 +123,19 @@
     text-shadow: 4px 4px 4px black;
   }
 
+  .mybox {
+    position: relative;
+  }
+
+  .mybox:after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 2rem;
+    border-bottom: 1px solid hsl(122, 100%, 50%);
+  }
+
   @keyframes slideDown {
     from {
       opacity: 10%;
