@@ -147,7 +147,7 @@ type SingleCommentProps = {
   depth?: number;
 };
 function SingleComment(props: SingleCommentProps) {
-  const [commentOpened, setCommentOpened] = useState(false);
+  const [commentOpened, setCommentOpened] = useState(true);
   const navigate = useNavigate();
   const { communityName, post, id } = useParams();
   const { depth = 0 } = props;
@@ -181,12 +181,12 @@ function SingleComment(props: SingleCommentProps) {
           onKeyUp={handleTriggerKeyUp}
           onKeyDown={handleTriggerKeyDown}
           onClick={handleTriggerClick}
-          className={`w-full ${props.replies.length > 0 ? "" : "cursor-text"}`}
+          className={`w-full ${props.replies.length > 0 ? "" : ""}`}
         >
           <div
             className={`${
               props.newComment ? "bg-gray-600" : ""
-            } comment-left-line text-white  pl-2 py-1 text-left`}
+            } comment-left-line text-white pl-2 py-1 text-left`}
           >
             <div className="flex justify-between ">
               <UserInfo
@@ -196,13 +196,19 @@ function SingleComment(props: SingleCommentProps) {
                 postOrComment={props.comment}
                 postOrCommentOpened={commentOpened}
               />
-              <span
-                className={`${commentOpened ? "rotate-180" : ""} ${
-                  props.replies.length > 0 ? "" : "hidden"
-                } transition-transform material-symbols-outlined text-secondary h-5 w-5 mr-2 `}
-              >
-                keyboard_arrow_down
-              </span>
+              {depth === 4 && props.replies.length > 0 ? (
+                <span className="mr-2 material-symbols-outlined text-secondary">
+                  open_in_new
+                </span>
+              ) : (
+                <span
+                  className={`${commentOpened ? "rotate-180" : ""} ${
+                    props.replies.length > 0 ? "" : "hidden"
+                  } transition-transform material-symbols-outlined text-secondary h-5 w-5 mr-2 `}
+                >
+                  keyboard_arrow_down
+                </span>
+              )}
             </div>
 
             <CommentInteraction
@@ -218,11 +224,11 @@ function SingleComment(props: SingleCommentProps) {
             if (reply.profile.profileImg !== undefined) {
               return (
                 <div
-                  className={`pl-8  ${
+                  className={`pl-4 md:pl-6 lg:pl-8  ${
                     index > 0 ? "" : "comment-curve-connection"
                   }`}
                 >
-                  {reply && (
+                  {reply && depth < 4 && (
                     <SingleComment
                       key={index}
                       userIcon={reply.profile.profileImg.toString()}

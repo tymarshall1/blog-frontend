@@ -31,8 +31,6 @@ function CommentThread() {
   }, [commentId]);
 
   useEffect(() => {
-    console.log("data changed :", responseData);
-
     if (responseData?._id) {
       setReactionScore(
         user?.profile?.likedComments.includes(responseData?._id)
@@ -54,17 +52,17 @@ function CommentThread() {
           </p>
         )}
         {responseData && (
-          <div key={commentId} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             <div>
               <Link
-                className="text-3xl font-bold text-secondary hover:text-white/50"
+                className="text-3xl font-bold underline text-secondary hover:text-white/50"
                 to={originalPostURL}
               >
-                Click To View The Original Post
+                View Original Post
               </Link>
             </div>
             <div>
-              <h2 className="font-semibold text-white underline font-2xl">
+              <h2 className="font-semibold text-white font-2xl">
                 Comment Thread for:
               </h2>
 
@@ -83,7 +81,7 @@ function CommentThread() {
             </div>
 
             {responseData.replies && (
-              <div className="pl-8 space-y-2">
+              <div className="pl-4 space-y-2 md:pl-6 lg:pl-8">
                 {responseData.replies.map((reply, index) => {
                   return (
                     <SingleComment

@@ -132,7 +132,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 2rem;
+    width: 1rem;
     border-bottom: 1px solid hsl(122, 100%, 50%);
   }
 
@@ -146,8 +146,19 @@
     top: 0;
     left: 0px;
     height: 100%;
-
     border-left: 1px solid hsl(122, 100%, 50%);
+  }
+
+  @media (min-width: 768px) {
+    .comment-curve-connection::after {
+      width: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .comment-curve-connection::after {
+      width: 2rem;
+    }
   }
 
   @keyframes slideDown {

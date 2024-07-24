@@ -48,7 +48,7 @@ function UserInfo(props: UserInfoProps) {
             e.stopPropagation();
           }}
           className={`${
-            props.postOrCommentOpened ? "" : "max-h-60"
+            props.postOrCommentOpened ? "" : "max-h-8 opacity-50"
           } hover:cursor-text max-w-4xl select-text pr-4 overflow-hidden font-normal prose text-left text-white break-words break-all prose-pre:break-all md:prose-pre:break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white`}
           dangerouslySetInnerHTML={{ __html: props.postOrComment || "" }}
         ></div>
