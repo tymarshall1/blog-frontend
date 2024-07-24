@@ -15,7 +15,9 @@ import { Badge } from "@/components/ui/badge";
 function PostCreation() {
   const { communityName } = useParams();
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
-    `http://localhost:3000/api/community/${communityName}`,
+    `${
+      import.meta.env.VITE_LIMELEAF_BACKEND_URL
+    }/api/community/${communityName}`,
     "GET"
   );
   useEffect(() => {
