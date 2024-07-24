@@ -30,18 +30,6 @@ function CommentThread() {
     fetchData();
   }, [commentId]);
 
-  // useEffect(() => {
-  //   if (responseData?._id) {
-  //     setReactionScore(
-  //       user?.profile?.likedComments.includes(responseData?._id)
-  //         ? 1
-  //         : user?.profile?.dislikedComments.includes(responseData?._id)
-  //         ? -1
-  //         : 0
-  //     );
-  //   }
-  // }, [responseData]);
-
   return (
     <div className="flex gap-2 p-2">
       <div className="flex-1">
@@ -71,6 +59,7 @@ function CommentThread() {
                 profileImg={responseData.profile.profileImg.toString()}
                 timeStamp={responseData.created}
                 postOrComment={responseData.comment}
+                postOrCommentOpened={true}
               />
               <CommentInteraction
                 likes={responseData.likes}
