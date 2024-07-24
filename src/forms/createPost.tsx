@@ -41,11 +41,10 @@ function CreatePost() {
   const [submitError, setSubmitError] = useState("");
   const { createPost } = useCreatePost();
   const defaultBodyText = "<p></p>";
-  const { isLoading, error, responseData, fetchData } =
-    useFetch<FollowedCommunity>(
-      `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/community/follows`,
-      "GET"
-    );
+  const { responseData, fetchData } = useFetch<FollowedCommunity>(
+    `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/community/follows`,
+    "GET"
+  );
   useEffect(() => {
     fetchData();
   }, []);
