@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import Post from "./post";
-import { useAuthContext } from "@/hooks/useAuthContext";
 import { UserPost } from "@/types/post";
 
 function PostFeed({ filter = "home" }: { filter?: string }) {
   const [posts, setPosts] = useState<UserPost[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuthContext();
+
+  const accessToken = localStorage.getItem("accessToken")
+    ? localStorage.getItem("accessToken")
+    : "undefined";
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
     fetch(
-      `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts?filter=${filter}`
+      `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts?filter=${filter}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
     )
       .then((response) => response.json())
       .then((data) => {
@@ -44,13 +52,7 @@ function PostFeed({ filter = "home" }: { filter?: string }) {
                 }
                 id={post._id}
                 communityIcon={post.community.communityIcon.toString()}
-                reactionScore={
-                  user?.profile?.likedPosts.includes(post._id)
-                    ? 1
-                    : user?.profile?.dislikedPosts.includes(post._id)
-                    ? -1
-                    : 0
-                }
+                reactionScore={post.reactionScore}
               />
             ))}
           </>

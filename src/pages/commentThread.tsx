@@ -30,17 +30,17 @@ function CommentThread() {
     fetchData();
   }, [commentId]);
 
-  useEffect(() => {
-    if (responseData?._id) {
-      setReactionScore(
-        user?.profile?.likedComments.includes(responseData?._id)
-          ? 1
-          : user?.profile?.dislikedComments.includes(responseData?._id)
-          ? -1
-          : 0
-      );
-    }
-  }, [responseData]);
+  // useEffect(() => {
+  //   if (responseData?._id) {
+  //     setReactionScore(
+  //       user?.profile?.likedComments.includes(responseData?._id)
+  //         ? 1
+  //         : user?.profile?.dislikedComments.includes(responseData?._id)
+  //         ? -1
+  //         : 0
+  //     );
+  //   }
+  // }, [responseData]);
 
   return (
     <div className="flex gap-2 p-2">
@@ -76,7 +76,7 @@ function CommentThread() {
                 likes={responseData.likes}
                 dislikes={responseData.dislikes}
                 commentID={responseData._id}
-                reactionScore={reactionScore}
+                reactionScore={responseData.reactionScore || 0}
               />
             </div>
 
@@ -95,6 +95,7 @@ function CommentThread() {
                       dislikes={reply.dislikes}
                       isReply={reply.isReply}
                       replies={reply.replies}
+                      reactionScore={reply.reactionScore || 0}
                     />
                   );
                 })}

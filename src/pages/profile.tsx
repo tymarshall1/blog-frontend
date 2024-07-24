@@ -167,10 +167,10 @@ function ProfileHeader({
   profileImg: string | undefined;
 }) {
   return (
-    <div className="px-4 pt-4 mt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation">
+    <div className="px-4 pt-4 mt-4 space-y-10 rounded bg-gradient-to-r from-sideNav to-moreInformation border-[1px] border-white/20">
       <div className="flex items-center gap-2 mb-4">
         <img
-          className="bg-transparent rounded-full w-14 h-14"
+          className="bg-transparent rounded-full w-14 h-14 border-[1px] border-white/20"
           src={profileImg}
           alt="profile image"
         />
@@ -217,6 +217,7 @@ type SectionDividerProps = {
   likes?: number;
   dislikes?: number;
   comments?: number;
+  reactionScore?: number;
 };
 
 function SectionDivider({
@@ -232,9 +233,9 @@ function SectionDivider({
   comments,
   dislikes,
   likes,
+  reactionScore = 0,
 }: SectionDividerProps) {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
   return (
     <div
       className={`${
@@ -288,13 +289,7 @@ function SectionDivider({
           postID={postID}
           postLink={`/community/${communityName}/${postName}/${postID}`}
           className=""
-          reactionScore={
-            user?.profile?.likedPosts.includes(postID)
-              ? 1
-              : user?.profile?.dislikedPosts.includes(postID)
-              ? -1
-              : 0
-          }
+          reactionScore={reactionScore}
         />
       )}
     </div>
@@ -357,6 +352,7 @@ function Posts({ posts, username }: { posts: UserPost[]; username: string }) {
             postBody={post.body}
             likes={post.likes}
             dislikes={post.dislikes}
+            reactionScore={post.reactionScore}
             comments={typeof post.comments === "number" ? post.comments : 0}
           />
         );
@@ -419,6 +415,7 @@ function Overview({
               isPost={true}
               postBody={element.body}
               likes={element.likes}
+              reactionScore={element.reactionScore}
               dislikes={element.dislikes}
               comments={
                 typeof element.comments === "number" ? element.comments : 0
@@ -541,7 +538,7 @@ function Profile() {
           {!error && !isLoading && (
             <div className="flex flex-col">
               <img
-                className="self-center w-20 h-20 bg-transparent rounded-full"
+                className="border-[1px] border-white/20 self-center w-20 h-20 bg-transparent rounded-full"
                 src={
                   isMyAccount
                     ? user?.profile?.profileImg.toString()

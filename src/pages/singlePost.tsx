@@ -145,6 +145,7 @@ type SingleCommentProps = {
   replies: Comment[];
   className?: string;
   depth?: number;
+  reactionScore: number;
 };
 function SingleComment(props: SingleCommentProps) {
   const [commentOpened, setCommentOpened] = useState(true);
@@ -215,7 +216,7 @@ function SingleComment(props: SingleCommentProps) {
               likes={props.likes}
               dislikes={props.dislikes}
               commentID={props.commentID}
-              reactionScore={0}
+              reactionScore={props.reactionScore}
             />
           </div>
         </CollapsibleTrigger>
@@ -241,6 +242,7 @@ function SingleComment(props: SingleCommentProps) {
                       isReply={true}
                       replies={reply.replies ? reply.replies : []}
                       depth={depth + 1}
+                      reactionScore={reply.reactionScore || 0}
                     />
                   )}
                 </div>
@@ -274,6 +276,7 @@ function CommentSection({
           commentID={newComment._id}
           isReply={newComment.isReply}
           replies={newComment.replies}
+          reactionScore={newComment.reactionScore || 0}
           key={newComment._id}
         />
       )}
@@ -291,6 +294,7 @@ function CommentSection({
                 dislikes={comment.dislikes}
                 commentID={comment._id}
                 isReply={comment.isReply}
+                reactionScore={comment.reactionScore || 0}
                 replies={comment.replies}
               />
             );
@@ -320,7 +324,11 @@ function SinglePost() {
     window.scrollTo(0, 0);
     setLoading(true);
 
-    fetch(`${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts/${id}`)
+    fetch(`${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts/${id}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("accessToken"),
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
@@ -418,13 +426,7 @@ function SinglePost() {
                     : userPost.comments
                 }
                 postID={id}
-                reactionScore={
-                  user?.profile?.likedPosts.includes(userPost._id)
-                    ? 1
-                    : user?.profile?.dislikedPosts.includes(userPost._id)
-                    ? -1
-                    : 0
-                }
+                reactionScore={userPost.reactionScore}
               />
               <div className="sr-only" id="comments"></div>
               <form action="" className="max-w-2xl mx-4">

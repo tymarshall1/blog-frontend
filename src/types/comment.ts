@@ -9,5 +9,6 @@ export type Comment = {
   likes: number;
   dislikes: number;
   isReply: boolean;
+  reactionScore?: number;
   _id: string;
 };

@@ -55,18 +55,15 @@ function CommentInteraction({
     "POST"
   );
 
-  useEffect(() => {
-    const newReactionScore = user?.profile?.likedComments.includes(commentID)
-      ? 1
-      : user?.profile?.dislikedComments.includes(commentID)
-      ? -1
-      : 0;
+  // useEffect(() => {
+  //   const newReactionScore = 0;
+  //   console.log("ran");
 
-    setLikesAndDislikes((prev) => ({
-      ...prev,
-      reactionScore: newReactionScore,
-    }));
-  }, [user, commentID]);
+  //   setLikesAndDislikes((prev) => ({
+  //     ...prev,
+  //     reactionScore: newReactionScore,
+  //   }));
+  // }, [user, commentID]);
 
   useEffect(() => {
     setNonUserTriedInteraction(false);
@@ -199,6 +196,7 @@ function CommentInteraction({
                 isReply={true}
                 replies={[]}
                 newComment={true}
+                reactionScore={replyData.reactionScore || 0}
               />
             </div>
           )}
