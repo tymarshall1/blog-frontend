@@ -123,17 +123,31 @@
     text-shadow: 4px 4px 4px black;
   }
 
-  .mybox {
+  .comment-curve-connection {
     position: relative;
   }
 
-  .mybox:after {
+  .comment-curve-connection::after {
     content: "";
     position: absolute;
-    top: 0px;
+    top: 0;
     left: 0;
     width: 2rem;
     border-bottom: 1px solid hsl(122, 100%, 50%);
+  }
+
+  .comment-left-line {
+    position: relative;
+  }
+
+  .comment-left-line::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0px;
+    height: 100%;
+
+    border-left: 1px solid hsl(122, 100%, 50%);
   }
 
   @keyframes slideDown {

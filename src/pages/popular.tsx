@@ -3,7 +3,7 @@ import PostFeed from "@/components/ui/postFeed";
 
 function Popular() {
   return (
-    <div className="flex items-start justify-center">
+    <div className="items-start justify-center lg:flex">
       <PostFeed filter="popular" />
       <MoreInformation defaultInformation={true}>
         <></>

@@ -17,6 +17,7 @@ import ContentPolicy from "./pages/contentPolicy";
 import PrivacyPolicy from "./pages/privacyPolicy";
 import UserAgreement from "./pages/userAgreement";
 import FindCommunities from "./pages/communities";
+import CommentThread from "./pages/commentThread";
 function App() {
   const { user } = useAuthContext();
   return (
@@ -41,6 +42,12 @@ function App() {
             path="/community/:communityName/:post/:id"
             element={<SinglePost />}
           />
+
+          <Route
+            path="/community/:communityName/:post/:id/comment-thread/:commentId"
+            element={<CommentThread />}
+          />
+
           <Route
             path="/community/create"
             element={user ? <CreateCommunity /> : <Unauthorized />}

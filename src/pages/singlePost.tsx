@@ -15,6 +15,8 @@ import PostInteraction from "@/components/ui/postInteraction";
 import { scrollToSection } from "@/lib/utils";
 import CommentInteraction from "@/components/ui/commentInteraction";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import UserInfo from "@/components/ui/userInfo";
 import {
   Collapsible,
   CollapsibleTrigger,
@@ -142,72 +144,67 @@ type SingleCommentProps = {
   isReply: boolean;
   replies: Comment[];
   className?: string;
+  depth?: number;
 };
 function SingleComment(props: SingleCommentProps) {
-  const userRef = useRef<HTMLAnchorElement | null>(null);
   const [commentOpened, setCommentOpened] = useState(false);
-  function toggleTextHighlightOnHover() {
-    userRef.current ? userRef.current.classList.toggle("text-secondary") : "";
-  }
+  const navigate = useNavigate();
+  const { communityName, post, id } = useParams();
+  const { depth = 0 } = props;
+
+  const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.code === "Space") {
+      setCommentOpened(false);
+    }
+  };
+
+  const handleTriggerKeyUp = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.code === "Space") {
+      setCommentOpened(true);
+    }
+  };
+
+  const handleTriggerClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (depth === 4 && props.replies.length > 0) {
+      e.stopPropagation();
+      navigate(
+        `/community/${communityName}/${post}/${id}/comment-thread/${props.commentID}`
+      );
+      return;
+    }
+    setCommentOpened((prev) => !prev);
+  };
   return (
     <div className={cn("rounded bg-white/5", props.className)}>
-      <Collapsible className="text-left ">
+      <Collapsible open={commentOpened} className="text-left ">
         <CollapsibleTrigger
-          onClick={() => {
-            setCommentOpened(commentOpened ? false : true);
-          }}
-          className="w-full "
+          onKeyUp={handleTriggerKeyUp}
+          onKeyDown={handleTriggerKeyDown}
+          onClick={handleTriggerClick}
+          className={`w-full ${props.replies.length > 0 ? "" : "cursor-text"}`}
         >
           <div
             className={`${
               props.newComment ? "bg-gray-600" : ""
-            } text-white  border-l-[1px] border-secondary pl-2 py-1 text-left`}
+            } comment-left-line text-white  pl-2 py-1 text-left`}
           >
-            <div className="flex gap-2 pt-1">
-              <Link to={`/user/${props.username}`}>
-                <img
-                  className="w-10 h-10 rounded-full min-w-10 min-h-10"
-                  src={props.userIcon}
-                  alt="users icon"
-                  onMouseEnter={toggleTextHighlightOnHover}
-                  onMouseLeave={toggleTextHighlightOnHover}
-                />
-              </Link>
-
-              <div className="w-full">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Link
-                      ref={userRef}
-                      className="font-bold hover:text-secondary"
-                      to={`/user/${props.username}`}
-                    >
-                      {props.username}
-                    </Link>
-                    <span className="ml-1 text-sm text-white/50">
-                      {timeSince(props.created)}
-                    </span>
-                  </div>
-
-                  {props.replies.length > 0 && (
-                    <button
-                      className={`${
-                        commentOpened ? "rotate-180" : ""
-                      } mr-2 text-black rounded bg-secondary hover:bg-white/50 transition-transform flex`}
-                    >
-                      <span className="material-symbols-outlined">
-                        keyboard_arrow_down
-                      </span>
-                    </button>
-                  )}
-                </div>
-
-                <div
-                  className="max-w-4xl pr-4 mb-3 overflow-hidden font-normal prose text-left text-white break-words break-all prose-pre:break-all md:prose-pre:break-words prose-blockquote:text-white prose-pre:whitespace-pre-wrap prose-h1:text-white prose-pre:max-w-lg prose-li:p-0 prose-li:m-0 prose-h1:text-lg prose-h1:m-0 prose-p:m-0 prose-p:p-0 prose-p:font-light prose-p:tracking-wide pose-h1:p-0 prose-ul:list-disc prose-li:marker:text-white"
-                  dangerouslySetInnerHTML={{ __html: props.comment }}
-                ></div>
-              </div>
+            <div className="flex justify-between ">
+              <UserInfo
+                username={props.username}
+                profileImg={props.userIcon}
+                timeStamp={props.created}
+                postOrComment={props.comment}
+                postOrCommentOpened={commentOpened}
+              />
+              <span
+                className={`${commentOpened ? "rotate-180" : ""} ${
+                  props.replies.length > 0 ? "" : "hidden"
+                } transition-transform material-symbols-outlined text-secondary h-5 w-5 mr-2 `}
+              >
+                keyboard_arrow_down
+              </span>
             </div>
+
             <CommentInteraction
               likes={props.likes}
               dislikes={props.dislikes}
@@ -218,24 +215,31 @@ function SingleComment(props: SingleCommentProps) {
         </CollapsibleTrigger>
         <CollapsibleContent>
           {props.replies.map((reply, index) => {
-            return (
-              <div className={`pl-8  ${index > 0 ? "" : "mybox"}`}>
-                {reply && (
-                  <SingleComment
-                    key={index}
-                    userIcon={reply.profile.profileImg.toString()}
-                    username={reply.profile.account?.username || "error"}
-                    commentID={reply._id}
-                    created={reply.created}
-                    comment={reply.comment}
-                    likes={reply.likes}
-                    dislikes={reply.dislikes}
-                    isReply={true}
-                    replies={reply.replies ? reply.replies : []}
-                  />
-                )}
-              </div>
-            );
+            if (reply.profile.profileImg !== undefined) {
+              return (
+                <div
+                  className={`pl-8  ${
+                    index > 0 ? "" : "comment-curve-connection"
+                  }`}
+                >
+                  {reply && (
+                    <SingleComment
+                      key={index}
+                      userIcon={reply.profile.profileImg.toString()}
+                      username={reply.profile.account?.username || "error"}
+                      commentID={reply._id}
+                      created={reply.created}
+                      comment={reply.comment}
+                      likes={reply.likes}
+                      dislikes={reply.dislikes}
+                      isReply={true}
+                      replies={reply.replies ? reply.replies : []}
+                      depth={depth + 1}
+                    />
+                  )}
+                </div>
+              );
+            }
           })}
         </CollapsibleContent>
       </Collapsible>
@@ -346,7 +350,7 @@ function SinglePost() {
     if (location.hash === "#comments") {
       setTimeout(() => {
         scrollToSection("comments");
-      }, 250);
+      }, 500);
     }
   }, [location]);
 

@@ -112,13 +112,14 @@ function CommentInteraction({
     fetchData({ action });
   }
   return (
-    <div className="">
+    <div className="text-white">
       {nonUserTriedInteraction && <LoginSignupDialogs />}
-      {error && (
-        <p className="text-white">
-          Error connecting to server, try again later.
-        </p>
-      )}
+      {error ||
+        (replyError && (
+          <p className="text-white">
+            Error connecting to server, try again later.
+          </p>
+        ))}
       {!nonUserTriedInteraction && (
         <>
           <div className="flex">
@@ -226,7 +227,8 @@ function CommentInteraction({
               </p>
               <div className="flex justify-end gap-2 my-2 ">
                 <Button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setNewCommentError("");
                     setNewComment("");
                     setReplyClicked(false);
@@ -236,7 +238,13 @@ function CommentInteraction({
                 >
                   Cancel
                 </Button>
-                <Button onClick={handleSubmitComment} type="button">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSubmitComment();
+                  }}
+                  type="button"
+                >
                   {"Submit"}
                 </Button>
               </div>
