@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 function PostCreation() {
   const { communityName } = useParams();
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
-    `http://localhost:3000/api/community/${communityName}/`,
+    `http://localhost:3000/api/community/${communityName}`,
     "GET"
   );
   useEffect(() => {
