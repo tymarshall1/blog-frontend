@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SingleComment } from "./singlePost";
 import useFetch from "@/hooks/useFetch";
 import UserInfo from "@/components/ui/userInfo";
-import { useAuthContext } from "@/hooks/useAuthContext";
+
 import { MoreInformation } from "@/components/ui/moreInformation";
 import { Comment } from "@/types/comment";
 import Loading from "@/components/ui/loading";
@@ -11,14 +11,14 @@ import CommentInteraction from "@/components/ui/commentInteraction";
 
 function CommentThread() {
   const { communityName, post, id, commentId } = useParams();
-  const [reactionScore, setReactionScore] = useState(0);
+
   const { isLoading, error, responseData, fetchData } = useFetch<Comment>(
     `${
       import.meta.env.VITE_LIMELEAF_BACKEND_URL
     }/api/posts/comment-thread/${commentId}`,
     "GET"
   );
-  const { user } = useAuthContext();
+
   const originalPostURL = `/community/${communityName}/${post}/${id}`;
   useEffect(() => {
     window.scrollTo(0, 0);
