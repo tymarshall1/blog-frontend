@@ -1,10 +1,11 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect } from "react";
 import Input from "./components/input";
 import PostEditor from "./components/postEditor";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useAuthContext } from "@/hooks/useAuthContext";
+
 import { Link, useNavigate } from "react-router-dom";
+import useFetch from "@/hooks/useFetch";
 import {
   Select,
   SelectContent,
@@ -22,6 +23,10 @@ enum SubmitError {
   IncorrectBody = "You must have a body thats at least 2 characters long.",
 }
 
+type FollowedCommunity = {
+  followedCommunities: [{ name: string; communityIcon: string }];
+};
+
 type PostFields = {
   communityName: string;
   title: string;
@@ -33,10 +38,17 @@ function CreatePost() {
     title: "",
     body: "",
   });
-  const { user } = useAuthContext();
   const [submitError, setSubmitError] = useState("");
   const { createPost } = useCreatePost();
   const defaultBodyText = "<p></p>";
+  const { isLoading, error, responseData, fetchData } =
+    useFetch<FollowedCommunity>(
+      `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/community/follows`,
+      "GET"
+    );
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const Navigate = useNavigate();
   function setBody(body: string) {
@@ -68,7 +80,7 @@ function CreatePost() {
   return (
     <form className="max-w-xl space-y-4">
       <h1 className="text-3xl font-black text-white">Create Post</h1>
-      {user?.profile?.followedCommunities.length === 0 && (
+      {responseData && responseData.followedCommunities.length <= 0 && (
         <p className="p-2 text-white rounded bg-destructive/50">
           You must be following the community you wish to post to. View{" "}
           <Link
@@ -98,20 +110,21 @@ function CreatePost() {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Followed Communities</SelectLabel>
-            {user?.profile?.followedCommunities.map((community) => {
-              return (
-                <SelectItem key={community.name} value={community.name}>
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={community.communityIcon.toString()}
-                      className="border-[1px] rounded-full border-black/10 w-7 h-7"
-                      alt="community icon"
-                    />
-                    <p>{community.name}</p>
-                  </div>
-                </SelectItem>
-              );
-            })}
+            {responseData &&
+              responseData.followedCommunities.map((community) => {
+                return (
+                  <SelectItem key={community.name} value={community.name}>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={community.communityIcon.toString()}
+                        className="border-[1px] rounded-full border-black/10 w-7 h-7"
+                        alt="community icon"
+                      />
+                      <p>{community.name}</p>
+                    </div>
+                  </SelectItem>
+                );
+              })}
           </SelectGroup>
         </SelectContent>
       </Select>
