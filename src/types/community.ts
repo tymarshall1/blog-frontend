@@ -10,4 +10,5 @@ export type Community = {
   owner?: string;
   created?: string;
   formattedDateCreated?: string;
+  followsCommunity?: boolean;
 };

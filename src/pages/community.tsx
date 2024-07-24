@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PostFilter } from "@/components/ui/postFilter";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
-import { useAuthContext } from "@/hooks/useAuthContext";
 
 type CommunityHeaderProps = {
   communityName: string;
@@ -88,7 +87,6 @@ function CommunityPage() {
     "GET"
   );
   const { fetchError, toggleFollow } = useToggleFollow();
-  const { user } = useAuthContext();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -96,13 +94,10 @@ function CommunityPage() {
   }, [communityName]);
 
   useEffect(() => {
-    if (!user?.profile?.followedCommunities) return;
-    user?.profile?.followedCommunities.forEach((community) => {
-      if (community.name === communityName) {
-        setFollows(true);
-      }
-    });
-  }, [user]);
+    if (responseData) {
+      setFollows(responseData.followsCommunity || false);
+    }
+  }, [responseData]);
 
   async function toggleFollowedCommunity() {
     await toggleFollow(communityName);

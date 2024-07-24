@@ -4,7 +4,6 @@ import { useState } from "react";
 import PostInteraction from "./postInteraction";
 import { timeSince } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "@/hooks/useAuthContext";
 export type CommunityPagePostProps = {
   profileImg: string;
   username: string;
@@ -16,11 +15,11 @@ export type CommunityPagePostProps = {
   comments: number;
   id: string;
   communityName: string;
+  reactionScore?: number;
 };
 
 function CommunityPagePost(props: CommunityPagePostProps) {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
   const postLink = `/community/${props.communityName}/${props.title}/${props.id}`;
   return (
     <div
@@ -54,13 +53,7 @@ function CommunityPagePost(props: CommunityPagePostProps) {
         postID={props.id}
         className="rounded-none"
         postLink={postLink}
-        reactionScore={
-          user?.profile?.likedPosts.includes(props.id)
-            ? 1
-            : user?.profile?.dislikedPosts.includes(props.id)
-            ? -1
-            : 0
-        }
+        reactionScore={props.reactionScore || 0}
       />
     </div>
   );
@@ -135,6 +128,7 @@ function SortedFeed({
             id={post.id}
             communityName={communityName}
             key={post.id}
+            reactionScore={post.reactionScore}
           />
         ))}
       {!sortedPosts || (sortedPosts.length === 0 && <NoPostsYet />)}
