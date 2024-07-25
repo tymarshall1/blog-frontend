@@ -5,7 +5,6 @@ import useFetch from "@/hooks/useFetch";
 import { Community } from "@/types/community";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "@/hooks/useAuthContext";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
 function SingleCommunity({
   bg,
@@ -13,15 +12,26 @@ function SingleCommunity({
   icon,
   followers,
   description,
+  userFollowsCommunity,
 }: {
   bg: string;
   name: string;
   icon: string;
   followers: number;
   description: string;
+  userFollowsCommunity: boolean;
 }) {
-  const { user } = useAuthContext();
   const { loading, toggleFollow } = useToggleFollow();
+  const [followClick, setFollowClick] = useState(false);
+  const [followerCount, setFollowerCount] = useState(followers);
+  const [followText, setFollowText] = useState(
+    userFollowsCommunity ? "Follow" : "Unfollow"
+  );
+
+  useEffect(() => {
+    setFollowText(followText === "Unfollow" ? "Follow" : "Unfollow");
+  }, [followClick]);
+
   return (
     <Link
       to={`/community/${name}`}
@@ -40,23 +50,27 @@ function SingleCommunity({
         />
         <h2 className="text-xl font-bold">{name}</h2>
         <h3 className="font-light text-white/80 text-md">
-          {`${followers} ${followers === 1 ? " follower" : " followers"}`}
+          {`${followerCount} ${
+            followerCount === 1 ? " follower" : " followers"
+          }`}
         </h3>
         <Button
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleFollow(name);
+            setFollowClick(!followClick);
+            setFollowerCount((prev) => {
+              if (followText === "Unfollow") {
+                return prev - 1;
+              }
+              return prev + 1;
+            });
           }}
           className="h-6"
           variant={"secondary"}
         >
-          {user &&
-          user.profile?.followedCommunities.some(
-            (community) => community.name === name
-          )
-            ? "Unfollow"
-            : "follow"}
+          {followText}
         </Button>
         {loading && <Loading />}
       </div>
@@ -124,23 +138,24 @@ function FindCommunities() {
       {isLoading && <Loading />}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 ">
         {communities &&
-          communities.map((communitiy, index) => {
+          communities.map((community, index) => {
             return (
               <SingleCommunity
                 key={index}
                 bg={
-                  typeof communitiy.communityBG === "string"
-                    ? communitiy.communityBG
+                  typeof community.communityBG === "string"
+                    ? community.communityBG
                     : ""
                 }
-                name={communitiy.name}
-                icon={communitiy.communityIcon.toString()}
+                name={community.name}
+                icon={community.communityIcon.toString()}
                 followers={
-                  typeof communitiy.followers === "number"
-                    ? communitiy.followers
+                  typeof community.followers === "number"
+                    ? community.followers
                     : 0
                 }
-                description={communitiy.description}
+                description={community.description}
+                userFollowsCommunity={community.followsCommunity || false}
               />
             );
           })}
