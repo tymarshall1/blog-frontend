@@ -364,7 +364,7 @@ function SinglePost() {
     if (location.hash === "#comments") {
       setTimeout(() => {
         scrollToSection("comments");
-      }, 500);
+      }, 1500);
     }
   }, [location]);
 
