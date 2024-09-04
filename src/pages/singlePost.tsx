@@ -99,6 +99,7 @@ type PostBodyProps = {
   postID: string | undefined;
   reactionScore: number;
   community: string;
+  username: string;
 };
 
 function PostBody(props: PostBodyProps) {
@@ -122,6 +123,9 @@ function PostBody(props: PostBodyProps) {
             reactionScore={props.reactionScore}
             className="rounded-none"
             postLink={postLink}
+            usernameOfPost={props.username}
+            postTitle={props.title}
+            postBody={props.body}
           />
         )}
         {!props.postID && (
@@ -427,6 +431,7 @@ function SinglePost() {
                 }
                 postID={id}
                 reactionScore={userPost.reactionScore}
+                username={userPost.author.account.username}
               />
               <div className="sr-only" id="comments"></div>
               <form action="" className="max-w-2xl mx-4">

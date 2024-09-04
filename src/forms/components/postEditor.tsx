@@ -176,16 +176,19 @@ type PostEditorProps = {
   setBody: (body: string) => void;
   className?: string;
   id: string;
+  defaultText?: string;
 };
 export default function PostEditor({
   setBody,
   className,
   id,
+  defaultText,
 }: PostEditorProps) {
   return (
     <EditorProvider
       slotBefore={<MenuBar />}
       extensions={extensions}
+      content={defaultText}
       onCreate={({ editor }) => {
         setTimeout(() => {
           editor.commands.focus();
@@ -197,7 +200,6 @@ export default function PostEditor({
       editorProps={{
         attributes: {
           id: id,
-
           class: `${className} max-w-none rounded prose text-black px-2 prose-li:my-1 prose-p:my-1 prose-h1:text-xl prose-h1:my-1 bg-white prose-ul:list-disc outline-none prose-li:marker:text-black`,
         },
       }}

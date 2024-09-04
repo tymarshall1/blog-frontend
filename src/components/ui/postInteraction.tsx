@@ -5,6 +5,8 @@ import LoginSignupDialogs from "./loginSignupDialogs";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { scrollToSection } from "@/lib/utils";
+import EditPost from "@/forms/components/editPost";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +26,9 @@ function PostInteraction({
   reactionScore,
   className,
   postLink,
+  usernameOfPost,
+  postTitle,
+  postBody,
 }: {
   likes: number;
   dislikes: number;
@@ -32,6 +37,9 @@ function PostInteraction({
   reactionScore: number;
   className?: string;
   postLink: string;
+  usernameOfPost?: string;
+  postTitle?: string;
+  postBody?: string;
 }) {
   const [likesAndDislikes, setLikesAndDislikes] = useState({
     likes: likes,
@@ -47,6 +55,15 @@ function PostInteraction({
   const moreInteractionsRef = useRef<HTMLButtonElement>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  function openDialog() {
+    setIsDialogOpen(true);
+  }
+
+  function closeDialog() {
+    setIsDialogOpen(false);
+  }
 
   useEffect(() => {
     setNonUserTriedInteraction(false);
@@ -217,6 +234,19 @@ function PostInteraction({
                 <span>Save</span>
               </div>
             </DropdownMenuItem>
+
+            {user && user.username === usernameOfPost && (
+              <>
+                <DropdownMenuItem>
+                  <button>
+                    <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
+                      <span className="material-symbols-outlined">edit</span>
+                      <span>Edit</span>
+                    </div>
+                  </button>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -271,6 +301,27 @@ function PostInteraction({
           <span className="material-symbols-outlined">bookmark</span>
           <span>Save</span>
         </div>
+
+        {user && user.username === usernameOfPost && (
+          <Dialog open={isDialogOpen}>
+            <DialogTrigger onClick={openDialog}>
+              <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:text-black hover:bg-secondary">
+                <span className="material-symbols-outlined">edit</span>
+                <span>Edit</span>
+              </div>
+            </DialogTrigger>
+            <DialogContent handleClose={closeDialog}>
+              {postBody && postTitle && (
+                <EditPost
+                  closeDialog={closeDialog}
+                  postTitle={postTitle}
+                  postBody={postBody}
+                  postID={postID}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );
