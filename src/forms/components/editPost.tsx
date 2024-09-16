@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Input from "./input";
 import PostEditor from "./postEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEditPost } from "@/hooks/useEditPost";
 import Loading from "@/components/ui/loading";
 
@@ -21,16 +21,19 @@ function EditPost({
     postBody: postBody,
   });
 
-  const { editPost, validationErrors, fetchError, isLoading } =
+  const { editPost, validationErrors, fetchError, isLoading, responseData } =
     useEditPost(postID);
 
-  async function handleEditPost() {
-    const result = await editPost(post);
-
-    if (result.success) {
+  useEffect(() => {
+    console.log(responseData);
+    if (responseData) {
       closeDialog();
       window.location.reload();
     }
+  }, [responseData]);
+
+  async function handleEditPost() {
+    await editPost(post);
   }
 
   function setBody(body: string) {
@@ -38,9 +41,9 @@ function EditPost({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="w-full space-y-2">
       {isLoading && <Loading />}
-      {fetchError && (
+      {fetchError !== null && (
         <p className="font-bold text-destructive">
           We were unable to process your request, try again later.
         </p>
@@ -74,7 +77,7 @@ function EditPost({
             defaultText={postBody}
             setBody={setBody}
             id={"postBody"}
-            className="p-2 min-h-48"
+            className="p-2 overflow-y-scroll max-h-96 min-h-48"
           />
         </div>
         {validationErrors.bodyError && (

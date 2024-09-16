@@ -6,7 +6,7 @@ import {
 } from "@/errorHandling/formValidation";
 
 export function useEditPost(postID: string) {
-  const { isLoading, error, fetchData } = useFetch(
+  const { isLoading, error, responseData, fetchData } = useFetch(
     `${import.meta.env.VITE_LIMELEAF_BACKEND_URL}/api/posts/${postID}/edit`,
     "PATCH"
   );
@@ -36,8 +36,8 @@ export function useEditPost(postID: string) {
     try {
       await fetchData(post);
       return { success: true };
-    } catch (fetchError) {
-      console.error("Fetch error:", fetchError);
+    } catch (error) {
+      console.error("Fetch error:", error);
       return {
         success: false,
         error: "An error occurred while updating the post.",
@@ -50,5 +50,6 @@ export function useEditPost(postID: string) {
     validationErrors,
     fetchError: error,
     isLoading,
+    responseData,
   };
 }

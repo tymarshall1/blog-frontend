@@ -29,7 +29,7 @@ function LoginSignupDialogs() {
         >
           Login
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-w-lg">
           <LoginForm
             closeLoginDialog={closeLoginDialog}
             openSignupDialog={openSignupDialog}
@@ -44,7 +44,7 @@ function LoginSignupDialogs() {
         >
           Sign Up
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-w-lg">
           <SignupForm
             closeSignupDialog={closeSignupDialog}
             openLoginDialog={openLoginDialog}

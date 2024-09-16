@@ -1,24 +1,29 @@
 enum editPostError {
   NONE = "",
   IncorrectCommunity = "You must choose a community.",
-  IncorrectTitle = "You must have a title thats between 2 and 50 characters long.",
-  IncorrectBody = "You must have a body thats at least 2 characters long.",
+  IncorrectTitle = "You must have a title that's between 2 and 50 characters long.",
+  IncorrectBody = "You must have a body that's at least 2 characters long.",
 }
 
 function validateEditPostForm(post: { postBody: string; postTitle: string }) {
-  const defaultBodyText = "<p></p>";
   let validationText = editPostError.NONE;
 
+  const isBodyEmpty = (body: string): boolean => {
+    const trimmedBody = body.trim();
+    const emptyContentRegex = /^<p>\s*<\/p>$/;
+    return !trimmedBody || emptyContentRegex.test(trimmedBody);
+  };
+
+  const isTitleInvalid = (title: string): boolean => {
+    return !title || title.trim().length < 2;
+  };
+
   switch (true) {
-    case !post.postTitle ||
-      post.postTitle.length < 2 ||
-      post.postTitle.length > 50:
+    case isTitleInvalid(post.postTitle) || post.postTitle.length > 50:
       validationText = editPostError.IncorrectTitle;
       break;
 
-    case !post.postBody ||
-      post.postBody === defaultBodyText ||
-      post.postBody.length < 9:
+    case isBodyEmpty(post.postBody) || post.postBody.length < 9:
       validationText = editPostError.IncorrectBody;
       break;
   }

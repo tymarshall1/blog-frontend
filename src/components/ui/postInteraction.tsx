@@ -310,7 +310,10 @@ function PostInteraction({
                 <span>Edit</span>
               </div>
             </DialogTrigger>
-            <DialogContent handleClose={closeDialog}>
+            <DialogContent
+              className="max-w-4xl md:w-3/4"
+              handleClose={closeDialog}
+            >
               {postBody && postTitle && (
                 <EditPost
                   closeDialog={closeDialog}
