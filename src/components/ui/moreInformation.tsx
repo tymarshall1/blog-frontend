@@ -169,7 +169,7 @@ function MoreInformation({
   return (
     <div
       className={cn(
-        "sticky hidden border-[1px] border-white/20 p-2 mt-4 h-fit text-white rounded top-20 min-[1080px]:block bg-moreInformation max-w-96 min-w-72 mb-3 overflow-y-scroll max-h-[600px]  scrollbar",
+        "sticky hidden border-[1px] border-white/20 p-2 mt-4 h-fit text-white rounded top-20 min-[1080px]:block bg-moreInformation max-w-96 min-w-72 mb-3 overflow-y-scroll max-h-[700px] scrollbar",
         className
       )}
     >

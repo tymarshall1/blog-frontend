@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PostFilter } from "@/components/ui/postFilter";
 import { useToggleFollow } from "@/hooks/useToggleFollow";
+import { useNavigate } from "react-router-dom";
 
 type CommunityHeaderProps = {
   communityName: string;
@@ -80,6 +81,7 @@ function CommunitySection(props: CommunitySectionProps) {
 function CommunityPage() {
   const { communityName } = useParams();
   const [follows, setFollows] = useState(false);
+  const navigate = useNavigate();
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
     `${
       import.meta.env.VITE_LIMELEAF_BACKEND_URL
@@ -169,7 +171,18 @@ function CommunityPage() {
                       typeof responseData.tags === "object" && (
                         <div className="flex flex-wrap gap-2">
                           {responseData.tags.map((tags: string) => (
-                            <Badge key={tags}>{tags}</Badge>
+                            <button
+                              onClick={() =>
+                                navigate(`/explore?search=${tags}`)
+                              }
+                            >
+                              <Badge
+                                className="hover:bg-secondary hover:cursor-pointer"
+                                key={tags}
+                              >
+                                {tags}
+                              </Badge>{" "}
+                            </button>
                           ))}
                         </div>
                       )

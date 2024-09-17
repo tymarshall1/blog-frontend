@@ -62,7 +62,7 @@ function CommentThread() {
                 username={responseData.profile.account?.username || "error"}
                 profileImg={responseData.profile.profileImg.toString()}
                 timeStamp={responseData.created}
-                postOrComment={editedComment || ""}
+                postOrComment={editedComment || responseData.comment || ""}
                 postOrCommentOpened={true}
               />
               <CommentInteraction

@@ -479,7 +479,7 @@ function SinglePost() {
                     </label>
                     <div className="bg-white rounded ">
                       <PostEditor
-                        className="pb-4 min-h-20"
+                        className="pb-4 min-h-20 cursor-text"
                         setBody={handleSetComment}
                         id={"comment"}
                       />

@@ -124,7 +124,6 @@ function CommentInteraction({
   }
 
   function handleEditComment() {
-    //submit request
     const isCommentEmpty = (): boolean => {
       const trimmedComment = editedComment.trim();
       const emptyContentRegex = /^<p>\s*<\/p>$/;
@@ -281,7 +280,7 @@ function CommentInteraction({
                 className="bg-white rounded "
               >
                 <PostEditor
-                  className="pb-4 min-h-20"
+                  className="pb-4 overflow-y-scroll min-h-20 max-h-96 cursor-text"
                   setBody={editCommentHelper}
                   defaultText={editedComment}
                   id={"editComment"}
@@ -334,7 +333,7 @@ function CommentInteraction({
                 className="bg-white rounded "
               >
                 <PostEditor
-                  className="pb-4 min-h-20"
+                  className="pb-4 min-h-20 cursor-text"
                   setBody={handleSetComment}
                   id={"comment"}
                 />

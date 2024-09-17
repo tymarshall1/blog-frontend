@@ -1,4 +1,5 @@
 import CreatePost from "@/forms/createPost";
+import { useNavigate } from "react-router-dom";
 import {
   MoreInformation,
   MoreInformationContainer,
@@ -12,8 +13,10 @@ import { Community } from "@/types/community";
 import useFetch from "@/hooks/useFetch";
 import Loading from "@/components/ui/loading";
 import { Badge } from "@/components/ui/badge";
+
 function PostCreation() {
   const { communityName } = useParams();
+  const navigate = useNavigate();
   const { isLoading, error, responseData, fetchData } = useFetch<Community>(
     `${
       import.meta.env.VITE_LIMELEAF_BACKEND_URL
@@ -74,7 +77,16 @@ function PostCreation() {
                   typeof responseData.tags === "object" && (
                     <div className="flex flex-wrap gap-2">
                       {responseData.tags.map((tags: string) => (
-                        <Badge key={tags}>{tags}</Badge>
+                        <button
+                          onClick={() => navigate(`/explore?search=${tags}`)}
+                        >
+                          <Badge
+                            className="hover:bg-secondary hover:cursor-pointer"
+                            key={tags}
+                          >
+                            {tags}
+                          </Badge>
+                        </button>
                       ))}
                     </div>
                   )
