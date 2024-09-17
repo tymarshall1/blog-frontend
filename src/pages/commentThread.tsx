@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SingleComment } from "./singlePost";
 import useFetch from "@/hooks/useFetch";
@@ -11,7 +11,11 @@ import CommentInteraction from "@/components/ui/commentInteraction";
 
 function CommentThread() {
   const { communityName, post, id, commentId } = useParams();
+  const [editedComment, setEditedComment] = useState<string | null>(null);
 
+  const handleCommentEditVisualChange = (comment: string) => {
+    setEditedComment(comment);
+  };
   const { isLoading, error, responseData, fetchData } = useFetch<Comment>(
     `${
       import.meta.env.VITE_LIMELEAF_BACKEND_URL
@@ -58,7 +62,7 @@ function CommentThread() {
                 username={responseData.profile.account?.username || "error"}
                 profileImg={responseData.profile.profileImg.toString()}
                 timeStamp={responseData.created}
-                postOrComment={responseData.comment}
+                postOrComment={editedComment || ""}
                 postOrCommentOpened={true}
               />
               <CommentInteraction
@@ -67,6 +71,8 @@ function CommentThread() {
                 dislikes={responseData.dislikes}
                 commentID={responseData._id}
                 reactionScore={responseData.reactionScore || 0}
+                comment={responseData.comment}
+                commentChangeFunction={handleCommentEditVisualChange}
               />
             </div>
 
