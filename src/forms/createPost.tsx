@@ -56,6 +56,11 @@ function CreatePost() {
   }
 
   function handleSubmit(event: { preventDefault: () => void }) {
+    const isPostEmpty = (): boolean => {
+      const trimmedComment = postFields.body.trim();
+      const emptyContentRegex = /^<p>\s*<\/p>$/;
+      return !trimmedComment || emptyContentRegex.test(trimmedComment);
+    };
     event.preventDefault();
     switch (true) {
       case !postFields.communityName:
@@ -66,9 +71,7 @@ function CreatePost() {
         postFields.title.length > 50:
         setSubmitError(SubmitError.IncorrectTitle);
         return;
-      case !postFields.body ||
-        postFields.body === defaultBodyText ||
-        postFields.body.length < 9:
+      case !postFields.body || isPostEmpty():
         setSubmitError(SubmitError.IncorrectBody);
         return;
       default:

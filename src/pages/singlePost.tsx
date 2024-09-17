@@ -156,6 +156,11 @@ function SingleComment(props: SingleCommentProps) {
   const navigate = useNavigate();
   const { communityName, post, id } = useParams();
   const { depth = 0 } = props;
+  const [editedComment, setEditedComment] = useState<string | null>(null);
+
+  const handleCommentEditVisualChange = (comment: string) => {
+    setEditedComment(comment);
+  };
 
   const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.code === "Space") {
@@ -198,7 +203,7 @@ function SingleComment(props: SingleCommentProps) {
                 username={props.username}
                 profileImg={props.userIcon}
                 timeStamp={props.created}
-                postOrComment={props.comment}
+                postOrComment={editedComment ? editedComment : props.comment}
                 postOrCommentOpened={commentOpened}
               />
               {depth === 4 && props.replies.length > 0 ? (
@@ -221,6 +226,9 @@ function SingleComment(props: SingleCommentProps) {
               dislikes={props.dislikes}
               commentID={props.commentID}
               reactionScore={props.reactionScore}
+              username={props.username}
+              comment={props.comment}
+              commentChangeFunction={handleCommentEditVisualChange}
             />
           </div>
         </CollapsibleTrigger>
@@ -378,20 +386,18 @@ function SinglePost() {
   }
 
   function handleSubmitComment() {
-    switch (true) {
-      case comment === "<p></p>":
-        setCommentError("Comment must not be empty.");
-        return;
-      case comment === "":
-        setCommentError("Comment must not be empty.");
-        return;
-      case comment.length < 9:
-        setCommentError("Comment be at least 2 characters long.");
-        return;
-      default:
-        createComment({ comment: comment, isReply: false }, id);
-        setComment("");
-        setTextAreaClick(false);
+    const isCommentEmpty = (): boolean => {
+      const trimmedComment = comment.trim();
+      const emptyContentRegex = /^<p>\s*<\/p>$/;
+      return !trimmedComment || emptyContentRegex.test(trimmedComment);
+    };
+
+    if (isCommentEmpty()) {
+      setCommentError("Comment be at least 2 characters long.");
+    } else {
+      createComment({ comment: comment, isReply: false }, id);
+      setComment("");
+      setTextAreaClick(false);
     }
   }
 

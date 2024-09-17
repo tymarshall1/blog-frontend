@@ -62,6 +62,7 @@ function CommentThread() {
                 postOrCommentOpened={true}
               />
               <CommentInteraction
+                username={responseData.profile.account?.username || "error"}
                 likes={responseData.likes}
                 dislikes={responseData.dislikes}
                 commentID={responseData._id}

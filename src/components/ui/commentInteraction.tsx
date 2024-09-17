@@ -8,6 +8,10 @@ import { Button } from "./button";
 import { useParams } from "react-router-dom";
 import { SingleComment } from "@/pages/singlePost";
 import { Comment } from "@/types/comment";
+import { toast } from "@/hooks/use-toast";
+import Loading from "./loading";
+import fetchError from "@/errorHandling/requestErrors";
+
 enum Action {
   TOGGLE_ACTION_LIKE = "TOGGLE_LIKE",
   TOGGLE_ACTION_DISLIKE = "TOGGLE_DISLIKE",
@@ -17,11 +21,17 @@ function CommentInteraction({
   dislikes,
   commentID,
   reactionScore,
+  username,
+  comment,
+  commentChangeFunction,
 }: {
   likes: number;
   dislikes: number;
   commentID: string;
   reactionScore: number;
+  username: string;
+  comment: string;
+  commentChangeFunction: (comment: string) => void;
 }) {
   type Reaction = {
     likes: number;
@@ -39,7 +49,10 @@ function CommentInteraction({
   const [newComment, setNewComment] = useState("");
   const [newCommentError, setNewCommentError] = useState("");
   const [replyClicked, setReplyClicked] = useState(false);
+  const [editClicked, setEditClicked] = useState(false);
+  const [editedComment, setEditedComment] = useState(comment);
   const { id: postID } = useParams();
+  const [commentEditError, setCommentEditError] = useState("");
   const { error, responseData, fetchData } = useFetch<Reaction>(
     `${
       import.meta.env.VITE_LIMELEAF_BACKEND_URL
@@ -55,15 +68,17 @@ function CommentInteraction({
     "POST"
   );
 
-  // useEffect(() => {
-  //   const newReactionScore = 0;
-  //   console.log("ran");
-
-  //   setLikesAndDislikes((prev) => ({
-  //     ...prev,
-  //     reactionScore: newReactionScore,
-  //   }));
-  // }, [user, commentID]);
+  const {
+    error: editError,
+    isLoading: editLoading,
+    fetchData: sendEdit,
+    responseData: editResponse,
+  } = useFetch<Comment>(
+    `${
+      import.meta.env.VITE_LIMELEAF_BACKEND_URL
+    }/api/posts/${postID}/comment/edit`,
+    "PATCH"
+  );
 
   useEffect(() => {
     setNonUserTriedInteraction(false);
@@ -76,27 +91,56 @@ function CommentInteraction({
     }
   }, [responseData]);
 
+  useEffect(() => {
+    if (editError) {
+      const error = fetchError(editError);
+      setCommentEditError(error);
+    } else if (editResponse) {
+      commentChangeFunction(editedComment);
+      toast({ title: "Comment Updated!" });
+      setEditClicked(false);
+    }
+  }, [editResponse, editError]);
+
   function handleSubmitComment() {
-    switch (true) {
-      case newComment === "<p></p>":
-        setNewCommentError("Comment must not be empty.");
-        return;
-      case newComment === "":
-        setNewCommentError("Comment must not be empty.");
-        return;
-      case newComment.length < 9:
-        setNewCommentError("Comment be at least 2 characters long.");
-        return;
-      default:
-        sendReply({ commentID, comment: newComment, isReply: true });
-        setNewComment("");
-        setReplyClicked(false);
+    const isCommentEmpty = (): boolean => {
+      const trimmedComment = newComment.trim();
+      const emptyContentRegex = /^<p>\s*<\/p>$/;
+      return !trimmedComment || emptyContentRegex.test(trimmedComment);
+    };
+
+    if (isCommentEmpty()) {
+      setNewCommentError("Comment be at least 2 characters long.");
+    } else {
+      sendReply({ commentID, comment: newComment, isReply: true });
+      setNewComment("");
+      setReplyClicked(false);
     }
   }
 
   function handleSetComment(comment: string) {
     setNewCommentError("");
     setNewComment(comment);
+  }
+
+  function handleEditComment() {
+    //submit request
+    const isCommentEmpty = (): boolean => {
+      const trimmedComment = editedComment.trim();
+      const emptyContentRegex = /^<p>\s*<\/p>$/;
+      return !trimmedComment || emptyContentRegex.test(trimmedComment);
+    };
+
+    if (isCommentEmpty()) {
+      setCommentEditError("Comment must be at least 2 characters long.");
+    } else {
+      setCommentEditError("");
+      sendEdit({ commentID, editedComment });
+    }
+  }
+
+  function editCommentHelper(newComment: string) {
+    setEditedComment(newComment);
   }
 
   function toggleLikeOrDislike(action: Action) {
@@ -182,7 +226,22 @@ function CommentInteraction({
               </span>
               <span className="text-sm">Reply</span>
             </button>
+            {user && user.username === username && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditClicked(editClicked === true ? false : true);
+                }}
+                className="flex items-center gap-1 p-1 hover:rounded-full hover:bg-secondary hover:text-black hover:cursor-pointer"
+              >
+                <span className="text-sm font-thin material-symbols-outlined">
+                  mode_comment
+                </span>
+                <span className="text-sm">Edit</span>
+              </button>
+            )}
           </div>
+
           {replyData && (
             <div className={`pl-6`}>
               <SingleComment
@@ -200,6 +259,66 @@ function CommentInteraction({
               />
             </div>
           )}
+
+          {editClicked && (
+            <div>
+              <label
+                onClick={(e) => e.stopPropagation()}
+                className="text-xl font-medium text-white"
+                htmlFor={"editComment"}
+              >
+                Edit Comment
+              </label>
+              {commentEditError ? (
+                <p className="text-destructive">{commentEditError}</p>
+              ) : (
+                ""
+              )}
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="bg-white rounded "
+              >
+                <PostEditor
+                  className="pb-4 min-h-20"
+                  setBody={editCommentHelper}
+                  defaultText={editedComment}
+                  id={"editComment"}
+                />
+              </div>
+              <div className="flex justify-end gap-2 pr-1 my-2">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditClicked(false);
+                    setEditedComment(comment);
+                    setCommentEditError("");
+                  }}
+                  type="button"
+                  variant={"destructive"}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditComment();
+                  }}
+                  type="button"
+                >
+                  {editLoading ? (
+                    <div className="flex p-2">
+                      <Loading color="black" />
+                    </div>
+                  ) : (
+                    "Edit"
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
+
           {replyClicked && (
             <div className="pr-2">
               <label

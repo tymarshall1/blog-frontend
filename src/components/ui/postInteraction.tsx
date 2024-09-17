@@ -238,7 +238,7 @@ function PostInteraction({
             {user && user.username === usernameOfPost && (
               <>
                 <DropdownMenuItem>
-                  <button>
+                  <button onClick={() => setIsDialogOpen(true)}>
                     <div className="flex items-center gap-1 p-1 rounded cursor-pointer hover:bg-secondary hover:text-black">
                       <span className="material-symbols-outlined">edit</span>
                       <span>Edit</span>
