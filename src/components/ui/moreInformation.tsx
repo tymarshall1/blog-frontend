@@ -1,13 +1,37 @@
 import { Link } from "react-router-dom";
 import { ReactNode, useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
-import Loading from "./loading";
 import { Community } from "@/types/community";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "./skeleton";
 type CommunitySectionProps = {
   title: string;
   data: string | number | string[] | React.ReactNode;
 };
+
+function SkeletonCommunity() {
+  return (
+    <div className="flex items-center gap-2">
+      <Skeleton className="w-10 h-10 rounded-full"></Skeleton>
+      <div className="space-y-2">
+        <Skeleton className="w-20 h-3"></Skeleton>
+        <Skeleton className="w-32 h-2"></Skeleton>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonLoading() {
+  return (
+    <div className="w-full p-2 space-y-4">
+      <SkeletonCommunity />
+      <SkeletonCommunity />
+      <SkeletonCommunity />
+      <SkeletonCommunity />
+      <SkeletonCommunity />
+    </div>
+  );
+}
 
 function MoreInformationContainer({ children }: { children: ReactNode }) {
   return <div className="space-y-2 max-h-dvh">{children}</div>;
@@ -127,6 +151,7 @@ function DefaultInformation() {
             <h4 className="">Popular Communities</h4>
             <span className="material-symbols-outlined">open_in_new</span>
           </Link>
+          {isLoading && <SkeletonLoading />}
           {communities?.map((community, index) => (
             <SingleCommunity
               key={index}
@@ -150,8 +175,6 @@ function DefaultInformation() {
               See More
             </button>
           )}
-
-          {isLoading && <Loading />}
         </>
       )}
     </>
