@@ -12,10 +12,10 @@ type CommunitySectionProps = {
 function SkeletonCommunity() {
   return (
     <div className="flex items-center gap-2">
-      <Skeleton className="w-10 h-10 rounded-full"></Skeleton>
+      <Skeleton className="w-10 h-10 rounded-full bg-neutral-600"></Skeleton>
       <div className="space-y-2">
-        <Skeleton className="w-20 h-3"></Skeleton>
-        <Skeleton className="w-32 h-2"></Skeleton>
+        <Skeleton className="w-20 h-3 bg-neutral-600"></Skeleton>
+        <Skeleton className="w-32 h-2 bg-neutral-600"></Skeleton>
       </div>
     </div>
   );

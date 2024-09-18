@@ -25,7 +25,7 @@ function Post(props: PostProps) {
   return (
     <div
       onClick={() => navigate(postLink)}
-      className="max-w-screen-md  mx-auto space-y-1 overflow-hidden text-black border-2 border-transparent rounded cursor-pointer lg:w-[45rem] bg-zinc-300 hover:border-secondary max-h-[30rem]"
+      className="max-w-screen-md mx-auto space-y-1 overflow-hidden text-black border-2 border-transparent rounded cursor-pointer lg:w-[45rem] bg-zinc-300 hover:border-secondary max-h-[30rem]"
     >
       {loaded && (
         <>

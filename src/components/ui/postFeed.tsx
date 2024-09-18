@@ -5,7 +5,7 @@ import { Skeleton } from "./skeleton";
 
 function SkeletonPost() {
   return (
-    <Skeleton className=" w-full h-60 bg-transparent rounded border-[1px] border-neutral-600 p-2 flex flex-col gap-5">
+    <Skeleton className="flex flex-col w-full gap-5 p-2 bg-transparent border-2 rounded h-60 border-neutral-600">
       <div className="flex items-center gap-2">
         <Skeleton className="w-10 h-10 rounded-full bg-neutral-600"></Skeleton>
         <Skeleton className="w-20 h-5 bg-neutral-600"></Skeleton>
@@ -45,10 +45,10 @@ function PostFeed({ filter = "home" }: { filter?: string }) {
       });
   }, []);
   return (
-    <div>
+    <div className="w-[49rem]">
       <div className="flex-1 p-4 space-y-4 lg:flex-[0]">
         {loading && (
-          <div className="space-y-3">
+          <div className="w-full space-y-3">
             <SkeletonPost />
             <SkeletonPost />
             <SkeletonPost />
