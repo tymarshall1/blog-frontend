@@ -74,12 +74,14 @@ type DefaultImgSelectorProps = {
   children: ReactNode;
   resetDefaultImg: () => void;
   itemHasBeenSelected?: boolean;
+  className?: string;
 };
 
 function DefaultImgSelector({
   children,
   resetDefaultImg,
   itemHasBeenSelected,
+  className,
 }: DefaultImgSelectorProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -102,7 +104,7 @@ function DefaultImgSelector({
 
       <DialogContent
         handleClose={closeDialog}
-        className="bg-black p-0 border-2 border-white/50 overflow-y-scroll max-h-[75%] max-w-screen-2xl scrollbar"
+        className={`${className} bg-black p-0 border-2 border-white/50 overflow-y-scroll  max-w-screen-2xl scrollbar`}
       >
         <form action="" className="">
           <fieldset className="">{children}</fieldset>

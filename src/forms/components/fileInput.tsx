@@ -7,6 +7,7 @@ type FileInput = {
   helperText?: string;
   error: boolean;
   required?: boolean;
+  className?: string;
 };
 
 function FileInput({
@@ -16,6 +17,7 @@ function FileInput({
   helperText,
   error,
   required = true,
+  className,
 }: FileInput) {
   return (
     <div>
@@ -25,7 +27,7 @@ function FileInput({
       <input
         className={`${
           error ? "outline-destructive" : "outline-none"
-        } block w-full bg-white border outline outline-2 rounded cursor-pointer text-md focus:outline-none `}
+        } ${className} block w-full bg-white border outline outline-2 rounded cursor-pointer text-md focus:outline-none `}
         type="file"
         onChange={onchange}
         id={id}
