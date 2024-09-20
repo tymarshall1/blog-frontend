@@ -45,7 +45,7 @@ function PostFeed({ filter = "home" }: { filter?: string }) {
       });
   }, []);
   return (
-    <div className="w-[49rem]">
+    <div className="m-auto lg:m-0 md:w-[47rem]">
       <div className="flex-1 p-4 space-y-4 lg:flex-[0]">
         {loading && (
           <div className="w-full space-y-3">
