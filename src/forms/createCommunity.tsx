@@ -222,6 +222,7 @@ function CreateCommunity() {
         <div>
           <FileInput
             label={"Icon"}
+            className="text-white"
             id={"communityIcon"}
             onchange={function (event: ChangeEvent<HTMLInputElement>): void {
               if (event.target.files) {
@@ -323,9 +324,11 @@ function CreateCommunity() {
             {" "}
             Currently selected:{" "}
             <span className="text-secondary">
-              {typeof community.communityIcon === "string"
+              {community.communityIcon instanceof File
+                ? community.communityIcon.name
+                : community.communityIcon !== ""
                 ? "Default"
-                : community.communityIcon.name}
+                : "None"}
             </span>
           </span>
         </div>
@@ -347,6 +350,7 @@ function CreateCommunity() {
         <div>
           <FileInput
             label={"Background"}
+            className="text-white"
             id={"communityBg"}
             onchange={function (event: ChangeEvent<HTMLInputElement>): void {
               if (event.target.files) {
@@ -426,9 +430,11 @@ function CreateCommunity() {
             {" "}
             Currently selected:{" "}
             <span className="text-secondary">
-              {typeof community.communityBG === "string"
+              {community.communityBG instanceof File
+                ? community.communityBG.name
+                : community.communityBG !== ""
                 ? "Default"
-                : community.communityBG.name}
+                : "None"}
             </span>
           </span>
         </div>
