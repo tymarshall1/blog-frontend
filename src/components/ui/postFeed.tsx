@@ -49,6 +49,12 @@ function PostFeed({ filter = "home" }: { filter?: string }) {
       <div className="flex-1 p-4 space-y-4 lg:flex-[0]">
         {loading && (
           <div className="w-full space-y-3">
+            <div className="p-2 text-black bg-white rounded">
+              <p>
+                Server has a 50 second spin up time when the website is first
+                loaded. Please be patient.
+              </p>
+            </div>
             <SkeletonPost />
             <SkeletonPost />
             <SkeletonPost />
